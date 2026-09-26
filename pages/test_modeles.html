@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Test de modèles — comparaison</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<style>
+  :root {
+    --navy: #1a2c56;
+    --blue: #2f5aa8;
+    --blue-light: #e8effa;
+    --teal: #0f6e56;
+    --teal-light: #e1f5ee;
+    --border: #cfd6e4;
+    --text: #23262f;
+    --text-muted: #5a5f6d;
+    --bg: #f6f7fb;
+    --card-bg: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    position: relative;
+    margin: 0;
+    padding: 32px 20px 80px;
+    background: var(--bg);
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+  }
+  h1 {
+    text-align: center;
+    color: var(--navy);
+    font-size: 24px;
+    margin: 0 0 8px;
+  }
+  .guide-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 30px;
+  }
+  .guide-section {
+    width: auto;
+    max-width: 700px;
+    margin: 0 auto 20px;
+  }
+  .step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 8px;
+  }
+  .step-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0 0 6px;
+  }
+  .step-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 12px 0 5px;
+  }
+  textarea, input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: Consolas, monospace;
+    color: var(--text);
+  }
+  textarea { resize: vertical; }
+  input[type="number"] { width: 100px; }
+
+  .modele-btn {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-family: Consolas, monospace;
+    cursor: pointer;
+    margin: 0 8px 8px 0;
+  }
+  .modele-btn:hover { border-color: var(--teal); }
+  .modele-btn.actif {
+    background: var(--teal-light);
+    border-color: var(--teal);
+    color: var(--teal);
+    font-weight: 700;
+  }
+
+  .ligne-ajout {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .ligne-ajout input { flex: 1; }
+
+  .btn-accordion {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .btn-accordion:hover { background: var(--blue); }
+
+  button#exportBtn {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  button#exportBtn:hover { background: #0a5642; }
+
+  .copy-btn-inline {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .copy-btn-inline:hover { background: #0a5642; }
+  .copy-btn-inline.copied { background: var(--blue); }
+
+  .info-box-large {
+    max-width: 700px;
+    margin: 30px auto 0;
+    text-align: center;
+    background: #fff6e0;
+    border: 2px solid #e8a93b;
+    border-radius: 10px;
+    padding: 18px 22px;
+    color: #8a5a00;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  /* absolute et non fixed : ces pages sont affichees dans un cadre, ou
+     un element fixe se positionne par rapport a la zone visible du cadre
+     et peut se retrouver hors champ. */
+  .langue-switch {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .langue-switch button {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .langue-switch button.langue-active {
+    background: var(--navy);
+    color: #fff;
+  }
+  .version {
+    max-width: 700px;
+    margin: 10px auto 24px;
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-family: Consolas, Menlo, monospace;
+    letter-spacing: .3px;
+    text-align: right;
+    padding-right: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="langue-switch">
+  <button id="btnLangueFr" onclick="appliquerLangue('fr')">FR</button>
+  <button id="btnLangueEn" onclick="appliquerLangue('en')">EN</button>
+</div>
+
+<div class="top">
+  <h1 data-i18n="h1_titre">Test de modèles IA</h1>
+  <p class="guide-subtitle" data-i18n="sous_titre">Soumettre la même consigne à plusieurs modèles installés, puis comparer ce qu’ils produisent et le temps qu’ils y mettent — pour choisir en connaissance de cause plutôt qu’à l’estime.</p>
+</div>
+
+<div class="guide-section">
+
+  <div class="step-card">
+    <div class="step-title" data-i18n="c1_titre">Conditions générales</div>
+    <div class="step-text" data-i18n="c1_texte">Reprend telles quelles les règles de l'Agent 1 (générateur d'items) du configurateur principal — seuls le thème et le nombre d'items se règlent ici. Le raisonnement (thinking) reste désactivé pour tous les modèles testés, sans possibilité de le réactiver.</div>
+
+    <label for="themeInput" data-i18n="lbl_theme">Thème / sujet des items à construire</label>
+    <textarea id="themeInput" rows="3" data-i18n-placeholder="ph_theme" placeholder="ex. Measuring pupils' anxiety about mathematics"></textarea>
+
+    <label for="nbItemsInput" data-i18n="lbl_nbitems">Nombre d'items souhaité</label>
+    <input type="number" id="nbItemsInput" value="25" min="1" max="200">
+  </div>
+
+  <div class="step-card">
+    <div class="step-title" data-i18n="c2_titre">Modèles à tester</div>
+    <div class="step-text" data-i18n-html="c2_texte">Cliquez sur un modèle pour l'ajouter ou le retirer du test (surligné = inclus). Les modèles doivent déjà être installés au préalable (<code>ollama pull</code>).</div>
+    <div id="modelesListe"></div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-title-row">
+      <span class="step-title" data-i18n="c3_titre">Générer le script de test</span>
+      <button id="exportBtn" data-i18n="btn_exporter">Exporter test_modeles.txt</button>
+    </div>
+    <div id="statusExport" class="step-text"></div>
+  </div>
+
+</div>
+
+<div class="guide-section">
+
+  <div class="step-card">
+    <div class="step-title-row">
+      <span class="step-title" data-i18n="c4_titre">Démarrer Ollama</span>
+      <button class="copy-btn-inline" data-texte='$DRIVE = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d&#39;un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\"\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\"\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\models"\n\n  $dejaActif = $false\n  try {\n    Invoke-WebRequest -Uri "http://127.0.0.1:11434" -UseBasicParsing -TimeoutSec 2 | Out-Null\n    $dejaActif = $true\n  } catch {}\n\n  if (-not $dejaActif) {\n    Write-Host "Demarrage du serveur Ollama..." -ForegroundColor Yellow\n    Start-Process -FilePath (Join-Path $DRIVE "ollama\ollama.exe") -ArgumentList "serve" -WindowStyle Minimized\n    Start-Sleep -Seconds 4\n  } else {\n    Write-Host "Serveur Ollama deja actif." -ForegroundColor Green\n  }\n}' onclick="copierBloc(this)">Copier</button>
+    </div>
+    <div class="step-text" data-i18n="c4_texte">À exécuter dans PowerShell, si Ollama n'est pas déjà lancé.</div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-title-row">
+      <span class="step-title" data-i18n="c5_titre">Lancer le test</span>
+      <button class="copy-btn-inline" data-texte='$DRIVE = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d&#39;un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\"\n      Write-Host "Chemin long detecte -- lecteur virtuel deja associe : $DRIVE" -ForegroundColor Green\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\"\n        Write-Host "Chemin trop long pour Windows -- lecteur virtuel cree : $DRIVE (vers $cheminLong)" -ForegroundColor Green\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  Write-Host "Dossier d&#39;installation detecte : $DRIVE" -ForegroundColor Green\n  Set-Location (Join-Path $DRIVE "projet")\n  &amp; (Join-Path $DRIVE "python\python.exe") $(if (Test-Path "test_modeles.py") { "test_modeles.py" } else { "test_modeles.txt" })\n}' onclick="copierBloc(this)">Copier</button>
+    </div>
+    <div class="step-text" data-i18n-html="c5_texte">À exécuter juste après, une fois <code>test_modeles.txt</code> enregistré dans le dossier \projet\. Ne pose aucune question : le thème, le nombre d'items et les modèles sont déjà inclus dans le fichier exporté.</div>
+  </div>
+
+  <div class="info-box-large" data-i18n-html="encadre_resultat">
+    ⚠️ Le résultat s'enregistre dans un fichier <code>resultats_modeles_AAAAMMJJ_HHMMSS.txt</code>, dans le dossier \projet\ ⚠️<br>
+    <span style="font-weight:400; font-size:14px;">Un seul fichier, avec pour chaque modèle : son nom, le temps pris, et les items générés.</span>
+  </div>
+
+</div>
+
+<script>
+// ============================ TRADUCTIONS ============================
+const TRADUCTIONS = {
+  fr: {
+    lien_retour: "\u2190 Retour",
+    h1_titre: "Test de mod\u00e8les",
+    sous_titre: "Comparer plusieurs mod\u00e8les install\u00e9s sur la m\u00eame consigne de g\u00e9n\u00e9ration d'items \u2014 nom du mod\u00e8le et temps pris, \u00e0 la fin",
+
+    h1_titre: "Test de mod\u00e8les IA",
+    sous_titre: "Soumettre la m\u00eame consigne \u00e0 plusieurs mod\u00e8les install\u00e9s, puis comparer ce qu\u2019ils produisent et le temps qu\u2019ils y mettent \u2014 pour choisir en connaissance de cause plut\u00f4t qu\u2019\u00e0 l\u2019estime.",
+    c1_titre: "Conditions g\u00e9n\u00e9rales",
+    c1_texte: "Reprend telles quelles les r\u00e8gles de l'Agent 1 (g\u00e9n\u00e9rateur d'items) du configurateur principal \u2014 seuls le th\u00e8me et le nombre d'items se r\u00e8glent ici. Le raisonnement (thinking) reste d\u00e9sactiv\u00e9 pour tous les mod\u00e8les test\u00e9s, sans possibilit\u00e9 de le r\u00e9activer.",
+    lbl_theme: "Th\u00e8me / sujet des items \u00e0 construire",
+    ph_theme: "ex. Measuring pupils' anxiety about mathematics",
+    lbl_nbitems: "Nombre d'items souhait\u00e9",
+
+    c2_titre: "Mod\u00e8les \u00e0 tester",
+    c2_texte: "Cliquez sur un mod\u00e8le pour l'ajouter ou le retirer du test (surlign\u00e9 = inclus). Les mod\u00e8les doivent d\u00e9j\u00e0 \u00eatre install\u00e9s au pr\u00e9alable (<code>ollama pull</code>).",
+    ph_ajout: "ajouter un mod\u00e8le absent de la liste : ex. qwen3:1.7b",
+    btn_ajouter: "Ajouter",
+
+    c3_titre: "G\u00e9n\u00e9rer le script de test",
+    btn_exporter: "Exporter test_modeles.txt",
+
+    c4_titre: "D\u00e9marrer Ollama",
+    c4_texte: "\u00c0 ex\u00e9cuter dans PowerShell, si Ollama n'est pas d\u00e9j\u00e0 lanc\u00e9.",
+
+    c5_titre: "Lancer le test",
+    c5_texte: "\u00c0 ex\u00e9cuter juste apr\u00e8s, une fois <code>test_modeles.txt</code> enregistr\u00e9 dans le dossier \\projet\\. Ne pose aucune question : le th\u00e8me, le nombre d'items et les mod\u00e8les sont d\u00e9j\u00e0 inclus dans le fichier export\u00e9.",
+
+    encadre_resultat: "\u26a0\ufe0f Le r\u00e9sultat s'enregistre dans un fichier <code>resultats_modeles_AAAAMMJJ_HHMMSS.txt</code>, dans le dossier \\projet\\ \u26a0\ufe0f<br><span style=\"font-weight:400; font-size:14px;\">Un seul fichier, avec pour chaque mod\u00e8le : son nom, le temps pris, et les items g\u00e9n\u00e9r\u00e9s.</span>",
+
+    copier: "Copier",
+    copie: "Copi\u00e9 !",
+    msg_choisir_modele: "Choisissez au moins un mod\u00e8le avant d\u2019exporter.",
+    msg_exporte: " t\u00e9l\u00e9charg\u00e9 (",
+    msg_modeles: " mod\u00e8le(s) inclus)."
+  },
+  en: {
+    lien_retour: "\u2190 Back",
+    h1_titre: "Model testing",
+    sous_titre: "Compare several installed models on the same item-generation brief \u2014 model name and time taken, at the end",
+
+    h1_titre: "AI model testing",
+    sous_titre: "Give the same brief to several installed models, then compare what they produce and how long they take \u2014 to choose knowingly rather than by guesswork.",
+    c1_titre: "General settings",
+    c1_texte: "Uses the rules of Agent 1 (item generator) from the main configurator as they are \u2014 only the topic and the number of items are set here. Reasoning (thinking) stays disabled for every model tested, with no way to turn it back on.",
+    lbl_theme: "Topic / subject of the items to build",
+    ph_theme: "e.g. Measuring pupils' anxiety about mathematics",
+    lbl_nbitems: "Number of items required",
+
+    c2_titre: "Models to test",
+    c2_texte: "Click a model to add it to or remove it from the test (highlighted = included). The models must already be installed beforehand (<code>ollama pull</code>).",
+    ph_ajout: "add a model missing from the list: e.g. qwen3:1.7b",
+    btn_ajouter: "Add",
+
+    c3_titre: "Generate the test script",
+    btn_exporter: "Export test_modeles.txt",
+
+    c4_titre: "Start Ollama",
+    c4_texte: "To be run in PowerShell, if Ollama is not already running.",
+
+    c5_titre: "Run the test",
+    c5_texte: "To be run straight afterwards, once <code>test_modeles.txt</code> has been saved in the \\projet\\ folder. It asks no questions: the topic, the number of items and the models are already included in the exported file.",
+
+    encadre_resultat: "\u26a0\ufe0f The results are saved to a file named <code>resultats_modeles_YYYYMMDD_HHMMSS.txt</code>, in the \\projet\\ folder \u26a0\ufe0f<br><span style=\"font-weight:400; font-size:14px;\">A single file, with each model's name, the time taken, and the items generated.</span>",
+
+    copier: "Copy",
+    copie: "Copied!",
+    msg_choisir_modele: "Please choose at least one model before exporting.",
+    msg_exporte: " downloaded (",
+    msg_modeles: " model(s) included)."
+  }
+};
+
+// --- Langue : parametre ?lang=, puis preference enregistree, puis navigateur ---
+let LANGUE_ACTUELLE = 'fr';
+(function detecterLangueInitiale() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const demandee = params.get('lang');
+    if (demandee === 'fr' || demandee === 'en') { LANGUE_ACTUELLE = demandee; return; }
+  } catch (e) {}
+  try {
+    const sauvegardee = localStorage.getItem('langueConfigurateur');
+    if (sauvegardee === 'fr' || sauvegardee === 'en') { LANGUE_ACTUELLE = sauvegardee; return; }
+  } catch (e) {}
+  const langueNavigateur = (navigator.language || navigator.userLanguage || 'fr').toLowerCase();
+  LANGUE_ACTUELLE = langueNavigateur.startsWith('fr') ? 'fr' : 'en';
+})();
+
+function appliquerLangue(langue) {
+  LANGUE_ACTUELLE = langue;
+  const dict = TRADUCTIONS[langue];
+
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n');
+    if (dict[cle] !== undefined) el.textContent = dict[cle];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n-html');
+    if (dict[cle] !== undefined) el.innerHTML = dict[cle];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n-placeholder');
+    if (dict[cle] !== undefined) el.placeholder = dict[cle];
+  });
+
+  // Boutons "Copier" au repos uniquement (on ne touche pas a un bouton affichant "Copie !")
+  document.querySelectorAll('[onclick="copierBloc(this)"]').forEach(function (btn) {
+    if (btn.textContent === TRADUCTIONS.fr.copier || btn.textContent === TRADUCTIONS.en.copier) {
+      btn.textContent = dict.copier;
+    }
+  });
+
+  // Le lien de retour transmet la langue a l'application
+  const retour = document.querySelector('[data-i18n="lien_retour"]');
+  if (retour) retour.setAttribute('href', 'app.html?lang=' + langue);
+
+  document.documentElement.setAttribute('lang', langue);
+  const btnFr = document.getElementById('btnLangueFr');
+  const btnEn = document.getElementById('btnLangueEn');
+  if (btnFr && btnEn) {
+    btnFr.classList.toggle('langue-active', langue === 'fr');
+    btnEn.classList.toggle('langue-active', langue === 'en');
+  }
+
+  try { localStorage.setItem('langueConfigurateur', langue); } catch (e) {}
+}
+
+function basculerLangue() {
+  appliquerLangue(LANGUE_ACTUELLE === 'fr' ? 'en' : 'fr');
+}
+
+// --- Liste des modeles disponibles, partagee avec la meme convention que le configurateur principal ---
+let MODELS = ['qwen3.5:0.8b']; // MODELES_MARKER
+let selectionnes = new Set(['qwen3.5:0.8b']); // au moins un modele coche par defaut
+
+function rendreModeles() {
+  const conteneur = document.getElementById('modelesListe');
+  conteneur.innerHTML = MODELS.map(function (m) {
+    const actif = selectionnes.has(m);
+    return '<button type="button" class="modele-btn' + (actif ? ' actif' : '') +
+      '" data-modele="' + m + '" onclick="basculerModele(this)">' +
+      (actif ? '✓ ' : '') + m + '</button>';
+  }).join('');
+}
+
+function basculerModele(btn) {
+  const m = btn.getAttribute('data-modele');
+  if (selectionnes.has(m)) {
+    selectionnes.delete(m);
+  } else {
+    selectionnes.add(m);
+  }
+  rendreModeles();
+}
+
+
+// Recupere les modeles transmis par la page principale (index.html), via le bouton
+// "Tester plusieurs modèles sur la même consigne". Si absent ou invalide, la liste
+// par defaut ci-dessus reste inchangee.
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const transmis = params.get('modeles');
+  if (!transmis) return;
+  try {
+    const liste = JSON.parse(transmis);
+    if (Array.isArray(liste) && liste.length > 0 && liste.every(function (m) { return typeof m === 'string'; })) {
+      MODELS = liste;
+      selectionnes = new Set(liste); // tous coches par defaut : ce sont ceux deja configures/installes
+    }
+  } catch (e) {
+    // parametre invalide ou mal forme : on garde la liste par defaut, sans erreur visible
+  }
+})();
+
+rendreModeles();
+appliquerLangue(LANGUE_ACTUELLE);
+
+// =====================================================================
+// MODELES DE L'UTILISATEUR CONNECTE
+// La liste ci-dessus n'est qu'un repli. Si la personne est connectee, on
+// charge celle enregistree sur son compte par le plugin, pour qu'elle
+// retrouve ici les modeles qu'elle a reellement installes.
+// =====================================================================
+(function chargerModelesUtilisateur() {
+  function contexteAuth() {
+    try {
+      if (window.parent && window.parent.GenitemAuth) return window.parent.GenitemAuth;
+    } catch (e) {}
+    return window.GenitemAuth || null;
+  }
+
+  if (typeof fetch !== 'function') return;
+
+  // Adresse des routes : deduite du domaine si la page parente ne l'a pas
+  // fournie (page mise en cache, ou fichier ouvert hors WordPress).
+  var ctx = contexteAuth();
+  var base = (ctx && ctx.rest) ? ctx.rest : (window.location.origin + '/wp-json/genitem/v1/');
+
+  // On demande au serveur un jeton frais plutot que d'utiliser celui inscrit
+  // dans la page parente : si celle-ci est servie par un cache, ce jeton
+  // appartient a une autre session et l'appel serait refuse.
+  function appliquerModeles(liste) {
+    MODELS = liste;
+    // Tous coches : ce sont les modeles que la personne a installes.
+    selectionnes = new Set(MODELS);
+    rendreModeles();
+  }
+
+  // Affichage immediat de la derniere liste connue, le temps que le serveur
+  // reponde. Elle est remplacee des l'arrivee de la reponse.
+  try {
+    var enCache = sessionStorage.getItem('genitemModeles');
+    if (enCache) {
+      var listeCache = JSON.parse(enCache);
+      if (listeCache && listeCache.length) appliquerModeles(listeCache);
+    }
+  } catch (e) {}
+
+  fetch(base + 'jeton', { credentials: 'same-origin', cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .catch(function () { return null; })
+    .then(function (session) {
+      // Repli : si /jeton ne repond pas (plugin pas encore mis a jour), on
+      // utilise le jeton depose par la page parente.
+      if (!session || !session.connecte) {
+        if (ctx && ctx.connecte && ctx.nonce) session = { connecte: true, nonce: ctx.nonce };
+        else return null;
+      }
+      // La liste accompagne desormais le jeton : un seul aller-retour suffit.
+      // Le second appel ne sert plus qu'avec une ancienne version du plugin.
+      if (session.modeles && session.modeles.length) {
+        return { ok: true, modeles: session.modeles };
+      }
+      return fetch(base + 'modeles', {
+        credentials: 'same-origin',
+        headers: { 'X-WP-Nonce': session.nonce }
+      }).then(function (r) { return (r && r.ok) ? r.json() : null; });
+    })
+    .then(function (donnees) {
+      if (!donnees || !donnees.modeles || !donnees.modeles.length) return;
+      appliquerModeles(donnees.modeles);
+      try { sessionStorage.setItem('genitemModeles', JSON.stringify(donnees.modeles)); } catch (e) {}
+    })
+    .catch(function () { /* silencieux : la liste de repli reste utilisable */ });
+})();
+
+// --- Construction du script test_modeles.py ---
+
+function pyStr(s) {
+  // Encode proprement une chaine (multi-ligne y compris) en litteral Python valide
+  return JSON.stringify(s);
+}
+
+function buildScript() {
+  const theme = document.getElementById('themeInput').value.trim() || '[theme non renseigne]';
+  let nbItems = parseInt(document.getElementById('nbItemsInput').value, 10);
+  if (!nbItems || nbItems < 1) { nbItems = 25; }
+
+  const modeles = MODELS.filter(function (m) { return selectionnes.has(m); });
+
+  const introAgent1 =
+    'You are a generator of Likert-scale items (5 levels, 1 = Strongly disagree, 5 = Strongly agree). ' +
+    'You produce exactly ' + nbItems + ' numbered items, following:\n\n';
+
+  const corpsAgent1 =
+    '- The item must be a first-person statement that the respondent rates about themselves (e.g., "I feel..."), never a general idea, fact, or explanation about the topic.\n' +
+    '- Minimise reading time: keep items short and clear.\n' +
+    '- Word each item as a clear statement (not a question).\n' +
+    '- Remind the reader of the scale being used.\n' +
+    '- Avoid "window dressing": no unnecessary detail.\n' +
+    '- Word the item positively; avoid double negatives.\n' +
+    '- One concept per item (avoid "double-barreled" items).\n' +
+    '- Avoid absolute terms ("always", "never", "all", "none").\n' +
+    '- Keep a consistent length across items.\n' +
+    '- Each item should cover a different facet of the construct being measured.';
+
+  const rappelAgent1 =
+    '\n\nIMPORTANT REMINDER: you must produce EXACTLY ' + nbItems + ' items, numbered from 1 to ' + nbItems +
+    ', one item per line, with no introduction or conclusion sentence. Expected format:\n' +
+    '1. [item 1]\n2. [item 2]\n...\n' + nbItems + '. [item ' + nbItems + ']';
+
+  const systemePrompt = introAgent1 + corpsAgent1 + rappelAgent1;
+
+  const modelesPyList = modeles.map(function (m) { return '    ' + pyStr(m) + ','; }).join('\n');
+
+  const code = `import ollama
+import datetime
+import time
+
+# --- Genere depuis la page de test de modeles (test_modeles.html) ---
+
+THEME = ${pyStr(theme)}
+NB_ITEMS = ${nbItems}
+MODELES = [
+${modelesPyList}
+]
+
+SYSTEME_AGENT1 = ${pyStr(systemePrompt)}
+
+
+def appeler(modele, systeme, message):
+    reponse = ollama.chat(
+        model=modele,
+        messages=[
+            {"role": "system", "content": systeme},
+            {"role": "user", "content": message},
+        ],
+        options={"num_ctx": 8192},
+        think=False,
+    )
+    return reponse["message"]["content"]
+
+
+def tester_modele(modele):
+    message = "Task :\\n" + THEME + "\\n\\nProduce exactly " + str(NB_ITEMS) + " numbered items."
+    debut = time.time()
+    resultat = appeler(modele, SYSTEME_AGENT1, message)
+    duree = time.time() - debut
+    return resultat, duree
+
+
+if __name__ == "__main__":
+    if not MODELES:
+        print("Aucun modele selectionne -- retourne a la page de test pour en choisir au moins un.")
+    else:
+        horodatage = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        nom_fichier = "resultats_modeles_" + horodatage + ".txt"
+
+        with open(nom_fichier, "w", encoding="utf-8") as f:
+            f.write("=== THEME ===\\n" + THEME + "\\n\\n")
+            f.write("=== NOMBRE D'ITEMS DEMANDE ===\\n" + str(NB_ITEMS) + "\\n\\n")
+
+            for modele in MODELES:
+                print("\\n--- Test du modele : " + modele + " ---")
+                try:
+                    resultat, duree = tester_modele(modele)
+                    duree_texte = str(round(duree, 1)) + " s"
+                    print("Termine en " + duree_texte)
+                except Exception as e:
+                    resultat = "ERREUR : " + str(e)
+                    duree_texte = "n/a"
+                    print("Echec : " + str(e))
+
+                f.write("=== MODELE : " + modele + " ===\\n")
+                f.write("Temps : " + duree_texte + "\\n\\n")
+                f.write(resultat + "\\n\\n")
+
+        print("\\nResultats enregistres dans : " + nom_fichier)
+`;
+
+  return { code: code, nbModeles: modeles.length };
+}
+
+function download(filename, text, mime) {
+  const blob = new Blob([text], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('exportBtn').addEventListener('click', function () {
+  const resultat = buildScript();
+  const statusEl = document.getElementById('statusExport');
+  if (resultat.nbModeles === 0) {
+    statusEl.style.color = '#b23b3b';
+    statusEl.textContent = TRADUCTIONS[LANGUE_ACTUELLE].msg_choisir_modele;
+    return;
+  }
+  download('test_modeles.txt', resultat.code, 'text/plain');
+  statusEl.style.color = 'var(--teal)';
+  statusEl.textContent = 'test_modeles.txt' + TRADUCTIONS[LANGUE_ACTUELLE].msg_exporte + resultat.nbModeles + TRADUCTIONS[LANGUE_ACTUELLE].msg_modeles;
+});
+
+// --- Copie des blocs PowerShell ---
+function copierBloc(btn) {
+  let texte;
+  const dataTexte = btn.getAttribute('data-texte');
+  if (dataTexte !== null) {
+    texte = dataTexte.replace(/\\n/g, '\n');
+  } else {
+    texte = btn.previousElementSibling.textContent;
+  }
+  navigator.clipboard.writeText(texte).then(function () {
+    const original = btn.textContent;
+    btn.textContent = TRADUCTIONS[LANGUE_ACTUELLE].copie;
+    btn.classList.add('copied');
+    setTimeout(function () {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 1500);
+  }).catch(function () {
+    const zoneTemp = document.createElement('textarea');
+    zoneTemp.value = texte;
+    document.body.appendChild(zoneTemp);
+    zoneTemp.select();
+    document.execCommand('copy');
+    document.body.removeChild(zoneTemp);
+    btn.textContent = TRADUCTIONS[LANGUE_ACTUELLE].copie;
+    setTimeout(function () { btn.textContent = TRADUCTIONS[LANGUE_ACTUELLE].copier; }, 1500);
+  });
+}
+</script>
+
+<div class="version">v.21.09.2026-01:18:49</div>
+
+</body>
+</html>

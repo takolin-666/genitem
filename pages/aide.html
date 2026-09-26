@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Aide — Genitem</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<style>
+  :root {
+    --navy: #1a2c56;
+    --blue: #2f5aa8;
+    --blue-light: #e8effa;
+    --teal: #0f6e56;
+    --teal-light: #e1f5ee;
+    --border: #cfd6e4;
+    --text: #23262f;
+    --text-muted: #5a5f6d;
+    --bg: #f6f7fb;
+    --card-bg: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    position: relative;
+    margin: 0;
+    padding: 32px 20px 80px;
+    background: var(--bg);
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+  }
+  h1 {
+    text-align: center;
+    color: var(--navy);
+    font-size: 24px;
+    margin: 0 0 28px;
+  }
+  .flow {
+    width: 80vw;
+    max-width: 80vw;
+    margin: 0 auto;
+  }
+  .fork {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0 24px;
+  }
+  .fork-caption {
+    font-size: 12px;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .fork-trunk {
+    width: 1.5px;
+    height: 12px;
+    background: var(--navy);
+  }
+  .fork-rail {
+    height: 1.5px;
+    background: var(--navy);
+    box-sizing: border-box;
+    margin-left: calc(16.6667% - 6px);
+    margin-right: calc(16.6667% - 6px);
+    width: auto;
+    align-self: stretch;
+  }
+  .fork-ticks, .merge-ticks {
+    position: relative;
+    height: 14px;
+    margin-left: calc(16.6667% - 6px);
+    margin-right: calc(16.6667% - 6px);
+    align-self: stretch;
+  }
+  .fork-tick, .merge-tick {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 14px;
+    border-left: 1.5px solid var(--navy);
+    transform: translateX(-1px);
+  }
+  .fork-tick::after {
+    content: "";
+    position: absolute;
+    left: -4px;
+    bottom: -1px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid var(--navy);
+  }
+  .fork-trunk.arrow-end {
+    position: relative;
+  }
+  .fork-trunk.arrow-end::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%);
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid var(--navy);
+  }
+  .row-single {
+    display: flex;
+    justify-content: center;
+  }
+  .row-single .card {
+    width: calc((100% - 36px) / 3);
+  }
+  .reviewer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    width: 100%;
+    position: relative;
+  }
+  .close-card {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+  }
+  .close-card:hover { background: #f1e3e3; color: #b3261e; }
+  .close-card.hidden { display: none; }
+  .card.generator { border-color: var(--blue); }
+  .card.reviewer { border-color: var(--teal); }
+  .card.revision { border-color: var(--blue); }
+  .add-card {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--teal);
+    cursor: pointer;
+    min-height: 140px;
+    transition: background 0.15s, border-color 0.15s;
+    user-select: none;
+  }
+  .add-card:hover { background: var(--teal-light); border-color: var(--teal); }
+  .add-card.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .generator .badge, .revision .badge { background: var(--blue); }
+  .reviewer .badge { background: var(--teal); }
+  .card-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .card-head span.name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    padding: 2px 4px;
+  }
+  .card-head input.name {
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    padding: 2px 4px;
+    width: 100%;
+    font-family: inherit;
+  }
+  .card-head input.name:focus { outline: 1px solid var(--border); border-radius: 4px; }
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 8px 0 4px;
+  }
+  select.model {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: monospace;
+    background: #fff;
+  }
+  .model-warning {
+    display: none;
+    color: #b3261e;
+    font-size: 11.5px;
+    font-weight: 600;
+    margin: 5px 0 0;
+    line-height: 1.4;
+  }
+  .model-warning.show { display: block; }
+  .mini-settings {
+    display: flex;
+    gap: 24px;
+    margin: 8px 0 4px;
+  }
+  .type-item-choice {
+    display: flex;
+    gap: 20px;
+    margin: 6px 0 2px;
+    flex-wrap: wrap;
+  }
+  .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 400;
+  }
+  .radio-label input[type="radio"] {
+    margin: 0;
+    cursor: pointer;
+  }
+  .mini-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mini-field label {
+    margin: 0;
+    white-space: nowrap;
+  }
+  input.mini {
+    width: 2.4em;
+    text-align: center;
+    padding: 4px 2px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: monospace;
+  }
+  textarea.prompt {
+    width: 100%;
+    min-height: 221px;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: monospace;
+    resize: vertical;
+    line-height: 1.4;
+  }
+  .export-zone {
+    max-width: 900px;
+    margin: 30px auto 0;
+    text-align: center;
+  }
+  button#exportBtn {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button#exportBtn:hover { background: var(--blue); }
+  .export-warning {
+    max-width: 700px;
+    margin: 16px auto 0;
+    text-align: center;
+    background: #fdeaea;
+    border: 2px solid #c0392b;
+    border-radius: 8px;
+    padding: 12px 18px;
+    color: #a4241a;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  #status {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--teal);
+    min-height: 18px;
+  }
+
+  .guide-section {
+    width: auto;
+    max-width: 700px;
+    margin: 60px auto 0;
+    padding-top: 30px;
+  }
+  .guide-title {
+    text-align: center;
+    color: var(--navy);
+    font-size: 22px;
+    margin: 0 0 8px;
+  }
+  .step-card-top {
+    width: 80vw;
+    max-width: 700px;
+    margin: 0 auto 50px;
+  }
+  .accordion {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px 20px;
+  }
+  .accordion-title {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--navy);
+    padding: 14px 0;
+    list-style: none;
+  }
+  .accordion-title::-webkit-details-marker { display: none; }
+  .accordion-title::before {
+    content: "▸ ";
+    color: var(--teal);
+  }
+  details[open] .accordion-title::before {
+    content: "▾ ";
+  }
+  .accordion-body {
+    padding: 4px 0 18px;
+  }
+  .accordion-body input[type="text"], .accordion-body select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: monospace;
+    margin-bottom: 10px;
+  }
+  .accordion-body a {
+    color: var(--teal);
+    font-size: 13px;
+  }
+  .btn-accordion {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-accordion:hover { background: var(--blue); }
+  .accordion-result {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--border);
+  }
+  .perf-section {
+    width: 80vw;
+    max-width: 80vw;
+    margin: 50px auto 0;
+  }
+  .perf-title {
+    text-align: center;
+    color: var(--navy);
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+  .perf-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 18px;
+  }
+  .perf-table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  table.perf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--card-bg);
+  }
+  table.perf-table th {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 9px;
+    text-align: center;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  table.perf-table td {
+    padding: 9px 9px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  table.perf-table td:first-child, table.perf-table td:nth-child(2) {
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--navy);
+    text-align: left;
+    background: #f6f7fb;
+  }
+  table.perf-table tr:last-child td { border-bottom: none; }
+  table.perf-table td:last-child { border-right: none; }
+  .perf-ok { background: #e1f5ee; }
+  .perf-mid { background: #fff6d9; }
+  .perf-bad { background: #fde3e3; }
+  .guide-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 30px;
+  }
+  .step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 8px;
+  }
+  .step-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0 0 6px;
+  }
+  .step-text ol {
+    margin: 4px 0;
+    padding-left: 20px;
+  }
+  .code-block {
+    position: relative;
+    background: #1a2c56;
+    border-radius: 8px;
+    margin: 10px 0;
+    padding: 14px 90px 14px 16px;
+  }
+  .code-block pre {
+    margin: 0;
+    color: #e8effa;
+    font-family: Consolas, monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .copy-btn:hover { background: #0a5642; }
+  .copy-btn.copied { background: var(--blue); }
+
+  .step-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .copy-btn-inline {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .copy-btn-inline:hover { background: #0a5642; }
+  .copy-btn-inline.copied { background: var(--blue); }
+
+  .info-box-large {
+    max-width: 700px;
+    margin: 30px auto 0;
+    text-align: center;
+    background: #fff6e0;
+    border: 2px solid #e8a93b;
+    border-radius: 10px;
+    padding: 18px 22px;
+    color: #8a5a00;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .logo-genitem-page {
+    display: block;
+    width: 300px;
+    max-width: 100%;
+    height: auto;
+    margin: 6px 0 26px 6px;
+  }
+  /* absolute et non fixed : ces pages sont affichees dans un cadre, ou
+     un element fixe se positionne par rapport a la zone visible du cadre
+     et peut se retrouver hors champ. */
+  .langue-switch {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .langue-switch button {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .langue-switch button.langue-active {
+    background: var(--navy);
+    color: #fff;
+  }
+  .version {
+    max-width: 700px;
+    margin: 10px auto 24px;
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-family: Consolas, Menlo, monospace;
+    letter-spacing: .3px;
+    text-align: right;
+    padding-right: 4px;
+  }
+</style>
+<style>
+  h1 { text-align:center; color: var(--navy); font-size: 24px; margin: 6px 0 4px; }
+  .sous-titre-aide { text-align:center; color: var(--text-muted); font-size: 13px; margin: 0 0 22px; }
+  #etatSource { font-size: 12.5px; }
+  #etatSource.ok { color: var(--teal); }
+  #etatSource.erreur { color: #b23b3b; font-weight: 600; }
+  .avis-connexion {
+    margin-top: 10px;
+    padding: 12px 16px;
+    background: #fff6e0;
+    border: 1px solid #e8a93b;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: #8a5a00;
+  }
+  .avis-connexion a { margin-left: 8px; font-weight: 700; color: #8a5a00; }
+</style>
+</head>
+<body>
+
+<div class="langue-switch">
+  <button id="btnLangueFr" onclick="appliquerLangue('fr')">FR</button>
+  <button id="btnLangueEn" onclick="appliquerLangue('en')">EN</button>
+</div>
+
+<h1 data-i18n="h1_aide">Aide</h1>
+<p class="sous-titre-aide" data-i18n="sous_titre_aide">Gestion des modèles, méthodes alternatives d’installation et performances indicatives</p>
+
+<div class="guide-section" style="margin-top:6px;">
+  <div class="step-card">
+    <div class="step-title" data-i18n="aide_lien_titre">Gestion des modèles</div>
+    <div class="step-text" data-i18n-html="aide_lien_texte">Les modèles ajoutés ou supprimés ici sont enregistrés sur votre compte : vous les retrouverez sur la page <strong>AI-agent</strong> à chaque connexion, sans aucun fichier à télécharger.</div>
+    <div id="etatSource" class="step-text" style="margin-top:6px;"></div>
+
+    <div id="avisConnexion" class="avis-connexion" style="display:none;">
+      <span data-i18n="avis_connexion">Vous devez être connecté pour ajouter ou supprimer des modèles.</span>
+      <a id="lienConnexion" href="https://genitem.recherche-formation.com/connexion/" target="_top" data-i18n="avis_connexion_lien">Se connecter</a>
+    </div>
+  </div>
+</div>
+
+<div class="guide-section reserve-connecte" style="margin-top:20px;">
+  <details class="accordion" style="background:#eef8f0; border-color:#a8d9b5;">
+    <summary class="accordion-title" data-i18n="titre_ajouter">Ajouter modèle</summary>
+    <div class="accordion-body">
+      <input type="text" id="nouveauModeleInput" placeholder="par exemple : ollama run qwen3.5:0.8b" data-i18n-placeholder="placeholder_modele">
+      <button class="btn-accordion" onclick="installerNouveauModele()" data-i18n="btn_installer">Installer</button>
+      <p><a href="https://ollama.com/search" target="_blank" rel="noopener" data-i18n="lien_ollama_search">Parcourir tous les modèles disponibles sur ollama.com</a></p>
+      <div id="resultatAjoutModele" class="accordion-result" style="display:none;">
+        <div class="step-text" data-i18n="ajout_texte">Fenêtre 1 : démarrer Ollama (à laisser ouverte). Fenêtre 2 : installer le modèle.</div>
+        <div class="step-title-row" style="margin-top:8px;">
+          <span class="step-title">PowerShell 1</span>
+          <button class="copy-btn-inline" id="btnCopierAjoutPS1" onclick="copierBloc(this)">Copier</button>
+        </div>
+        <div class="step-title-row" style="margin-top:8px;">
+          <span class="step-title">PowerShell 2</span>
+          <button class="copy-btn-inline" id="btnCopierInstaller" onclick="copierBloc(this)">Copier</button>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <details class="accordion" style="margin-top:16px; background:#fdecec; border-color:#e8a9a9;">
+    <summary class="accordion-title" data-i18n="titre_supprimer">Supprimer modèle</summary>
+    <div class="accordion-body">
+      <select id="selectSupprimerModele"></select>
+      <button class="btn-accordion" onclick="supprimerModeleChoisi()" data-i18n="btn_supprimer">Supprimer</button>
+      <div id="resultatSupprModele" class="accordion-result" style="display:none;">
+        <div class="step-text" data-i18n="suppr_texte">Fenêtre 1 : démarrer Ollama (à laisser ouverte). Fenêtre 2 : supprimer le modèle.</div>
+        <div class="step-title-row" style="margin-top:8px;">
+          <span class="step-title">PowerShell 1</span>
+          <button class="copy-btn-inline" id="btnCopierSupprPS1" onclick="copierBloc(this)">Copier</button>
+        </div>
+        <div class="step-title-row" style="margin-top:8px;">
+          <span class="step-title">PowerShell 2</span>
+          <button class="copy-btn-inline" id="btnCopierSupprimer" onclick="copierBloc(this)">Copier</button>
+        </div>
+      </div>
+    </div>
+  </details>
+</div>
+
+<div class="guide-section" style="margin-top:20px;" id="altBlocAlternatives">
+
+  <style>
+    /* Ajout : les accordeons imbriques doivent garder leur propre fleche */
+    #altBlocAlternatives details:not([open]) > .accordion-title::before { content: "\25B8  "; }
+    #altBlocAlternatives .accordion-body .accordion { padding: 4px 16px; }
+    #altBlocAlternatives > details > .accordion-title { line-height: 1.45; }
+  </style>
+
+  <details class="accordion" style="background:#fff8e6; border-color:#e8cf8a;">
+    <summary class="accordion-title" data-i18n="titre_methodes_alt">Méthodes alternatives — à utiliser uniquement si « Ajouter modèle » ou « Supprimer modèle » ci-dessus échoue sur une machine</summary>
+    <div class="accordion-body">
+
+      <div class="step-text" style="margin-bottom:18px;">
+        <span data-i18n-html="intro_methodes_alt">Les boutons d'origine restent inchangés. Ces méthodes attendent réellement que le serveur Ollama réponde, cherchent <em>ollama.exe</em> à plus d'endroits, et proposent une voie de secours qui n'utilise pas le client en ligne de commande.</span>
+      </div>
+
+      <details class="accordion" style="background:#eef2fa; border-color:#a8bcd9;">
+        <summary class="accordion-title" data-i18n="titre_diagnostic">Diagnostic Ollama — à lancer d'abord en cas d'échec</summary>
+        <div class="accordion-body">
+          <div class="step-title-row">
+            <span class="step-title" data-i18n="diag1_titre">1. Vérifier l'exécutable, le port 11434, le dossier des modèles et les journaux</span>
+            <button class="copy-btn-inline" id="btnCopierDiagAlt" onclick="copierBloc(this)">Copier</button>
+          </div>
+          <div class="step-text" data-i18n="diag1_texte">À exécuter dans PowerShell. Ne modifie rien : n'affiche que l'état réel de l'installation.</div>
+
+          <div class="step-title-row" style="margin-top:16px;">
+            <span class="step-title" data-i18n="diag2_titre">2. Lister les modèles installés</span>
+            <button class="copy-btn-inline" id="btnCopierListeModeles" onclick="copierBloc(this)">Copier</button>
+          </div>
+          <div class="step-text" data-i18n="diag2_texte">Nécessite qu'Ollama tourne déjà (lance d'abord un « PowerShell 1 » ci-dessus).</div>
+
+          <div class="step-title-row" style="margin-top:16px;">
+            <span class="step-title" data-i18n="diag3_titre">3. Arrêter tous les processus Ollama en cours</span>
+            <button class="copy-btn-inline" id="btnCopierStopProcessus" onclick="copierBloc(this)">Copier</button>
+          </div>
+          <div class="step-text" data-i18n="diag3_texte">Utile pour repartir sur une base propre si plusieurs instances tournent en même temps.</div>
+
+          <div class="step-title-row" style="margin-top:16px;">
+            <span class="step-title" data-i18n="diag4_titre">4. Nettoyer un manifeste bloqué (modifie le nom avant de coller)</span>
+            <button class="copy-btn-inline" id="btnCopierNettoyerManifeste" onclick="copierBloc(this)">Copier</button>
+          </div>
+          <div class="step-text" data-i18n-html="diag4_texte">Remplace la valeur de <code>$M</code> par le nom exact du modèle qui bloque (visible dans le message d'erreur « Access is denied »), puis colle et exécute. Corrige l'erreur « Error: remove ...: Access is denied » au démarrage du serveur.</div>
+
+          <div class="step-title-row" style="margin-top:16px;">
+            <span class="step-title" data-i18n="diag5_titre">5. Nettoyer les fichiers de données orphelins (libère de l'espace disque)</span>
+            <button class="copy-btn-inline" id="btnCopierNettoyerBlobs" onclick="copierBloc(this)">Copier</button>
+          </div>
+          <div class="step-text" data-i18n="diag5_texte">Supprime les fichiers de poids qui ne sont plus référencés par aucun modèle installé (restes d'une suppression ou d'un téléchargement interrompu). Sans danger pour les modèles encore installés.</div>
+
+          <div class="step-title-row" style="margin-top:16px;">
+            <span class="step-title" data-i18n="diag6_titre">6. Démarrage avec nettoyage automatique en boucle (recommandé)</span>
+            <button class="copy-btn-inline" id="btnCopierAutoNettoyage" onclick="copierBloc(this)">Copier</button>
+          </div>
+          <div class="step-text" data-i18n="diag6_texte">Détecte tout seul quel manifeste bloque (message « Access is denied »), le supprime automatiquement, et réessaie — jusqu'à 10 fois si besoin — avant de lancer le serveur normalement. Remplace avantageusement la technique 4 quand plusieurs modèles bloquent d'un coup ou que tu ne veux pas identifier le nom toi-même.</div>
+        </div>
+      </details>
+
+      <details class="accordion" style="margin-top:16px; background:#eef8f0; border-color:#a8d9b5;">
+        <summary class="accordion-title" data-i18n="titre_ajout_alt">Ajouter modèle — méthodes alternatives</summary>
+        <div class="accordion-body">
+          <input type="text" id="altAjoutInput" placeholder="par exemple : ollama run qwen3.5:0.8b" data-i18n-placeholder="placeholder_modele">
+          <button class="btn-accordion" onclick="altPreparerAjout()" data-i18n="btn_preparer">Préparer les commandes</button>
+          <p><a href="https://ollama.com/search" target="_blank" rel="noopener" data-i18n="lien_ollama_search">Parcourir tous les modèles disponibles sur ollama.com</a></p>
+
+          <div id="altResultatAjout" class="accordion-result" style="display:none;">
+            <div class="step-title-row">
+              <span class="step-title" data-i18n="methode_b_titre">Méthode B — client Ollama, avec attente réelle du serveur (jusqu'à 60 s)</span>
+              <button class="copy-btn-inline" id="btnCopierAjoutB" onclick="copierBloc(this)">Copier</button>
+            </div>
+            <div class="step-text" data-i18n="methode_b_texte">À essayer en premier. Affiche la progression du téléchargement.</div>
+
+            <div class="step-title-row" style="margin-top:14px;">
+              <span class="step-title" data-i18n="methode_c_titre">Méthode C — API locale, sans passer par le client en ligne de commande</span>
+              <button class="copy-btn-inline" id="btnCopierAjoutC" onclick="copierBloc(this)">Copier</button>
+            </div>
+            <div class="step-text" data-i18n="methode_c_texte">Contourne l'erreur « could not locate ollama app » : parle directement au serveur. Aucun affichage pendant le téléchargement, soyez patient.</div>
+
+            <div class="step-title-row" style="margin-top:14px;">
+              <span class="step-title" data-i18n="methode_d_titre">Méthode D — fenêtre serveur séparée, puis téléchargement (dernier recours)</span>
+              <button class="copy-btn-inline" id="btnCopierAjoutD" onclick="copierBloc(this)">Copier</button>
+            </div>
+            <div class="step-text" data-i18n="methode_d_texte">Deux fenêtres PowerShell : la première garde le serveur visible et affiche ses erreurs, la seconde télécharge.</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="accordion" id="altDetailsSuppr" style="margin-top:16px; background:#fdecec; border-color:#e8a9a9;">
+        <summary class="accordion-title" data-i18n="titre_suppr_alt">Supprimer modèle — méthodes alternatives</summary>
+        <div class="accordion-body">
+          <select id="altSelectSuppr"></select>
+          <input type="text" id="altSupprLibre" placeholder="ou saisir un autre nom, par exemple : mistral-nemo:12b" data-i18n-placeholder="placeholder_suppr_libre">
+          <button class="btn-accordion" onclick="altPreparerSuppression()" data-i18n="btn_preparer">Préparer les commandes</button>
+
+          <div id="altResultatSuppr" class="accordion-result" style="display:none;">
+            <div class="step-title-row">
+              <span class="step-title">Méthode B — client Ollama, avec attente réelle du serveur (jusqu'à 60 s)</span>
+              <button class="copy-btn-inline" id="btnCopierSupprB" onclick="copierBloc(this)">Copier</button>
+            </div>
+
+            <div class="step-title-row" style="margin-top:14px;">
+              <span class="step-title">Méthode C — API locale, sans passer par le client en ligne de commande</span>
+              <button class="copy-btn-inline" id="btnCopierSupprC" onclick="copierBloc(this)">Copier</button>
+            </div>
+
+            <div class="step-title-row" style="margin-top:14px;">
+              <span class="step-title" data-i18n="methode_e_titre">Méthode E — suppression des fichiers, serveur éteint (dernier recours)</span>
+              <button class="copy-btn-inline" id="btnCopierSupprE" onclick="copierBloc(this)">Copier</button>
+            </div>
+            <div class="step-text" data-i18n="methode_e_texte">Fonctionne même si le serveur refuse de démarrer : retire le manifeste du modèle, puis les blocs de données devenus orphelins. Affiche l'espace libéré et demande confirmation avant d'effacer.</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="accordion" style="margin-top:16px; background:#f4f0fa; border-color:#c3b0e0;">
+        <summary class="accordion-title" data-i18n="titre_maj_liste">Mettre à jour la liste du fichier, sans rien installer</summary>
+        <div class="accordion-body">
+          <div class="step-text" style="margin-bottom:10px;">
+            <span data-i18n="maj_liste_texte">Utile quand un modèle est déjà installé sur la machine mais absent des menus déroulants, ou quand le téléchargement automatique de la page a échoué. Le fichier est réenregistré sous son nom d'origine.</span>
+          </div>
+          <input type="text" id="altListeAjoutInput" placeholder="nom du modèle à ajouter aux menus, par exemple : llama3.2:3b" data-i18n-placeholder="placeholder_liste_ajout">
+          <button class="btn-accordion" onclick="altAjouterALaListe()" data-i18n="btn_ajouter_liste">Ajouter à la liste</button>
+          <select id="altListeSelect" style="margin-top:12px;"></select>
+          <button class="btn-accordion" onclick="altRetirerDeLaListe()" data-i18n="btn_retirer_liste">Retirer de la liste</button>
+          <div style="margin-top:14px;">
+            <button class="btn-accordion" onclick="altTelechargerSousNomOrigine()" data-i18n="btn_telecharger_maj">Télécharger la page mise à jour</button>
+          </div>
+          <div id="altListeEtat" class="step-text" style="margin-top:10px;"></div>
+        </div>
+      </details>
+
+    </div>
+  </details>
+
+</div>
+
+<div class="perf-section">
+  <div class="perf-title" data-i18n="perf_titre">Performance indicative selon le matériel</div>
+  <div class="perf-subtitle" data-i18n="perf_sous_titre">Vitesse de génération approximative (quantification Q4) selon la taille du modèle et le matériel disponible</div>
+  <div class="perf-table-wrap">
+    <table class="perf-table">
+      <tr>
+        <th data-i18n="perf_th1">Taille du modèle (Q4)</th>
+        <th data-i18n="perf_th2">VRAM / RAM</th>
+        <th data-i18n="perf_th3">Sans GPU (16 Go RAM)</th>
+        <th data-i18n="perf_th4">Sans GPU (64 Go RAM)</th>
+        <th data-i18n="perf_th5">GPU 8 Go VRAM</th>
+        <th data-i18n="perf_th6">GPU 16 Go VRAM (RTX 4080)</th>
+        <th data-i18n="perf_th7">GPU 32 Go VRAM (RTX 5090)</th>
+      </tr>
+      <tr>
+        <td>1B à 3B</td>
+        <td>~1,5 - 3 Go</td>
+        <td class="perf-ok">🟢⚡ (15-30 tok/s)</td>
+        <td class="perf-ok">🟢⚡ (20-35 tok/s)</td>
+        <td class="perf-ok">🟢🚀 (&gt; 100 tok/s)</td>
+        <td class="perf-ok">🟢🚀 (&gt; 120 tok/s)</td>
+        <td class="perf-ok">🟢🚀 (&gt; 150 tok/s)</td>
+      </tr>
+      <tr>
+        <td>7B à 8B</td>
+        <td>~5,5 - 6 Go</td>
+        <td class="perf-mid">🟡🚶 (5-12 tok/s)</td>
+        <td class="perf-ok">🟢🏃 (8-15 tok/s)</td>
+        <td class="perf-ok">🟢🚀 (60-90 tok/s)</td>
+        <td class="perf-ok">🟢🚀 (80-120 tok/s)</td>
+        <td class="perf-ok">🟢🚀 (&gt; 130 tok/s)</td>
+      </tr>
+      <tr>
+        <td>14B à 32B</td>
+        <td>~10 - 20 Go</td>
+        <td class="perf-bad">🔴❌ (Manque RAM)</td>
+        <td class="perf-mid">🟡🐢 (2-6 tok/s)</td>
+        <td class="perf-mid">🟡⚠️ (Hybride, 5-10 tok/s)</td>
+        <td class="perf-mid">🟢🚀 (14B) / 🟡⚠️ (32B)</td>
+        <td class="perf-ok">🟢🚀 (60-100 tok/s)</td>
+      </tr>
+      <tr>
+        <td>70B</td>
+        <td>~40 - 43 Go</td>
+        <td class="perf-bad">🔴❌ (Manque RAM)</td>
+        <td class="perf-bad">🔴🐌 (0,5-2 tok/s)</td>
+        <td class="perf-bad">🔴❌ (Inutilisable)</td>
+        <td class="perf-bad">🔴🐌 (Hybride, 1-3 tok/s)</td>
+        <td class="perf-mid">🟡🚶 (Hybride, 8-15 tok/s)</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<script>
+const TRADUCTIONS = {
+  fr: {
+    h1_titre: "Génération d'items avec l'IA",
+    etape1_titre: "Étape 1 — Créer agents.py avec le configurateur ci-dessous",
+    lbl_modele: "Modèle Ollama",
+    lbl_instructions: "Instructions (rôle de l'agent)",
+    warn_modele_leger: "⚠️ Modèle léger : peut mal respecter les consignes précises ⚠️",
+    lbl_type_item: "Type d'item",
+    opt_dichotomique: "Item dichotomique",
+    opt_accord: "Item avec niveau d'accord",
+    lbl_nb_items: "Nombre d'items",
+    lbl_nb_tours: "Nombre de tours",
+    fork_caption: "Exécution en parallèle — consensus itératif",
+    etape2_titre: "Étape 2 — Exporter agents.py",
+    btn_exporter: "Exporter agents.py",
+    export_warning: 'Sauvegarde le fichier <strong>agents.py</strong> téléchargé dans le dossier \\projet\\ du disque de travail',
+    btn_sauver_agents: "Sauvegarder les agents mis à jour",
+    etape3_titre: "Étape 3 — Générer des items",
+    etape3_texte: "Fenêtre 1\u00a0: démarrer Ollama (à laisser ouverte). Fenêtre 2\u00a0: générer les items.",
+    etape4_titre: "Étape 4 — Analyser avec AI-GENIE",
+    btn_valider_items: "Valider les items",
+    btn_valider_items_sous: "Un seul construit\u00a0: analyse directe des items générés",
+    btn_assigner_facteurs: "Assigner les facteurs",
+    btn_assigner_facteurs_sous: "Plusieurs construits\u00a0: répartir d\u2019abord les items par facteur",
+    etape4bis_titre: "Étape 4 bis — Analyser plusieurs construits",
+    etape4bis_texte: "Variante multi-construits\u00a0: nécessite <code>AI-GENIE_construits.csv</code> dans \\projet\\, produit par la page d\u2019assignation des facteurs.",
+    h1_aide: "Aide",
+    sous_titre_aide: "Gestion des modèles, méthodes alternatives d\u2019installation et performances indicatives",
+    aide_lien_titre: "Gestion des modèles",
+    aide_lien_texte: "Les modèles ajoutés ou supprimés ici sont enregistrés sur votre compte\u00a0: vous les retrouverez sur la page <strong>AI-agent</strong> à chaque connexion, sans aucun fichier à télécharger.",
+    avis_connexion: "Vous devez être connecté pour ajouter ou supprimer des modèles.",
+    avis_connexion_lien: "Se connecter",
+    etat_non_connecte: "Non connecté\u00a0: vos modèles ne peuvent pas être chargés.",
+    etat_enregistrement: "Enregistrement\u2026",
+    etat_enregistre: "Enregistré. Vos modèles\u00a0:",
+    etat_erreur_enregistrement: "L\u2019enregistrement a échoué.",
+    etat_chargement: "Lecture de vos modèles\u2026",
+    etat_charge: "Vos modèles\u00a0:",
+    etat_erreur: "Impossible de lire vos modèles. Réessayez après vous être reconnecté.",
+    alerte_dernier_modele: "Impossible de supprimer le dernier modèle restant.",
+    confirmer_suppression: "Voulez-vous vraiment supprimer le modèle « %s » ?",
+    titre_ajouter: "Ajouter modèle",
+    btn_installer: "Installer",
+    lien_ollama_search: "Parcourir tous les modèles disponibles sur ollama.com",
+    ajout_texte: "Fenêtre 1\u00a0: démarrer Ollama (à laisser ouverte). Fenêtre 2\u00a0: installer le modèle.",
+    titre_supprimer: "Supprimer modèle",
+    btn_supprimer: "Supprimer",
+    suppr_texte: "Fenêtre 1\u00a0: démarrer Ollama (à laisser ouverte). Fenêtre 2\u00a0: supprimer le modèle.",
+    titre_methodes_alt: "Méthodes alternatives — à utiliser uniquement si «\u00a0Ajouter modèle\u00a0» ou «\u00a0Supprimer modèle\u00a0» ci-dessus échoue sur une machine",
+    intro_methodes_alt: "Les boutons d'origine restent inchangés. Ces méthodes attendent réellement que le serveur Ollama réponde, cherchent <em>ollama.exe</em> à plus d'endroits, et proposent une voie de secours qui n'utilise pas le client en ligne de commande.",
+    titre_diagnostic: "Diagnostic Ollama — à lancer d'abord en cas d'échec",
+    diag1_titre: "1. Vérifier l'exécutable, le port 11434, le dossier des modèles et les journaux",
+    diag1_texte: "À exécuter dans PowerShell. Ne modifie rien : n'affiche que l'état réel de l'installation.",
+    diag2_titre: "2. Lister les modèles installés",
+    diag2_texte: "Nécessite qu'Ollama tourne déjà (lance d'abord un «\u00a0PowerShell 1\u00a0» ci-dessus).",
+    diag3_titre: "3. Arrêter tous les processus Ollama en cours",
+    diag3_texte: "Utile pour repartir sur une base propre si plusieurs instances tournent en même temps.",
+    diag4_titre: "4. Nettoyer un manifeste bloqué (modifie le nom avant de coller)",
+    diag4_texte: 'Remplace la valeur de <code>$M</code> par le nom exact du modèle qui bloque (visible dans le message d\'erreur «\u00a0Access is denied\u00a0»), puis colle et exécute. Corrige l\'erreur «\u00a0Error: remove ...: Access is denied\u00a0» au démarrage du serveur.',
+    diag5_titre: "5. Nettoyer les fichiers de données orphelins (libère de l'espace disque)",
+    diag5_texte: "Supprime les fichiers de poids qui ne sont plus référencés par aucun modèle installé (restes d'une suppression ou d'un téléchargement interrompu). Sans danger pour les modèles encore installés.",
+    diag6_titre: "6. Démarrage avec nettoyage automatique en boucle (recommandé)",
+    diag6_texte: "Détecte tout seul quel manifeste bloque (message «\u00a0Access is denied\u00a0»), le supprime automatiquement, et réessaie — jusqu'à 10 fois si besoin — avant de lancer le serveur normalement. Remplace avantageusement la technique 4 quand plusieurs modèles bloquent d'un coup ou que tu ne veux pas identifier le nom toi-même.",
+    titre_ajout_alt: "Ajouter modèle — méthodes alternatives",
+    btn_preparer: "Préparer les commandes",
+    methode_b_titre: "Méthode B — client Ollama, avec attente réelle du serveur (jusqu'à 60 s)",
+    methode_b_texte: "À essayer en premier. Affiche la progression du téléchargement.",
+    methode_c_titre: "Méthode C — API locale, sans passer par le client en ligne de commande",
+    methode_c_texte: "Contourne l'erreur «\u00a0could not locate ollama app\u00a0» : parle directement au serveur. Aucun affichage pendant le téléchargement, soyez patient.",
+    methode_d_titre: "Méthode D — fenêtre serveur séparée, puis téléchargement (dernier recours)",
+    methode_d_texte: "Deux fenêtres PowerShell : la première garde le serveur visible et affiche ses erreurs, la seconde télécharge.",
+    titre_suppr_alt: "Supprimer modèle — méthodes alternatives",
+    methode_e_titre: "Méthode E — suppression des fichiers, serveur éteint (dernier recours)",
+    methode_e_texte: "Fonctionne même si le serveur refuse de démarrer : retire le manifeste du modèle, puis les blocs de données devenus orphelins. Affiche l'espace libéré et demande confirmation avant d'effacer.",
+    titre_maj_liste: "Mettre à jour la liste du fichier, sans rien installer",
+    maj_liste_texte: "Utile quand un modèle est déjà installé sur la machine mais absent des menus déroulants, ou quand le téléchargement automatique de la page a échoué. Le fichier est réenregistré sous son nom d'origine.",
+    btn_ajouter_liste: "Ajouter à la liste",
+    btn_retirer_liste: "Retirer de la liste",
+    btn_telecharger_maj: "Télécharger la page mise à jour",
+    perf_titre: "Performance indicative selon le matériel",
+    perf_sous_titre: "Vitesse de génération approximative (quantification Q4) selon la taille du modèle et le matériel disponible",
+    perf_th1: "Taille du modèle (Q4)",
+    perf_th2: "VRAM / RAM",
+    perf_th3: "Sans GPU (16 Go RAM)",
+    perf_th4: "Sans GPU (64 Go RAM)",
+    perf_th5: "GPU 8 Go VRAM",
+    perf_th6: "GPU 16 Go VRAM (RTX 4080)",
+    perf_th7: "GPU 32 Go VRAM (RTX 5090)",
+    title_retirer_agent: "Retirer cet agent",
+    title_ajouter_agent: "Ajouter un agent de relecture",
+    placeholder_modele: "par exemple : ollama run qwen3.5:0.8b",
+    placeholder_suppr_libre: "ou saisir un autre nom, par exemple : mistral-nemo:12b",
+    placeholder_liste_ajout: "nom du modèle à ajouter aux menus, par exemple : llama3.2:3b",
+    placeholder_nom_agent: "Nom de l'agent",
+    copier: "Copier",
+    copie: "Copié !",
+    btn_accueil: "Accueil",
+    lien_test_modeles: "\u2192 Tester plusieurs mod\u00e8les sur la m\u00eame consigne"
+  },
+  en: {
+    h1_titre: "AI Item Generation",
+    etape1_titre: "Step 1 — Create agents.py with the configurator below",
+    lbl_modele: "Ollama Model",
+    lbl_instructions: "Instructions (agent's role)",
+    warn_modele_leger: "⚠️ Light model: may not follow precise instructions well ⚠️",
+    lbl_type_item: "Item type",
+    opt_dichotomique: "Dichotomous item",
+    opt_accord: "Likert-type item",
+    lbl_nb_items: "Number of items",
+    lbl_nb_tours: "Number of rounds",
+    fork_caption: "Parallel execution — iterative consensus",
+    etape2_titre: "Step 2 — Export agents.py",
+    btn_exporter: "Export agents.py",
+    export_warning: 'Save the downloaded <strong>agents.py</strong> file in the \\projet\\ folder of the working drive',
+    btn_sauver_agents: "Save updated agents",
+    etape3_titre: "Step 3 — Generate items",
+    etape3_texte: "Window 1: start Ollama (keep it open). Window 2: generate the items.",
+    etape4_titre: "Step 4 — Analyse with AI-GENIE",
+    btn_valider_items: "Validate the items",
+    btn_valider_items_sous: "A single construct: analyse the generated items directly",
+    btn_assigner_facteurs: "Assign the factors",
+    btn_assigner_facteurs_sous: "Several constructs: first sort the items by factor",
+    etape4bis_titre: "Step 4b — Analyse several constructs",
+    etape4bis_texte: "Multi-construct variant: requires <code>AI-GENIE_construits.csv</code> in \\projet\\, produced by the factor assignment page.",
+    h1_aide: "Help",
+    sous_titre_aide: "Model management, alternative installation methods and indicative performance",
+    aide_lien_titre: "Model management",
+    aide_lien_texte: "Models added or removed here are saved to your account: you will find them on the <strong>AI-agent</strong> page each time you log in, with no file to download.",
+    avis_connexion: "You must be logged in to add or remove models.",
+    avis_connexion_lien: "Log in",
+    etat_non_connecte: "Not logged in: your models cannot be loaded.",
+    etat_enregistrement: "Saving\u2026",
+    etat_enregistre: "Saved. Your models:",
+    etat_erreur_enregistrement: "Saving failed.",
+    etat_chargement: "Reading your models\u2026",
+    etat_charge: "Your models:",
+    etat_erreur: "Your models could not be read. Try again after logging in.",
+    alerte_dernier_modele: "The last remaining model cannot be removed.",
+    confirmer_suppression: "Do you really want to remove the model \u201c%s\u201d?",
+    titre_ajouter: "Add model",
+    btn_installer: "Install",
+    lien_ollama_search: "Browse all available models on ollama.com",
+    ajout_texte: "Window 1: start Ollama (keep it open). Window 2: install the model.",
+    titre_supprimer: "Remove model",
+    btn_supprimer: "Remove",
+    suppr_texte: "Window 1: start Ollama (keep it open). Window 2: remove the model.",
+    titre_methodes_alt: "Alternative methods — use only if \u201cAdd model\u201d or \u201cRemove model\u201d above fails on a machine",
+    intro_methodes_alt: "The original buttons stay unchanged. These methods actually wait for the Ollama server to respond, look for <em>ollama.exe</em> in more places, and offer a fallback that doesn't rely on the command-line client.",
+    titre_diagnostic: "Ollama diagnostics — run this first if something fails",
+    diag1_titre: "1. Check the executable, port 11434, the models folder, and the logs",
+    diag1_texte: "Run in PowerShell. Changes nothing: only shows the actual state of the installation.",
+    diag2_titre: "2. List installed models",
+    diag2_texte: "Requires Ollama to already be running (start \u201cPowerShell 1\u201d above first).",
+    diag3_titre: "3. Stop all running Ollama processes",
+    diag3_texte: "Useful to start fresh if several instances are running at once.",
+    diag4_titre: "4. Clean up a stuck manifest (edit the name before pasting)",
+    diag4_texte: 'Replace the value of <code>$M</code> with the exact name of the model that\u2019s stuck (shown in the \u201cAccess is denied\u201d error message), then paste and run. Fixes the \u201cError: remove ...: Access is denied\u201d error at server startup.',
+    diag5_titre: "5. Clean up orphaned data files (frees disk space)",
+    diag5_texte: "Deletes weight files no longer referenced by any installed model (leftovers from a removal or an interrupted download). Safe for models still installed.",
+    diag6_titre: "6. Startup with automatic loop cleanup (recommended)",
+    diag6_texte: "Automatically detects which manifest is stuck (\u201cAccess is denied\u201d message), removes it, and retries — up to 10 times if needed — before starting the server normally. A better alternative to technique 4 when several models are stuck at once or you don't want to identify the name yourself.",
+    titre_ajout_alt: "Add model — alternative methods",
+    btn_preparer: "Prepare the commands",
+    methode_b_titre: "Method B — Ollama client, with real wait for the server (up to 60 s)",
+    methode_b_texte: "Try this first. Shows download progress.",
+    methode_c_titre: "Method C — local API, without going through the command-line client",
+    methode_c_texte: "Works around the \u201ccould not locate ollama app\u201d error: talks directly to the server. No display during the download, be patient.",
+    methode_d_titre: "Method D — separate server window, then download (last resort)",
+    methode_d_texte: "Two PowerShell windows: the first keeps the server visible and shows its errors, the second downloads.",
+    titre_suppr_alt: "Remove model — alternative methods",
+    methode_e_titre: "Method E — file deletion, server off (last resort)",
+    methode_e_texte: "Works even if the server refuses to start: removes the model's manifest, then any data blocks left orphaned. Shows freed space and asks for confirmation before deleting.",
+    titre_maj_liste: "Update the file's list, without installing anything",
+    maj_liste_texte: "Useful when a model is already installed on the machine but missing from the dropdown menus, or when the page's automatic download failed. The file is re-saved under its original name.",
+    btn_ajouter_liste: "Add to list",
+    btn_retirer_liste: "Remove from list",
+    btn_telecharger_maj: "Download the updated page",
+    perf_titre: "Indicative performance by hardware",
+    perf_sous_titre: "Approximate generation speed (Q4 quantisation) depending on model size and available hardware",
+    perf_th1: "Model size (Q4)",
+    perf_th2: "VRAM / RAM",
+    perf_th3: "No GPU (16 GB RAM)",
+    perf_th4: "No GPU (64 GB RAM)",
+    perf_th5: "GPU 8 GB VRAM",
+    perf_th6: "GPU 16 GB VRAM (RTX 4080)",
+    perf_th7: "GPU 32 GB VRAM (RTX 5090)",
+    title_retirer_agent: "Remove this agent",
+    title_ajouter_agent: "Add a review agent",
+    placeholder_modele: "for example: ollama run qwen3.5:0.8b",
+    placeholder_suppr_libre: "or type another name, for example: mistral-nemo:12b",
+    placeholder_liste_ajout: "model name to add to the menus, for example: llama3.2:3b",
+    placeholder_nom_agent: "Agent name",
+    copier: "Copy",
+    copie: "Copied!",
+    btn_accueil: "Home",
+    lien_test_modeles: "\u2192 Test several models on the same brief"
+  }
+};
+
+(function detecterLangueInitiale() {
+  // 1) langue transmise par la page d'accueil (index.html)
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const demandee = params.get('lang');
+    if (demandee === 'fr' || demandee === 'en') {
+      LANGUE_ACTUELLE = demandee;
+      return;
+    }
+  } catch (e) {}
+  // 2) preference deja enregistree
+  try {
+    const sauvegardee = localStorage.getItem('langueConfigurateur');
+    if (sauvegardee === 'fr' || sauvegardee === 'en') {
+      LANGUE_ACTUELLE = sauvegardee;
+      return;
+    }
+  } catch (e) {}
+  const langueNavigateur = (navigator.language || navigator.userLanguage || 'fr').toLowerCase();
+  LANGUE_ACTUELLE = langueNavigateur.startsWith('fr') ? 'fr' : 'en';
+})();
+
+function appliquerLangue(langue) {
+  LANGUE_ACTUELLE = langue;
+  const dict = TRADUCTIONS[langue];
+
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n');
+    if (dict[cle] !== undefined) el.textContent = dict[cle];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n-html');
+    if (dict[cle] !== undefined) el.innerHTML = dict[cle];
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n-title');
+    if (dict[cle] !== undefined) el.title = dict[cle];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n-placeholder');
+    if (dict[cle] !== undefined) el.placeholder = dict[cle];
+  });
+  // Boutons "Copier" (idle uniquement -- ne touche pas un bouton qui affiche "Copie !"/"Copied!")
+  document.querySelectorAll('[onclick="copierBloc(this)"]').forEach(function (btn) {
+    if (btn.textContent === TRADUCTIONS.fr.copier || btn.textContent === TRADUCTIONS.en.copier) {
+      btn.textContent = dict.copier;
+    }
+  });
+
+  // (basculerTextesAgentsFixes et updateTypeItem restent dans AI-agent.html :
+  //  cette page ne contient ni les agents ni le selecteur de type d'item.)
+
+  const btnFr = document.getElementById('btnLangueFr');
+  const btnEn = document.getElementById('btnLangueEn');
+  if (btnFr && btnEn) {
+    btnFr.classList.toggle('langue-active', langue === 'fr');
+    btnEn.classList.toggle('langue-active', langue === 'en');
+  }
+  document.documentElement.setAttribute('lang', langue);
+
+  try { localStorage.setItem('langueConfigurateur', langue); } catch (e) {}
+}
+
+function copierBloc(btn) {
+  let texte;
+  const dataTexte = btn.getAttribute('data-texte');
+  if (dataTexte !== null) {
+    texte = dataTexte.replace(/\\n/g, '\n');
+  } else {
+    texte = btn.nextElementSibling.textContent;
+  }
+  navigator.clipboard.writeText(texte).then(function () {
+    const original = btn.textContent;
+    btn.textContent = 'Copié !';
+    btn.classList.add('copied');
+    setTimeout(function () {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 1500);
+  }).catch(function () {
+    const zoneTemp = document.createElement('textarea');
+    zoneTemp.value = texte;
+    document.body.appendChild(zoneTemp);
+    zoneTemp.select();
+    document.execCommand('copy');
+    document.body.removeChild(zoneTemp);
+    btn.textContent = 'Copié !';
+    setTimeout(function () { btn.textContent = 'Copier'; }, 1500);
+  });
+}
+
+const CMD_PS1_DEMARRER = '$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\\\" } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d\'un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\\"\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\\"\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\\models"\n  & (Join-Path $DRIVE "ollama\\ollama.exe") serve\n}';
+const CMD_INSTALLER_AVANT = '$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\\\" } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d\'un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\\"\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\\"\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\\models"\n  & (Join-Path $DRIVE "ollama\\ollama.exe") pull ';
+const CMD_INSTALLER_APRES = '\n}';
+const CMD_SUPPRIMER_AVANT = '$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\\\" } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d\'un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\\"\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\\"\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\\models"\n  & (Join-Path $DRIVE "ollama\\ollama.exe") rm ';
+const CMD_SUPPRIMER_APRES = '\n}';
+
+function pourAttribut(texte) {
+  return texte.replace(/\n/g, '\\n');
+}
+
+// =====================================================================
+// GESTION DES MODELES, ENREGISTREE PAR UTILISATEUR
+// La liste n'est plus inscrite dans un fichier HTML a retelecharger : elle
+// est conservee par le plugin WordPress, propre a chaque compte. Cette page
+// la lit au chargement et l'enregistre a chaque ajout ou suppression.
+// =====================================================================
+
+let MODELS = [];
+
+// Contexte depose par le plugin sur la page WordPress. Cette page etant
+// affichee dans un cadre, on le lit chez le parent, du meme domaine.
+function contexteAuth() {
+  try {
+    if (window.parent && window.parent.GenitemAuth) return window.parent.GenitemAuth;
+  } catch (e) {}
+  return window.GenitemAuth || null;
+}
+
+// Adresse des routes : deduite du domaine si la page parente ne l'a pas fournie
+// (page mise en cache, ou fichier ouvert hors WordPress).
+function baseRest() {
+  var ctx = contexteAuth();
+  if (ctx && ctx.rest) return ctx.rest;
+  return window.location.origin + '/wp-json/genitem/v1/';
+}
+
+// Etat reel de la session, demande au serveur a chaque ouverture. On ne se fie
+// pas au jeton inscrit dans la page parente : si celle-ci est servie par un
+// cache, ce jeton appartient a une autre session et toute ecriture echoue.
+var AUTH = { rest: baseRest(), nonce: '', connecte: false, nom: '' };
+var CONNECTE = false;
+
+// Repli : si la route /jeton ne repond pas (plugin pas encore mis a jour,
+// par exemple), on se rabat sur le contexte depose par la page parente.
+function replierSurParent() {
+  var ctx = contexteAuth();
+  if (ctx && ctx.connecte && ctx.nonce) {
+    AUTH.connecte = true;
+    AUTH.nonce = ctx.nonce;
+    AUTH.nom = ctx.nom || '';
+    CONNECTE = true;
+    return true;
+  }
+  return false;
+}
+
+function verifierSession() {
+  if (typeof fetch !== 'function') return Promise.resolve(replierSurParent());
+  return fetch(AUTH.rest + 'jeton', { credentials: 'same-origin', cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d) return replierSurParent();
+      AUTH.connecte = !!d.connecte;
+      AUTH.nonce = d.nonce || '';
+      AUTH.nom = d.nom || '';
+      // La liste accompagne le jeton : un second appel devient inutile.
+      AUTH.modeles = d.modeles || null;
+      CONNECTE = AUTH.connecte;
+      // Le serveur dit "non connecte" alors que la page parente affirme le
+      // contraire : on tente quand meme, la reponse REST tranchera.
+      if (!CONNECTE) return replierSurParent();
+      return true;
+    })
+    .catch(function () { return replierSurParent(); });
+}
+
+function etat(cle, type, suffixe) {
+  const el = document.getElementById('etatSource');
+  if (!el) return;
+  el.className = 'step-text' + (type ? ' ' + type : '');
+  el.textContent = (TRADUCTIONS[LANGUE_ACTUELLE][cle] || cle) + (suffixe ? ' ' + suffixe : '');
+}
+
+// Affiche les commandes et le formulaire seulement si la session est ouverte.
+function appliquerEtatConnexion() {
+  const zones = document.querySelectorAll('.reserve-connecte');
+  zones.forEach(function (z) { z.style.display = CONNECTE ? '' : 'none'; });
+
+  const avis = document.getElementById('avisConnexion');
+  if (avis) {
+    avis.style.display = CONNECTE ? 'none' : '';
+    // L'adresse reste celle de la page de connexion du site (et non
+    // wp-login.php) : elle porte les explications destinees aux visiteurs.
+  }
+}
+
+function genererOptionsHTML(valeurSelectionnee) {
+  return MODELS.map(function (m) {
+    return '<option value="' + m + '"' + (m === valeurSelectionnee ? ' selected' : '') + '>' + m + '</option>';
+  }).join('');
+}
+
+function initialiserSelectSuppression() {
+  const sel = document.getElementById('selectSupprimerModele');
+  if (sel) sel.innerHTML = genererOptionsHTML(MODELS[0]);
+}
+
+function chargerModeles() {
+  if (!CONNECTE) {
+    etat('etat_non_connecte', 'erreur');
+    return Promise.resolve();
+  }
+  if (typeof fetch !== 'function') {
+    etat('etat_erreur', 'erreur');
+    return Promise.resolve();
+  }
+
+  // Liste deja recue avec le jeton : rien a redemander.
+  if (AUTH.modeles && AUTH.modeles.length) {
+    MODELS = AUTH.modeles;
+    initialiserSelectSuppression();
+    etat('etat_charge', 'ok', MODELS.join(', '));
+    return Promise.resolve();
+  }
+
+  etat('etat_chargement');
+  return fetch(AUTH.rest + 'modeles', {
+    credentials: 'same-origin',
+    headers: { 'X-WP-Nonce': AUTH.nonce }
+  })
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (donnees) {
+      MODELS = donnees.modeles || [];
+      initialiserSelectSuppression();
+      etat('etat_charge', 'ok', MODELS.join(', '));
+    })
+    .catch(function (e) {
+      etat('etat_erreur', 'erreur', '(' + e.message + ')');
+    });
+}
+
+// Enregistrement immediat : aucun fichier a telecharger ni a redeposer.
+function enregistrerModeles() {
+  if (!CONNECTE) return Promise.resolve(false);
+
+  etat('etat_enregistrement');
+  return fetch(AUTH.rest + 'modeles', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': AUTH.nonce
+    },
+    body: JSON.stringify({ modeles: MODELS })
+  })
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (donnees) {
+      MODELS = donnees.modeles || MODELS;
+      initialiserSelectSuppression();
+      etat('etat_enregistre', 'ok', MODELS.join(', '));
+      return true;
+    })
+    .catch(function (e) {
+      etat('etat_erreur_enregistrement', 'erreur', '(' + e.message + ')');
+      return false;
+    });
+}
+
+function installerNouveauModele() {
+  if (!CONNECTE) return;
+  const champ = document.getElementById('nouveauModeleInput');
+  const saisie = champ.value.trim();
+  if (!saisie) return;
+  const nomModele = saisie.replace(/^ollama\s+(run|pull)\s+/i, '').trim();
+  if (!nomModele) return;
+
+  if (!MODELS.includes(nomModele)) {
+    MODELS.push(nomModele);
+  }
+
+  document.getElementById('btnCopierAjoutPS1').setAttribute('data-texte', pourAttribut(CMD_PS1_DEMARRER));
+  document.getElementById('btnCopierInstaller').setAttribute(
+    'data-texte',
+    pourAttribut(CMD_INSTALLER_AVANT + nomModele + CMD_INSTALLER_APRES)
+  );
+  document.getElementById('resultatAjoutModele').style.display = 'block';
+  champ.value = '';
+  enregistrerModeles();
+}
+
+function supprimerModeleChoisi() {
+  if (!CONNECTE) return;
+  const sel = document.getElementById('selectSupprimerModele');
+  const nomModele = sel.value;
+  if (!nomModele) return;
+  if (MODELS.length <= 1) {
+    alert(TRADUCTIONS[LANGUE_ACTUELLE].alerte_dernier_modele);
+    return;
+  }
+  if (!confirm(TRADUCTIONS[LANGUE_ACTUELLE].confirmer_suppression.replace('%s', nomModele))) return;
+
+  MODELS = MODELS.filter(function (m) { return m !== nomModele; });
+
+  document.getElementById('btnCopierSupprPS1').setAttribute('data-texte', pourAttribut(CMD_PS1_DEMARRER));
+  document.getElementById('btnCopierSupprimer').setAttribute(
+    'data-texte',
+    pourAttribut(CMD_SUPPRIMER_AVANT + nomModele + CMD_SUPPRIMER_APRES)
+  );
+  document.getElementById('resultatSupprModele').style.display = 'block';
+  enregistrerModeles();
+}
+
+
+function basculerLangue() {
+  appliquerLangue(LANGUE_ACTUELLE === 'fr' ? 'en' : 'fr');
+}
+
+appliquerLangue(LANGUE_ACTUELLE);
+verifierSession().then(function () {
+  appliquerEtatConnexion();
+  chargerModeles();
+});
+</script>
+
+<script>
+// =====================================================================
+// AJOUT (ne remplace rien) : methodes alternatives d'installation et de
+// suppression de modeles, pour les machines ou le client Ollama repond
+// "could not locate ollama app" -- c'est-a-dire ou le serveur n'ecoutait
+// pas encore quand la commande a ete lancee.
+// =====================================================================
+
+// --- Bloc commun : localisation de ollama.exe + demarrage avec attente reelle du port ---
+const ALT_PRELUDE = String.raw`# ===== Preparation : localiser Ollama et s'assurer que le serveur repond =====
+$env:OLLAMA_HOST = "127.0.0.1:11434"
+
+function Get-OllamaExe {
+  $pistes = @()
+  $pistes += Get-PSDrive -PSProvider FileSystem | ForEach-Object { Join-Path $_.Root "ollama\ollama.exe" }
+  $pistes += Join-Path $env:LOCALAPPDATA "Programs\Ollama\ollama.exe"
+  $pistes += Join-Path $env:LOCALAPPDATA "Ollama\ollama.exe"
+  $pistes += "C:\Program Files\Ollama\ollama.exe"
+  $pistes += "C:\Program Files (x86)\Ollama\ollama.exe"
+  $danslePath = Get-Command ollama.exe -ErrorAction SilentlyContinue
+  if ($danslePath) { $pistes += $danslePath.Source }
+
+  $trouve = $pistes | Where-Object { $_ -and (Test-Path $_ -ErrorAction SilentlyContinue) } | Select-Object -First 1
+  if ($trouve) { $trouve } else {
+    Write-Host "Recherche dans le dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow
+    $r = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($r) { $r.FullName } else { $null }
+  }
+}
+
+function Test-OllamaPort {
+  try {
+    $client = New-Object System.Net.Sockets.TcpClient
+    $client.Connect("127.0.0.1", 11434)
+    $client.Close()
+    $true
+  } catch { $false }
+}
+
+$EXE = Get-OllamaExe
+
+if ($EXE) {
+  Write-Host ("Executable detecte : " + $EXE) -ForegroundColor Green
+  $dossierModeles = Join-Path (Split-Path $EXE) "models"
+  if (Test-Path $dossierModeles) { $env:OLLAMA_MODELS = $dossierModeles }
+} else {
+  Write-Host "ollama.exe introuvable. Renseigne le chemin a la main sur la ligne suivante, puis relance ce bloc :" -ForegroundColor Red
+  Write-Host '  $EXE = "D:\ollama\ollama.exe"' -ForegroundColor Yellow
+}
+
+$pret = $false
+if ($EXE) { $pret = Test-OllamaPort }
+
+if ($EXE -and -not $pret) {
+  Write-Host "Le serveur ne repond pas encore. Demarrage puis attente reelle (jusqu'a 60 secondes)..." -ForegroundColor Yellow
+  $journalSortie = Join-Path $env:TEMP "ollama_serve_out.log"
+  $journalErreur = Join-Path $env:TEMP "ollama_serve_err.log"
+  try {
+    Start-Process -FilePath $EXE -ArgumentList "serve" -RedirectStandardOutput $journalSortie -RedirectStandardError $journalErreur
+  } catch {
+    try { Start-Process -FilePath $EXE -ArgumentList "serve" -WindowStyle Minimized } catch { Write-Host ("Lancement impossible : " + $_.Exception.Message) -ForegroundColor Red }
+  }
+  $secondes = 0
+  while (-not (Test-OllamaPort) -and $secondes -lt 60) { Start-Sleep -Seconds 1; $secondes++ }
+  $pret = Test-OllamaPort
+  if ($pret) { Write-Host ("Serveur pret apres " + $secondes + " seconde(s).") -ForegroundColor Green }
+}
+
+if ($EXE -and -not $pret) {
+  Write-Host "Le serveur Ollama n'ecoute toujours pas sur 127.0.0.1:11434 apres 60 secondes." -ForegroundColor Red
+  Write-Host "Ce n'est donc ni le reseau ni le nom du modele : c'est le serveur qui ne demarre pas." -ForegroundColor Red
+  Write-Host "Dernieres lignes des journaux disponibles :" -ForegroundColor Yellow
+  foreach ($j in @((Join-Path $env:TEMP "ollama_serve_err.log"), (Join-Path $env:TEMP "ollama_serve_out.log"), (Join-Path $env:LOCALAPPDATA "Ollama\server.log"))) {
+    if (Test-Path $j) { Write-Host ("--- " + $j) -ForegroundColor Yellow; Get-Content $j -Tail 12 }
+  }
+  Write-Host "Essai a la main dans une autre fenetre, pour voir les messages du serveur :" -ForegroundColor Yellow
+  Write-Host ("  & '" + $EXE + "' serve") -ForegroundColor Yellow
+}
+`;
+
+const ALT_ACTION_PULL = String.raw`
+# ===== Installation du modele (client Ollama) =====
+if ($pret) {
+  $tentative = 0
+  $reussi = $false
+  while (-not $reussi -and $tentative -lt 3) {
+    $tentative++
+    if (-not (Test-OllamaPort)) {
+      Write-Host "Le serveur s'est arrete en cours de route, relance..." -ForegroundColor Yellow
+      Start-Process -FilePath $EXE -ArgumentList "serve" -WindowStyle Minimized
+      $s = 0
+      while (-not (Test-OllamaPort) -and $s -lt 30) { Start-Sleep -Seconds 1; $s++ }
+    }
+    Write-Host ("Telechargement de " + $M + " (tentative " + $tentative + ")...") -ForegroundColor Cyan
+    & $EXE pull $M
+    if ($LASTEXITCODE -eq 0) { $reussi = $true } else { Start-Sleep -Seconds 3 }
+  }
+  if ($reussi) {
+    Write-Host "Modele installe." -ForegroundColor Green
+    & $EXE list
+  } else {
+    Write-Host "Echec du telechargement. Verifie le nom du modele sur ollama.com et la connexion Internet." -ForegroundColor Red
+  }
+}
+`;
+
+const ALT_ACTION_PULL_API = String.raw`
+# ===== Installation du modele via l'API locale (sans le client en ligne de commande) =====
+if ($pret) {
+  [System.Net.WebRequest]::DefaultWebProxy = $null
+  $corps = @{ model = $M; stream = $false } | ConvertTo-Json
+  Write-Host ("Telechargement de " + $M + " via l'API locale.") -ForegroundColor Cyan
+  Write-Host "Aucun affichage pendant l'operation : cela peut durer plusieurs minutes selon la taille du modele." -ForegroundColor Yellow
+  try {
+    $reponse = Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:11434/api/pull" -Body $corps -ContentType "application/json" -TimeoutSec 0
+    Write-Host ("Reponse du serveur : " + $reponse.status) -ForegroundColor Green
+    $liste = Invoke-RestMethod -Uri "http://127.0.0.1:11434/api/tags" -TimeoutSec 30
+    $liste.models | Select-Object name, @{ n = "Go"; e = { [math]::Round($_.size / 1GB, 2) } } | Format-Table
+  } catch {
+    Write-Host ("Echec de l'appel a l'API : " + $_.Exception.Message) -ForegroundColor Red
+    Write-Host "Si le message parle de proxy, essaie la methode B." -ForegroundColor Yellow
+  }
+}
+`;
+
+const ALT_ACTION_PULL_DEUX_FENETRES = String.raw`
+# ===== Dernier recours : serveur dans sa propre fenetre, puis telechargement =====
+# 1) Ce bloc ouvre une fenetre PowerShell dediee au serveur : laisse-la ouverte,
+#    elle affiche les messages d'Ollama lui-meme (c'est la qu'on voit la vraie cause).
+# 2) Il attend que le port reponde, puis telecharge le modele dans CETTE fenetre.
+
+if ($EXE) {
+  $scriptServeur = Join-Path $env:TEMP "demarrer_ollama.ps1"
+  $lignes = @()
+  $lignes += '$env:OLLAMA_HOST = "127.0.0.1:11434"'
+  if ($env:OLLAMA_MODELS) { $lignes += ('$env:OLLAMA_MODELS = "' + $env:OLLAMA_MODELS + '"') }
+  $lignes += 'Write-Host "Serveur Ollama -- laisse cette fenetre ouverte." -ForegroundColor Cyan'
+  $lignes += ('& "' + $EXE + '" serve')
+  Set-Content -Path $scriptServeur -Value $lignes -Encoding UTF8
+
+  if (-not (Test-OllamaPort)) {
+    Start-Process powershell -ArgumentList "-NoExit", "-ExecutionPolicy", "Bypass", "-File", $scriptServeur
+    Write-Host ("Fenetre serveur ouverte (" + $scriptServeur + "). Attente de sa mise en ecoute...") -ForegroundColor Yellow
+    $s = 0
+    while (-not (Test-OllamaPort) -and $s -lt 90) { Start-Sleep -Seconds 1; $s++ }
+  }
+
+  if (Test-OllamaPort) {
+    Write-Host "Serveur en ecoute. Telechargement..." -ForegroundColor Green
+    & $EXE pull $M
+    if ($LASTEXITCODE -eq 0) { & $EXE list } else { Write-Host "Telechargement en echec -- regarde les messages dans la fenetre serveur." -ForegroundColor Red }
+  } else {
+    Write-Host "Toujours aucune ecoute apres 90 secondes : lis les messages affiches dans la fenetre serveur, la cause y est ecrite." -ForegroundColor Red
+  }
+}
+`;
+
+const ALT_ACTION_RM = String.raw`
+# ===== Suppression du modele (client Ollama) =====
+if ($pret) {
+  Write-Host ("Suppression de " + $M + "...") -ForegroundColor Cyan
+  & $EXE rm $M
+  if ($LASTEXITCODE -eq 0) {
+    Write-Host "Modele supprime." -ForegroundColor Green
+    & $EXE list
+  } else {
+    Write-Host "Echec de la suppression -- essaie la methode C, puis la methode E." -ForegroundColor Red
+  }
+}
+`;
+
+const ALT_ACTION_RM_API = String.raw`
+# ===== Suppression du modele via l'API locale =====
+if ($pret) {
+  [System.Net.WebRequest]::DefaultWebProxy = $null
+  $corps = @{ model = $M } | ConvertTo-Json
+  try {
+    Invoke-RestMethod -Method Delete -Uri "http://127.0.0.1:11434/api/delete" -Body $corps -ContentType "application/json" -TimeoutSec 60 | Out-Null
+    Write-Host ("Modele supprime : " + $M) -ForegroundColor Green
+    $liste = Invoke-RestMethod -Uri "http://127.0.0.1:11434/api/tags" -TimeoutSec 30
+    $liste.models | Select-Object name, @{ n = "Go"; e = { [math]::Round($_.size / 1GB, 2) } } | Format-Table
+  } catch {
+    Write-Host ("Echec de l'appel a l'API : " + $_.Exception.Message) -ForegroundColor Red
+    Write-Host "Si le modele n'existe pas sous ce nom exact, verifie l'orthographe avec la commande list." -ForegroundColor Yellow
+  }
+}
+`;
+
+const ALT_ACTION_RM_FICHIERS = String.raw`
+# ===== Suppression au niveau des fichiers, serveur eteint (dernier recours) =====
+# Retire le manifeste du modele, puis les blocs de donnees qui ne servent plus a
+# aucun autre modele. Demande confirmation avant d'effacer quoi que ce soit.
+
+function Get-OllamaExe {
+  $pistes = @()
+  $pistes += Get-PSDrive -PSProvider FileSystem | ForEach-Object { Join-Path $_.Root "ollama\ollama.exe" }
+  $pistes += Join-Path $env:LOCALAPPDATA "Programs\Ollama\ollama.exe"
+  $pistes += "C:\Program Files\Ollama\ollama.exe"
+  $trouve = $pistes | Where-Object { $_ -and (Test-Path $_ -ErrorAction SilentlyContinue) } | Select-Object -First 1
+  if ($trouve) { $trouve } else { $null }
+}
+
+$EXE = Get-OllamaExe
+
+$candidats = @()
+if ($env:OLLAMA_MODELS) { $candidats += $env:OLLAMA_MODELS }
+if ($EXE) { $candidats += (Join-Path (Split-Path $EXE) "models") }
+$candidats += (Join-Path $env:USERPROFILE ".ollama\models")
+
+$DOS = $candidats | Where-Object { $_ -and (Test-Path (Join-Path $_ "manifests") -ErrorAction SilentlyContinue) } | Select-Object -First 1
+
+if (-not $DOS) {
+  Write-Host "Dossier des modeles introuvable. Renseigne-le a la main puis relance :" -ForegroundColor Red
+  Write-Host '  $DOS = "D:\ollama\models"' -ForegroundColor Yellow
+} else {
+  Write-Host ("Dossier des modeles : " + $DOS) -ForegroundColor Green
+
+  $parties = $M.Split(":")
+  $nomModele = $parties[0]
+  if ($parties.Count -gt 1) { $etiquette = $parties[1] } else { $etiquette = "latest" }
+
+  $manifestes = Get-ChildItem (Join-Path $DOS "manifests") -Recurse -File -ErrorAction SilentlyContinue
+  $cible = $manifestes | Where-Object { $_.Name -eq $etiquette -and $_.Directory.Name -eq $nomModele } | Select-Object -First 1
+
+  if (-not $cible) {
+    Write-Host ("Aucun manifeste pour " + $M + ". Modeles presents dans le dossier :") -ForegroundColor Red
+    $manifestes | ForEach-Object { Write-Host ("  " + $_.Directory.Name + ":" + $_.Name) }
+  } else {
+    $reponse = Read-Host ("Supprimer definitivement " + $M + " ? (o/n)")
+    if ($reponse -ne "o") {
+      Write-Host "Abandon : rien n'a ete supprime." -ForegroundColor Yellow
+    } else {
+      Remove-Item $cible.FullName -Force
+      Write-Host "Manifeste supprime." -ForegroundColor Green
+
+      $references = @{}
+      Get-ChildItem (Join-Path $DOS "manifests") -Recurse -File -ErrorAction SilentlyContinue | ForEach-Object {
+        try {
+          $json = Get-Content $_.FullName -Raw | ConvertFrom-Json
+          if ($json.config.digest) { $references[$json.config.digest] = $true }
+          foreach ($couche in $json.layers) { if ($couche.digest) { $references[$couche.digest] = $true } }
+        } catch { }
+      }
+
+      $libere = 0
+      $effaces = 0
+      Get-ChildItem (Join-Path $DOS "blobs") -File -ErrorAction SilentlyContinue | ForEach-Object {
+        $empreinte = $_.Name -replace "^sha256-", "sha256:"
+        if (-not $references.ContainsKey($empreinte)) {
+          $libere += $_.Length
+          $effaces++
+          Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue
+        }
+      }
+      Write-Host ("Blocs de donnees effaces : " + $effaces + " -- espace libere : " + [math]::Round($libere / 1GB, 2) + " Go") -ForegroundColor Green
+      Write-Host "Au prochain demarrage, le serveur ne proposera plus ce modele." -ForegroundColor Green
+    }
+  }
+}
+`;
+
+const ALT_DIAGNOSTIC = String.raw`# ===== Diagnostic Ollama (ne modifie rien) =====
+$env:OLLAMA_HOST = "127.0.0.1:11434"
+
+function Get-OllamaExe {
+  $pistes = @()
+  $pistes += Get-PSDrive -PSProvider FileSystem | ForEach-Object { Join-Path $_.Root "ollama\ollama.exe" }
+  $pistes += Join-Path $env:LOCALAPPDATA "Programs\Ollama\ollama.exe"
+  $pistes += Join-Path $env:LOCALAPPDATA "Ollama\ollama.exe"
+  $pistes += "C:\Program Files\Ollama\ollama.exe"
+  $pistes += "C:\Program Files (x86)\Ollama\ollama.exe"
+  $danslePath = Get-Command ollama.exe -ErrorAction SilentlyContinue
+  if ($danslePath) { $pistes += $danslePath.Source }
+  $pistes | Where-Object { $_ -and (Test-Path $_ -ErrorAction SilentlyContinue) } | Select-Object -First 1
+}
+
+function Test-OllamaPort {
+  try {
+    $client = New-Object System.Net.Sockets.TcpClient
+    $client.Connect("127.0.0.1", 11434)
+    $client.Close()
+    $true
+  } catch { $false }
+}
+
+Write-Host "--- Executable ---" -ForegroundColor Cyan
+$EXE = Get-OllamaExe
+if ($EXE) {
+  Write-Host $EXE -ForegroundColor Green
+  & $EXE --version
+  if ($EXE.Length -gt 200) { Write-Host "Attention : chemin tres long, Windows peut le refuser." -ForegroundColor Yellow }
+  $appli = Join-Path (Split-Path $EXE) "ollama app.exe"
+  if (Test-Path $appli) { Write-Host "Application de bureau presente." } else { Write-Host "Installation portable (pas d'application de bureau) : normal, mais le client ne peut alors pas demarrer le serveur tout seul." -ForegroundColor Yellow }
+} else {
+  Write-Host "ollama.exe introuvable aux emplacements habituels." -ForegroundColor Red
+}
+
+Write-Host "--- Processus en cours ---" -ForegroundColor Cyan
+$processus = Get-Process -Name "ollama*" -ErrorAction SilentlyContinue
+if ($processus) { $processus | Select-Object Id, ProcessName, StartTime | Format-Table } else { Write-Host "Aucun processus ollama actif." -ForegroundColor Yellow }
+
+Write-Host "--- Port 11434 ---" -ForegroundColor Cyan
+if (Test-OllamaPort) { Write-Host "Le serveur ecoute." -ForegroundColor Green } else { Write-Host "Personne n'ecoute : c'est la cause de l'erreur 'could not locate ollama app'." -ForegroundColor Red }
+
+Write-Host "--- Dossier des modeles ---" -ForegroundColor Cyan
+$candidats = @()
+if ($env:OLLAMA_MODELS) { $candidats += $env:OLLAMA_MODELS }
+if ($EXE) { $candidats += (Join-Path (Split-Path $EXE) "models") }
+$candidats += (Join-Path $env:USERPROFILE ".ollama\models")
+$DOS = $candidats | Where-Object { $_ -and (Test-Path $_ -ErrorAction SilentlyContinue) } | Select-Object -First 1
+if ($DOS) {
+  Write-Host $DOS -ForegroundColor Green
+  $taille = (Get-ChildItem $DOS -Recurse -File -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum
+  Write-Host ("Taille occupee : " + [math]::Round($taille / 1GB, 2) + " Go")
+  Write-Host "Modeles trouves dans les fichiers :"
+  Get-ChildItem (Join-Path $DOS "manifests") -Recurse -File -ErrorAction SilentlyContinue | ForEach-Object { Write-Host ("  " + $_.Directory.Name + ":" + $_.Name) }
+} else {
+  Write-Host "Aucun dossier de modeles trouve." -ForegroundColor Yellow
+}
+
+Write-Host "--- Espace disque ---" -ForegroundColor Cyan
+Get-PSDrive -PSProvider FileSystem | Select-Object Name, @{ n = "LibreGo"; e = { [math]::Round($_.Free / 1GB, 1) } } | Format-Table
+
+Write-Host "--- Journaux (dernieres lignes) ---" -ForegroundColor Cyan
+foreach ($j in @((Join-Path $env:TEMP "ollama_serve_err.log"), (Join-Path $env:TEMP "ollama_serve_out.log"), (Join-Path $env:LOCALAPPDATA "Ollama\server.log"))) {
+  if (Test-Path $j) { Write-Host ("--- " + $j) -ForegroundColor Yellow; Get-Content $j -Tail 12 }
+}
+Write-Host "--- Fin du diagnostic ---" -ForegroundColor Cyan
+`;
+
+// --- Outils communs aux nouvelles sections ---
+function altPoserCommande(idBouton, commande) {
+  const bouton = document.getElementById(idBouton);
+  if (bouton) bouton.setAttribute('data-texte', pourAttribut(commande));
+}
+
+function altNettoyerNom(saisie) {
+  return (saisie || '').trim().replace(/^ollama\s+(run|pull|rm)\s+/i, '').trim();
+}
+
+function altLigneModele(nomModele) {
+  return '\n$M = "' + nomModele + '"\n';
+}
+
+function altRafraichirSelects() {
+  const valeurs = MODELS.slice();
+  [['altSelectSuppr'], ['altListeSelect']].forEach(function (paire) {
+    const sel = document.getElementById(paire[0]);
+    if (!sel) return;
+    const actuel = sel.value;
+    const garder = valeurs.includes(actuel) ? actuel : valeurs[0];
+    sel.innerHTML = valeurs.map(function (m) {
+      return '<option value="' + m + '"' + (m === garder ? ' selected' : '') + '>' + m + '</option>';
+    }).join('');
+  });
+}
+
+// --- Ajout : preparation des trois commandes ---
+function altPreparerAjout() {
+  const nomModele = altNettoyerNom(document.getElementById('altAjoutInput').value);
+  if (!nomModele) return;
+
+  const entete = altLigneModele(nomModele);
+  altPoserCommande('btnCopierAjoutB', ALT_PRELUDE + entete + ALT_ACTION_PULL);
+  altPoserCommande('btnCopierAjoutC', ALT_PRELUDE + entete + ALT_ACTION_PULL_API);
+  altPoserCommande('btnCopierAjoutD', ALT_PRELUDE + entete + ALT_ACTION_PULL_DEUX_FENETRES);
+  document.getElementById('altResultatAjout').style.display = 'block';
+}
+
+// --- Suppression : preparation des trois commandes ---
+function altPreparerSuppression() {
+  const libre = altNettoyerNom(document.getElementById('altSupprLibre').value);
+  const choisi = document.getElementById('altSelectSuppr').value;
+  const nomModele = libre || choisi;
+  if (!nomModele) return;
+
+  const entete = altLigneModele(nomModele);
+  altPoserCommande('btnCopierSupprB', ALT_PRELUDE + entete + ALT_ACTION_RM);
+  altPoserCommande('btnCopierSupprC', ALT_PRELUDE + entete + ALT_ACTION_RM_API);
+  altPoserCommande('btnCopierSupprE', entete + ALT_ACTION_RM_FICHIERS);
+  document.getElementById('altResultatSuppr').style.display = 'block';
+}
+
+// --- Liste des modeles du fichier : ajout, retrait, enregistrement ---
+function altEtat(message) {
+  const zone = document.getElementById('altListeEtat');
+  if (zone) zone.textContent = message;
+}
+
+function altAjouterALaListe() {
+  const nomModele = altNettoyerNom(document.getElementById('altListeAjoutInput').value);
+  if (!nomModele) return;
+  if (MODELS.includes(nomModele)) {
+    altEtat('« ' + nomModele + ' » figure déjà dans la liste.');
+    return;
+  }
+  MODELS.push(nomModele);
+  initialiserSelectSuppression();
+  altRafraichirSelects();
+  document.getElementById('altListeAjoutInput').value = '';
+  altEtat('« ' + nomModele + ' » ajouté aux menus. Enregistre la page pour conserver ce changement.');
+}
+
+function altRetirerDeLaListe() {
+  const sel = document.getElementById('altListeSelect');
+  const nomModele = sel ? sel.value : '';
+  if (!nomModele) return;
+  if (MODELS.length <= 1) {
+    altEtat('Impossible de retirer le dernier modèle de la liste.');
+    return;
+  }
+  MODELS = MODELS.filter(function (m) { return m !== nomModele; });
+  initialiserSelectSuppression();
+  altRafraichirSelects();
+  altEtat('« ' + nomModele + ' » retiré des menus (le modèle reste installé sur la machine). Enregistre la page pour conserver ce changement.');
+}
+
+function altNomFichierOrigine() {
+  let nom = '';
+  try {
+    nom = decodeURIComponent((location.pathname || '').split('/').pop() || '');
+  } catch (e) {
+    nom = '';
+  }
+  if (!/\.html?$/i.test(nom)) nom = 'Genitem.html';
+  return nom;
+}
+
+function altTelechargerSousNomOrigine() {
+  const accordeons = document.querySelectorAll('details.accordion');
+  const etats = Array.from(accordeons).map(function (d) { return d.open; });
+  accordeons.forEach(function (d) { d.open = false; });
+
+  let html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  const declaration = 'let MODELS = ' + JSON.stringify(MODELS) + '; // MODELES_MARKER';
+  const avant = html;
+  html = html.replace(/let MODELS = .*?;[ \t]*\/\/ MODELES_MARKER/, declaration);
+
+  accordeons.forEach(function (d, i) { d.open = etats[i]; });
+
+  if (html === avant) {
+    altEtat('Repère de la liste introuvable dans la page : le fichier a été enregistré tel quel, la liste devra être ajustée à la main.');
+  }
+
+  const nom = altNomFichierOrigine();
+  const blob = new Blob([html], { type: 'text/html' });
+  const lien = document.createElement('a');
+  lien.href = URL.createObjectURL(blob);
+  lien.download = nom;
+  document.body.appendChild(lien);
+  lien.click();
+  document.body.removeChild(lien);
+  setTimeout(function () { URL.revokeObjectURL(lien.href); }, 4000);
+
+  if (html !== avant) {
+    altEtat('Page enregistrée sous « ' + nom +' ». Remplace l\u2019ancien fichier par celui-ci : la liste y est inscrite en dur.');
+  }
+}
+
+// --- Initialisation des nouvelles sections ---
+const ALT_LISTE_MODELES = String.raw`$DRIVE = $(
+  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root
+  if (-not $racine) {
+    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow
+    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" } | Sort-Object { $_.Root -like "C:*" })) {
+      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1
+      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }
+    }
+  }
+  $racine
+)
+$env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\models"
+& (Join-Path $DRIVE "ollama\ollama.exe") list
+`;
+
+const ALT_STOP_PROCESSUS = String.raw`Stop-Process -Name "ollama*" -Force -ErrorAction SilentlyContinue
+Write-Host "Tous les processus Ollama ont ete arretes." -ForegroundColor Green
+`;
+
+const ALT_NETTOYER_MANIFESTE = String.raw`$M = "nom-du-modele-qui-bloque"
+
+$DRIVE = $(
+  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root
+  if (-not $racine) {
+    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow
+    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" } | Sort-Object { $_.Root -like "C:*" })) {
+      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1
+      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }
+    }
+  }
+  $racine
+)
+$chemin = Join-Path $DRIVE "ollama\models\manifests\registry.ollama.ai\library\$M"
+
+if (Test-Path $chemin) {
+  Remove-Item -Recurse -Force $chemin
+  Write-Host "Manifeste de $M supprime." -ForegroundColor Green
+} else {
+  Write-Host "Aucun manifeste trouve pour $M a cet emplacement." -ForegroundColor Yellow
+}
+`;
+
+const ALT_NETTOYER_BLOBS = String.raw`$DRIVE = $(
+  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root
+  if (-not $racine) {
+    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow
+    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" } | Sort-Object { $_.Root -like "C:*" })) {
+      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1
+      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }
+    }
+  }
+  $racine
+)
+$DOS = Join-Path $DRIVE "ollama\models"
+
+$references = @{}
+Get-ChildItem (Join-Path $DOS "manifests") -Recurse -File -ErrorAction SilentlyContinue | ForEach-Object {
+  try {
+    $json = Get-Content $_.FullName -Raw | ConvertFrom-Json
+    if ($json.config.digest) { $references[$json.config.digest] = $true }
+    foreach ($couche in $json.layers) { if ($couche.digest) { $references[$couche.digest] = $true } }
+  } catch { }
+}
+
+$libere = 0
+$effaces = 0
+Get-ChildItem (Join-Path $DOS "blobs") -File -ErrorAction SilentlyContinue | ForEach-Object {
+  $empreinte = $_.Name -replace "^sha256-", "sha256:"
+  if (-not $references.ContainsKey($empreinte)) {
+    $libere += $_.Length
+    $effaces++
+    Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue
+  }
+}
+Write-Host ("Blocs de donnees effaces : " + $effaces + " -- espace libere : " + [math]::Round($libere / 1GB, 2) + " Go") -ForegroundColor Green
+`;
+
+altPoserCommande('btnCopierDiagAlt', ALT_DIAGNOSTIC);
+altPoserCommande('btnCopierListeModeles', ALT_LISTE_MODELES);
+altPoserCommande('btnCopierStopProcessus', ALT_STOP_PROCESSUS);
+altPoserCommande('btnCopierNettoyerManifeste', ALT_NETTOYER_MANIFESTE);
+altPoserCommande('btnCopierNettoyerBlobs', ALT_NETTOYER_BLOBS);
+
+const ALT_AUTO_NETTOYAGE = String.raw`$DRIVE = $(
+  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root
+  if (-not $racine) {
+    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow
+    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" } | Sort-Object { $_.Root -like "C:*" })) {
+      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1
+      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }
+    }
+  }
+  $racine
+)
+$env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\models"
+$EXE = Join-Path $DRIVE "ollama\ollama.exe"
+
+$maxEssais = 10
+$pret = $false
+
+for ($i = 1; $i -le $maxEssais -and -not $pret; $i++) {
+  Write-Host "--- Tentative $i ---" -ForegroundColor Cyan
+  $job = Start-Job -ScriptBlock { param($e) & $e serve 2>&1 } -ArgumentList $EXE
+  Start-Sleep -Seconds 3
+  $sortie = Receive-Job $job -Keep -ErrorAction SilentlyContinue
+
+  $ligneErreur = $sortie | Where-Object { $_ -match "Access is denied" } | Select-Object -First 1
+
+  if ($ligneErreur -and $ligneErreur -match 'library\\([^:\\]+):') {
+    $modele = $Matches[1]
+    Write-Host "Manifeste bloque detecte : $modele -- nettoyage automatique..." -ForegroundColor Yellow
+    Stop-Job $job -ErrorAction SilentlyContinue
+    Remove-Job $job -Force -ErrorAction SilentlyContinue
+    $chemin = Join-Path $DRIVE "ollama\models\manifests\registry.ollama.ai\library\$modele"
+    Remove-Item -Recurse -Force $chemin -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 1
+  } elseif ($job.State -eq "Running") {
+    Write-Host "Serveur demarre avec succes." -ForegroundColor Green
+    Stop-Job $job -ErrorAction SilentlyContinue
+    Remove-Job $job -Force -ErrorAction SilentlyContinue
+    $pret = $true
+  } else {
+    Write-Host "Le serveur s'est arrete pour une autre raison :" -ForegroundColor Red
+    $sortie | Select-Object -Last 10 | ForEach-Object { Write-Host $_ }
+    Stop-Job $job -ErrorAction SilentlyContinue
+    Remove-Job $job -Force -ErrorAction SilentlyContinue
+    break
+  }
+}
+
+if ($pret) {
+  Write-Host "Lancement du serveur (laisse cette fenetre ouverte)..." -ForegroundColor Cyan
+  & $EXE serve
+} else {
+  Write-Host "Echec apres $maxEssais tentative(s) -- probleme different d'un manifeste bloque." -ForegroundColor Red
+}
+`;
+altPoserCommande('btnCopierAutoNettoyage', ALT_AUTO_NETTOYAGE);
+altRafraichirSelects();
+
+const altDetailsSuppr = document.getElementById('altDetailsSuppr');
+if (altDetailsSuppr) altDetailsSuppr.addEventListener('toggle', altRafraichirSelects);
+</script>
+
+<div class="version">v.21.09.2026-01:18:49</div>
+
+</body>
+</html>

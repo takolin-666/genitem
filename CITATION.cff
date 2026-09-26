@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+title: "Genitem: A User-friendly Tool for the Generation and Pre-validation of Items with AI"
+message: If you use this software, please cite it as below.
+type: software
+authors:
+  - family-names: Jan
+    given-names: David
+  - family-names: Béland
+    given-names: Sébastien
+  - family-names: Vincent
+    given-names: Cathy
+  - family-names: Michelot
+    given-names: Florent
+year: 2026
+version: "0.1"
+doi: 10.5281/zenodo.22801169
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22801168
+    description: Concept DOI, resolving to every version
+url: https://genitem.recherche-formation.com
+repository-code: https://github.com/takolin-666/genitem
+abstract: >-
+  Browser-based tools for AI-assisted item generation, verbatim coding and
+  back-translation, running entirely on the researcher's own machine through a
+  local Ollama server. No data is sent to any external service.
+keywords:
+  - psychometrics
+  - item generation
+  - large language models
+  - scale development
+  - local inference
+  - Ollama
+license: MIT
+license-url: https://opensource.org/licenses/MIT

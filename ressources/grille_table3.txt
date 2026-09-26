@@ -1,0 +1,8 @@
+Level	Type	Description	Example
+0	Irrelevant Feedback	Feedback unrelated to the response or lacking meaningful content.	Good morning/e/.
+1	General Impression	Vague or superficial impressions about the overall response.	Good job/Unclear/Slightly disappointing
+2	Correctness-Focused	Feedback that solely indicates whether the answer is correct or evaluates the response by comparing it to the model answer.	Incorrect/Correct/Matches the answer/Slightly different from the model answer
+3	Rubric-Based	Feedback based on the rubric, evaluating the overall structure and validity of the response.	Conclusion and reasoning are appropriate/The reasoning is insufficient
+4	Error Identification	Feedback that simply points out specific errors or missing elements.	No mention of wolves/Marine animals?
+5	Commentary	Feedback that identifies strengths or weaknesses and explains them with logical reasoning.	I don’t think “because it snowed” is valid. The weather is consistent in four places, so one location having different food conditions doesn’t make sense.
+6	Suggestion with Alternative	Feedback that offers concrete alternatives or additional perspectives to improve the response.	Add more detail on the manipulated variable, and consider splitting cases by presence/absence of wolves and food.

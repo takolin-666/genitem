@@ -1,0 +1,26 @@
+Documentation, coding grid and written resources
+================================================
+
+The documentation in this repository -- README.md, README.fr.md,
+ARCHITECTURE.md, CONTRIBUTING.md, SITEMAP.md -- together with the coding grid
+and the other written resources under ressources/, is licensed under the
+Creative Commons Attribution 4.0 International Licence (CC BY 4.0).
+
+    https://creativecommons.org/licenses/by/4.0/
+
+You are free to share and adapt this material for any purpose, including
+commercially, provided you give appropriate credit, link to the licence, and
+indicate if changes were made.
+
+Attribution:
+
+    Jan, D., Beland, S., Vincent, C., & Michelot, F. (2026). Genitem: A
+    user-friendly tool for the generation and pre-validation of items with AI
+    (Version 0.1) [Computer software]. Zenodo.
+    https://doi.org/10.5281/zenodo.22801169
+
+The SOFTWARE in this repository -- the HTML, JavaScript, Python, R and
+PowerShell files -- is licensed separately, under the MIT licence. See LICENSE.
+
+The split is deliberate: Creative Commons licences are not intended for
+software, and Creative Commons itself advises against that use.

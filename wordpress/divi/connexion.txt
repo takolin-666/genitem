@@ -1,0 +1,241 @@
+<style>
+  #introConnexion {
+    --navy: #1a2c56;
+    --blue: #2f5aa8;
+    --teal: #0f6e56;
+    --border: #cfd6e4;
+    --text: #23262f;
+    --text-muted: #5a5f6d;
+    max-width: 700px;
+    margin: 0 auto 26px;
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+    box-sizing: border-box;
+  }
+  #introConnexion * { box-sizing: border-box; }
+
+  #introConnexion .intro-entete {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+  #introConnexion h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  #introConnexion .intro-langue {
+    display: flex;
+    gap: 4px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+  #introConnexion .intro-langue button {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  #introConnexion .intro-langue button.langue-active {
+    background: var(--navy);
+    color: #fff;
+  }
+
+  #introConnexion .intro-carte {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    border-radius: 10px;
+    padding: 18px 22px;
+  }
+  #introConnexion p {
+    margin: 0 0 12px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  #introConnexion p:last-child { margin-bottom: 0; }
+  #introConnexion ul {
+    margin: 0 0 12px;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  #introConnexion li { margin-bottom: 4px; }
+  #introConnexion a {
+    color: var(--teal);
+    font-weight: 600;
+  }
+  #introConnexion .intro-note {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: #fff6e0;
+    border: 1px solid #e8a93b;
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #8a5a00;
+  }
+  /* Le lien doit ressortir sur le fond ambre de l'encadre : fond blanc,
+     soulignement et icone d'enveloppe. */
+  #introConnexion .intro-note a.lien-contact {
+    display: inline-flex;
+    align-items: center;
+    background: #fff;
+    color: #7a4f00;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: 3px 9px;
+    border: 1px solid #e8a93b;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  #introConnexion .intro-note a.lien-contact:hover {
+    background: #8a5a00;
+    color: #fff;
+    border-color: #8a5a00;
+  }
+
+  /* Carte d'inscription, entre la presentation et le formulaire de
+     connexion. Bord bleu pour la distinguer du vert de la premiere carte
+     et de l'ambre de l'encadre. */
+  #introConnexion .intro-cours {
+    margin-top: 18px;
+    background: #f2f6fd;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    border-radius: 10px;
+    padding: 16px 22px 18px;
+  }
+  #introConnexion .intro-cours h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.4;
+  }
+  #introConnexion .intro-cours p {
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  #introConnexion a.lien-inscription {
+    display: inline-flex;
+    align-items: center;
+    background: var(--blue);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 9px 16px;
+    border: 1px solid var(--blue);
+    border-radius: 7px;
+  }
+  #introConnexion a.lien-inscription:hover {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: #fff;
+  }
+  #introConnexion a.lien-inscription:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+</style>
+
+<div id="introConnexion">
+  <div class="intro-entete">
+    <h2 data-i18n="titre">Connexion</h2>
+    <div class="intro-langue">
+      <button type="button" id="introBtnFr" onclick="introLangue('fr')">FR</button>
+      <button type="button" id="introBtnEn" onclick="introLangue('en')">EN</button>
+    </div>
+  </div>
+
+  <div class="intro-carte">
+    <p data-i18n="chapeau">Se connecter à Genitem donne accès à deux choses&nbsp;:</p>
+    <ul>
+      <li data-i18n="point_forum">le <strong>forum</strong>, pour poser une question ou partager une expérience&nbsp;;</li>
+      <li data-i18n="point_modeles">la <strong>mémorisation de vos modèles</strong>&nbsp;: les modèles que vous ajoutez ou supprimez restent enregistrés sur votre compte, et vous les retrouvez à chaque visite, sans rien télécharger ni réinstaller.</li>
+    </ul>
+    <p data-i18n="sans_compte">Sans connexion, les pages restent entièrement consultables et utilisables&nbsp;: seule la mémorisation de vos modèles est indisponible.</p>
+
+    <div class="intro-note">
+      <span data-i18n-html="note">La création de compte est réservée aux participants d’un cours. En dehors, demandez-en un par le <a class="lien-contact" href="https://genitem.recherche-formation.com/contact/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px; margin-right:5px;"><rect x="2.5" y="4.5" width="19" height="15" rx="2"></rect><polyline points="3 6 12 13 21 6"></polyline></svg>formulaire de contact</a>.</span>
+    </div>
+  </div>
+
+  <div class="intro-cours">
+    <h3 data-i18n="cours_titre">Inscription durant un cours</h3>
+    <p data-i18n="cours_texte">Si vous suivez un cours Genitem, créez votre compte vous-même pendant la séance.</p>
+    <a class="lien-inscription" href="https://genitem.recherche-formation.com/wp-login.php?action=register"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px; margin-right:7px;"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg><span data-i18n="cours_lien">Formulaire d’inscription</span></a>
+  </div>
+</div>
+
+<script>
+(function () {
+  var TEXTES = {
+    fr: {
+      titre: 'Connexion',
+      chapeau: 'Se connecter à Genitem donne accès à deux choses\u00a0:',
+      point_forum: 'le <strong>forum</strong>, pour poser une question ou partager une expérience\u00a0;',
+      point_modeles: 'la <strong>mémorisation de vos modèles</strong>\u00a0: les modèles que vous ajoutez ou supprimez restent enregistrés sur votre compte, et vous les retrouvez à chaque visite, sans rien télécharger ni réinstaller.',
+      sans_compte: 'Sans connexion, les pages restent entièrement consultables et utilisables\u00a0: seule la mémorisation de vos modèles est indisponible.',
+      cours_titre: 'Inscription durant un cours',
+      cours_texte: 'Si vous suivez un cours Genitem, créez votre compte vous-même pendant la séance.',
+      cours_lien: 'Formulaire d\u2019inscription',
+      note: 'La création de compte est réservée aux participants d\u2019un cours. En dehors, demandez-en un par le <a class="lien-contact" href="https://genitem.recherche-formation.com/contact/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px; margin-right:5px;"><rect x="2.5" y="4.5" width="19" height="15" rx="2"></rect><polyline points="3 6 12 13 21 6"></polyline></svg>formulaire de contact</a>.'
+    },
+    en: {
+      titre: 'Log in',
+      chapeau: 'Logging in to Genitem gives you access to two things:',
+      point_forum: 'the <strong>forum</strong>, to ask a question or share your experience;',
+      point_modeles: 'your <strong>saved models</strong>: the models you add or remove stay recorded on your account, and you find them again on every visit, with nothing to download or reinstall.',
+      sans_compte: 'Without logging in, the pages remain fully readable and usable: only the saving of your models is unavailable.',
+      cours_titre: 'Signing up during a lesson',
+      cours_texte: 'If you are taking a Genitem course, create your own account during the session.',
+      cours_lien: 'Registration form',
+      note: 'Creating an account is reserved for course participants. Otherwise, request one through the <a class="lien-contact" href="https://genitem.recherche-formation.com/contact/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px; margin-right:5px;"><rect x="2.5" y="4.5" width="19" height="15" rx="2"></rect><polyline points="3 6 12 13 21 6"></polyline></svg>contact form</a>.'
+    }
+  };
+
+  var bloc = document.getElementById('introConnexion');
+
+  window.introLangue = function (langue) {
+    var dict = TEXTES[langue] || TEXTES.fr;
+
+    bloc.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var cle = el.getAttribute('data-i18n');
+      if (dict[cle] !== undefined) el.innerHTML = dict[cle];
+    });
+    bloc.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+      var cle = el.getAttribute('data-i18n-html');
+      if (dict[cle] !== undefined) el.innerHTML = dict[cle];
+    });
+
+    document.getElementById('introBtnFr').classList.toggle('langue-active', langue === 'fr');
+    document.getElementById('introBtnEn').classList.toggle('langue-active', langue === 'en');
+
+    // Memorise le choix, comme sur les autres pages du site
+    try { localStorage.setItem('langueConfigurateur', langue); } catch (e) {}
+  };
+
+  // Langue de depart : preference enregistree, sinon celle du navigateur
+  var depart = 'fr';
+  try {
+    var memorisee = localStorage.getItem('langueConfigurateur');
+    if (memorisee === 'fr' || memorisee === 'en') depart = memorisee;
+    else depart = (navigator.language || 'fr').toLowerCase().indexOf('fr') === 0 ? 'fr' : 'en';
+  } catch (e) {}
+
+  window.introLangue(depart);
+})();
+</script>

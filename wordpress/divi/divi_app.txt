@@ -1,0 +1,66 @@
+<style>
+  .et_pb_section:has(#cadreAppGenitem),
+  .et_pb_row:has(#cadreAppGenitem),
+  .et_pb_column:has(#cadreAppGenitem),
+  .et_pb_module:has(#cadreAppGenitem) {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  #cadreAppGenitem {
+    display: block;
+    width: 100%;
+    border: none;
+    overflow: hidden;
+  }
+</style>
+
+<iframe id="cadreAppGenitem" title="AI-agent Genitem" scrolling="no"></iframe>
+
+<script>
+(function () {
+  var cadre = document.getElementById('cadreAppGenitem');
+
+  // L'adresse est imposee ici : c'est le FICHIER, jamais la page Divi.
+  // Pointer vers la page ferait charger celle-ci dans son propre cadre,
+  // d'ou le menu et le pied de page en double.
+  // Le navigateur garde longtemps en cache les fichiers statiques : sans ce
+  // parametre, une nouvelle version deposee sur le serveur peut rester
+  // invisible pendant des heures, meme apres Ctrl+Maj+R sur la page.
+  // Date.now() rend l'adresse unique a chaque visite.
+  var FICHIER = 'https://genitem.recherche-formation.com/wp-content/uploads/code/AI-agent.html?v=' + Date.now();
+
+  // Securite : si ce cadre se retrouvait lui-meme imbrique, on ne charge rien.
+  if (window.top !== window.self && window.parent !== window.top) { return; }
+  cadre.setAttribute('src', FICHIER);
+
+  function ajusterHauteur() {
+    try {
+      var doc = cadre.contentWindow.document;
+      cadre.style.height = Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight) + 'px';
+    } catch (e) {
+      cadre.style.height = '2400px';
+    }
+  }
+
+  cadre.addEventListener('load', function () {
+    ajusterHauteur();
+    try {
+      new MutationObserver(ajusterHauteur).observe(cadre.contentWindow.document.body,
+        { childList: true, subtree: true, attributes: true });
+
+      // Les accordeons changent la hauteur a l'ouverture.
+      cadre.contentWindow.document.querySelectorAll('details').forEach(function (d) {
+        d.addEventListener('toggle', function () {
+          requestAnimationFrame(function () { requestAnimationFrame(ajusterHauteur); });
+        });
+      });
+
+      setInterval(ajusterHauteur, 400);
+    } catch (e) {}
+  });
+
+  window.addEventListener('resize', ajusterHauteur);
+})();
+</script>

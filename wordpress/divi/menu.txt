@@ -1,0 +1,375 @@
+<style>
+  .et_pb_module:has(#menuGenitem),
+  .et_pb_code:has(#menuGenitem),
+  .et_pb_row:has(#menuGenitem),
+  .et_pb_row_inner:has(#menuGenitem),
+  .et_pb_column:has(#menuGenitem),
+  .et_pb_section:has(#menuGenitem) {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    /* Sans ces deux lignes, Divi rogne le sous-menu deroulant et la section
+       suivante se dessine par-dessus. */
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 9000 !important;
+  }
+
+  #menuGenitem {
+    position: relative;
+    overflow: visible;
+    z-index: 9000;
+    --navy: #1a2c56;
+    --blue: #2f5aa8;
+    --border: #cfd6e4;
+    width: 100%;
+    background: #f6f7fb;
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    box-sizing: border-box;
+  }
+  #menuGenitem * { box-sizing: border-box; }
+
+  /* Memes marges que la banniere de citation en pied de page */
+  #menuGenitem .menu-inner {
+    width: 100%;
+    padding: 6px 100px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  #menuGenitem .menu-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    margin-right: auto;
+  }
+  #menuGenitem .menu-logo img {
+    height: 36px;
+    width: auto;
+    display: block;
+  }
+
+  /* Barre superieure (trois traits + titre) : petits ecrans uniquement */
+  #menuGenitem .menu-barre {
+    display: none;
+  }
+  #menuGenitem .menu-burger {
+    border: none;
+    background: transparent;
+    padding: 8px 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  #menuGenitem .menu-burger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--navy);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  #menuGenitem .menu-burger span + span {
+    margin-top: 5px;
+  }
+  /* Les trois traits se muent en croix une fois le menu ouvert */
+  #menuGenitem.ouvert .menu-burger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  #menuGenitem.ouvert .menu-burger span:nth-child(2) {
+    opacity: 0;
+  }
+  #menuGenitem.ouvert .menu-burger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+  #menuGenitem .menu-titre {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    text-decoration: none;
+    line-height: 1;
+  }
+  /* Le logo se cale sur la hauteur du texte : la barre ne grandit pas. */
+  #menuGenitem .menu-titre img {
+    height: 22px;
+    width: auto;
+    display: block;
+    flex-shrink: 0;
+    margin-right: 8px;
+  }
+
+  #menuGenitem nav {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+  }
+  #menuGenitem nav a {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    text-decoration: none;
+    padding: 6px 2px;
+    transition: color 0.15s ease;
+  }
+  #menuGenitem nav a:hover,
+  #menuGenitem nav a.active {
+    color: var(--blue);
+  }
+  /* Menu deroulant : ouverture au survol sur grand ecran, au clic ailleurs */
+  /* Reserve aux personnes connectees : masque tant que la session n'est
+     pas confirmee, pour eviter un affichage fugitif. */
+  #menuGenitem .menu-deroulant {
+    display: none;
+  }
+  #menuGenitem.connecte .menu-deroulant {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  #menuGenitem .menu-parent::after {
+    content: "";
+    display: inline-block;
+    margin-left: 6px;
+    border: 4px solid transparent;
+    border-top-color: currentColor;
+    transform: translateY(2px);
+  }
+  #menuGenitem .menu-sous {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 190px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+    padding: 6px;
+    z-index: 9500;
+  }
+  #menuGenitem .menu-sous a {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  #menuGenitem .menu-sous a:hover { background: #eef4ff; }
+  #menuGenitem .menu-deroulant:hover .menu-sous,
+  #menuGenitem .menu-deroulant.ouvert .menu-sous { display: block; }
+
+  #menuGenitem .menu-cadenas {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  /* Vert une fois la session ouverte, pour distinguer les deux etats au coup d'oeil */
+  #menuGenitem .menu-cadenas.connecte { color: #0f6e56; }
+  #menuGenitem .menu-cadenas .cadenas-nom {
+    font-size: 12.5px;
+    font-weight: 600;
+    max-width: 10em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1024px) {
+    #menuGenitem .menu-inner {
+      padding: 8px 22px;
+      gap: 0;
+      position: relative;
+      justify-content: center;
+    }
+
+    /* Le logo cede la place au bouton et au titre centre. Le bouton se
+       positionne dans la barre seule, et non dans tout le bloc : sans cela,
+       la croix descendait au milieu des liens une fois le menu deplie. */
+    #menuGenitem .menu-logo { display: none; }
+    #menuGenitem .menu-barre {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+      min-height: 32px;
+    }
+    #menuGenitem .menu-burger {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* Les liens se deplient sous la barre, au clic seulement */
+    #menuGenitem nav {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      margin-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    #menuGenitem.ouvert nav { display: flex; }
+    #menuGenitem nav a {
+      padding: 11px 2px;
+      border-bottom: 1px solid var(--border);
+    }
+    #menuGenitem nav a:last-child { border-bottom: none; }
+
+    /* Le deroulant devient une section de la liste : pas de survol au doigt */
+    #menuGenitem.connecte .menu-deroulant {
+      display: block;
+      position: static;
+      border-bottom: 1px solid var(--border);
+    }
+    #menuGenitem .menu-parent { padding: 11px 2px; }
+    #menuGenitem .menu-sous {
+      position: static;
+      border: none;
+      box-shadow: none;
+      padding: 0 0 6px 14px;
+      min-width: 0;
+    }
+    #menuGenitem .menu-sous a {
+      padding: 9px 2px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+  }
+</style>
+
+<div id="menuGenitem">
+  <div class="menu-inner">
+    <div class="menu-barre">
+      <button class="menu-burger" type="button" aria-expanded="false" aria-controls="menuGenitemNav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <a class="menu-titre" href="https://genitem.recherche-formation.com/">
+        <img src="https://genitem.recherche-formation.com/wp-content/uploads/2026/09/logo_seul_genitem.svg" alt="">
+        <span>Genitem</span>
+      </a>
+    </div>
+
+    <a class="menu-logo" href="https://genitem.recherche-formation.com/">
+      <img src="https://genitem.recherche-formation.com/wp-content/uploads/2026/09/genitem.svg" alt="Genitem.education">
+    </a>
+
+    <nav id="menuGenitemNav">
+      <a href="https://genitem.recherche-formation.com/app/">AI-agent</a>
+      <div class="menu-deroulant">
+        <a class="menu-parent" href="https://genitem.recherche-formation.com/extra/" aria-haspopup="true" aria-expanded="false">Extra</a>
+        <div class="menu-sous">
+          <a href="https://genitem.recherche-formation.com/test_modeles/">Test modèles</a>
+          <a href="https://genitem.recherche-formation.com/ia-humain/">Verbatims</a>
+          <a href="https://genitem.recherche-formation.com/retrotraduction/">Rétrotraduction</a>
+        </div>
+      </div>
+      <a href="https://genitem.recherche-formation.com/forums/">Forums</a>
+      <a href="https://genitem.recherche-formation.com/aide/">Aide</a>
+      <a href="https://genitem.recherche-formation.com/contact/">Contact</a>
+      <a class="menu-cadenas" id="menuConnexion" href="https://genitem.recherche-formation.com/connexion/" title="Connexion" aria-label="Connexion">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="4" y="11" width="16" height="10" rx="2"></rect>
+          <path class="anse-fermee" d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+          <path class="anse-ouverte" d="M8 11V7a4 4 0 0 1 8 0" style="display:none"></path>
+        </svg>
+        <span class="cadenas-nom"></span>
+      </a>
+    </nav>
+  </div>
+</div>
+
+<script>
+(function () {
+  var menu = document.getElementById('menuGenitem');
+  var bouton = menu.querySelector('.menu-burger');
+
+  // Divi enferme le menu dans plusieurs conteneurs qui peuvent rogner le
+  // sous-menu deroulant ou le faire passer sous la section suivante. On
+  // remonte la chaine des parents pour lever ces deux obstacles. Le faire
+  // par script plutot que par feuille de style evite de dependre du
+  // selecteur :has() et des noms de classes de Divi.
+  (function libererConteneurs(){
+    var el = menu.parentNode;
+    while (el && el.nodeType === 1 && el !== document.body) {
+      // Sans condition : ces conteneurs entourent le menu et n'ont aucune
+      // raison de defiler ni de masquer quoi que ce soit.
+      el.style.overflow = 'visible';
+      if (window.getComputedStyle(el).position === 'static') el.style.position = 'relative';
+      el.style.zIndex = '9000';
+      el = el.parentNode;
+    }
+  })();
+
+  bouton.addEventListener('click', function () {
+    var ouvert = menu.classList.toggle('ouvert');
+    bouton.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+  });
+
+  // Sur ecran tactile, un premier clic sur « Extra » ouvre le sous-menu ;
+  // un second suit le lien vers la page de presentation.
+  menu.querySelectorAll('.menu-deroulant').forEach(function (bloc) {
+    var parent = bloc.querySelector('.menu-parent');
+    parent.addEventListener('click', function (e) {
+      var tactile = window.matchMedia('(hover: none)').matches
+        || window.matchMedia('(max-width: 1024px)').matches;
+      if (tactile && !bloc.classList.contains('ouvert')) {
+        e.preventDefault();
+        bloc.classList.add('ouvert');
+        parent.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // Referme le menu quand on choisit un lien, ou en cliquant a cote
+  menu.querySelectorAll('nav a').forEach(function (lien) {
+    lien.addEventListener('click', function () {
+      menu.classList.remove('ouvert');
+      bouton.setAttribute('aria-expanded', 'false');
+      menu.querySelectorAll('.menu-deroulant').forEach(function (b) { b.classList.remove('ouvert'); });
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!menu.contains(e.target)) {
+      menu.classList.remove('ouvert');
+      bouton.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Etat de connexion : depose par le plugin sur la page WordPress. Depuis un
+  // cadre, on le lit chez le parent, qui est du meme domaine.
+  function contexte() {
+    try { if (window.parent && window.parent.GenitemAuth) return window.parent.GenitemAuth; } catch (e) {}
+    return window.GenitemAuth || null;
+  }
+
+  var cadenas = document.getElementById('menuConnexion');
+  var ctx = contexte();
+
+  // L'entree « Extra » n'apparait que pour une session ouverte.
+  if (ctx && ctx.connecte) menu.classList.add('connecte');
+
+  if (cadenas && ctx && ctx.connecte) {
+    cadenas.classList.add('connecte');
+    cadenas.querySelector('.anse-fermee').style.display = 'none';
+    cadenas.querySelector('.anse-ouverte').style.display = '';
+    cadenas.querySelector('.cadenas-nom').textContent = ctx.nom || '';
+    cadenas.setAttribute('title', 'Connecté : ' + (ctx.nom || ''));
+    cadenas.setAttribute('href', ctx.urlLogout || cadenas.getAttribute('href'));
+  }
+
+  // Met en surbrillance le lien de la page actuelle
+  menu.querySelectorAll('nav a[href]').forEach(function (lien) {
+    if (location.href.indexOf(lien.getAttribute('href')) === 0) {
+      lien.classList.add('active');
+    }
+  });
+})();
+</script>

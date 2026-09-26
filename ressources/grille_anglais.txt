@@ -1,0 +1,81 @@
+SEVEN-LEVEL CODING FRAMEWORK — ENGLISH (SOURCE VERSION)
+Source: Lee & Ha (2026), Sage Open, doi 10.1177/21582440261418083, Table 3.
+
+This is the reference version. Unlike the nine other languages, it is not a
+working translation: the level names are those of Table 3, and the definitions
+are adapted to comments on written work.
+
+To use it: open the page, unfold "View and edit the definitions and the
+decision rules", then paste the fields below. What you write there is exactly
+what the AI receive.
+
+==============================================================================
+
+0. Irrelevant Feedback — off-topic or empty
+   Definition: Comment unrelated to the work under review, or carrying no
+   usable content: greeting, off-topic remark, isolated symbol,
+   unintelligible text.
+   Examples: Have a nice day! ; ok ; ???
+
+1. General Impression — general impression
+   Definition: Vague or surface-level impression of the work as a whole
+   (appraisal, feeling, encouragement), with no specific information about
+   its content.
+   Examples: Very good work. ; A bit disappointing. ; Not very clear.
+
+2. Correctness-Focused — focused on correctness
+   Definition: Plain judgement of correctness or compliance: states only
+   whether something is right or wrong, or compares it with what was expected
+   (answer key, instructions), without further detail.
+   Examples: That is correct. ; It follows the instructions. ; This is not what was asked for.
+
+3. Rubric-Based — based on the rubric
+   Definition: Assessment grounded in the criteria of the rubric or the
+   instructions: judges the overall structure, the validity or the
+   sufficiency of an element against a criterion, without naming the specific
+   error or saying how to fix it.
+   Examples: The research question is well stated and the argument meets the coherence criterion. ; The reasoning is insufficient.
+
+4. Error Identification — error identification
+   Definition: Points to a specific element to correct, a gap or an error
+   (where the problem lies), without explaining why it is a problem and
+   without offering a solution. A question that only points to a gap belongs
+   here.
+   Examples: Table 2 is not cited in the text. ; The conclusion does not mention the limitations. ; Where is the definition?
+
+5. Commentary — reasoned commentary
+   Definition: Identifies a specific strength or weakness and explains it
+   with a reason: the commenter argues for the judgement, without necessarily
+   proposing a change.
+   Examples: You cite a study conducted with adults to support your choice, but your audience is made up of adolescents, so the argument transfers poorly to your context.
+
+6. Suggestion with Alternative — suggestion with alternative
+   Definition: Offers a concrete change, an alternative, a viewpoint or
+   additional information to improve the work: says what to change, add or
+   rephrase.
+   Examples: Add a definition of motivation in the introduction, for instance the one by Deci and Ryan, then connect it to your example.
+
+==============================================================================
+
+DECISION RULES
+
+1) Assign a single level, the highest one the content of the comment
+   clearly reaches. The levels are hierarchical, from 0 to 6.
+2) Classify the nature of the comment, not its accuracy: do not judge the
+   quality of the work under review nor the validity of the opinion.
+3) As soon as a concrete change, addition or alternative is proposed, the
+   level is 6, even if the comment also points to an error.
+4) A specific strength or weakness together with its reason, with no
+   concrete change proposed, is level 5.
+5) A specific element to correct or a gap pointed out, with neither reason
+   nor solution, is level 4.
+6) An overall judgement grounded in criteria, without naming a specific
+   element, is level 3.
+7) A question is classified by what it expresses: often level 4 when it
+   points to a gap, level 6 when it suggests a concrete improvement.
+8) If the comment refers back to the previous one (for example "Same"),
+   read it together with the previous comments provided and classify what it
+   expresses.
+9) When hesitating between two adjacent levels, keep the lower one unless
+   the comment explicitly contains the elements of the higher level.
+

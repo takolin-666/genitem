@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rétrotraduction assistée par IA</title>
+<style>
+:root{
+  --bg:#faf7f3; --card:#ffffff; --ink:#1f2933; --muted:#5f6b7a; --line:#d9dfe7;
+  --accent:#b35309; --accent-d:#8a3f06; --ok:#2e7d32; --warn:#8a6d00; --err:#b3261e;
+  --sans:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:Consolas,Menlo,"DejaVu Sans Mono","Lucida Console",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{font-family:var(--sans)}
+body{position:relative;margin:0;padding:0 0 60px;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45}
+input,select,textarea,button{font-family:inherit;font-size:inherit;color:inherit}
+/* Selecteur de langue de l'interface, identique aux autres pages du site.
+   absolute et non fixed : la page est affichee dans un cadre. */
+.langue-switch{position:absolute;top:14px;right:18px;z-index:1000;background:#fff;
+  border:1px solid var(--line);border-radius:8px;padding:4px;display:flex;gap:4px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.langue-switch button{border:none;background:transparent;color:var(--muted);font-size:12px;
+  font-weight:700;padding:5px 10px;border-radius:6px;cursor:pointer}
+.langue-switch button.langue-active{background:var(--accent);color:#fff}
+/* Entete : titre centre sur le fond de page, comme les autres pages du site */
+.top{padding:32px 20px 4px;text-align:center}
+.top h1{margin:0 0 4px;font-size:24px;font-weight:700;color:var(--accent)}
+.top p{margin:0 0 20px;font-size:13px;color:var(--muted)}
+main{max-width:1240px;margin:0 auto;padding:0 20px}
+/* Bord gauche colore : signature visuelle des cartes du site */
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:16px 20px;margin-bottom:20px}
+.card h2{margin:0 0 12px;font-size:16px;font-weight:600;display:flex;align-items:center;gap:10px}
+.card h2 .n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:3px;min-width:120px}
+.field label{font-size:12px;color:var(--muted);font-weight:600}
+.champ-curseur{width:100%;margin:8px 0 4px}
+.champ-curseur label{display:block;margin:0 0 4px}
+.ligne-curseur{display:table;width:100%}
+.ligne-curseur input[type=range]{display:table-cell;width:100%;vertical-align:middle}
+.ligne-curseur span{display:table-cell;width:2.6em;padding-left:10px;font-weight:600;text-align:right;vertical-align:middle;white-space:nowrap}
+input[type=text],input[type=number],select,textarea{border:1px solid var(--line);border-radius:5px;padding:6px 8px;background:#fff;min-width:0}
+input:focus,select:focus,textarea:focus{outline:2px solid #e8b887;border-color:var(--accent)}
+textarea{resize:vertical}
+button{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:5px;padding:7px 14px;cursor:pointer;font-weight:600}
+button:hover:not(:disabled){background:var(--accent-d)}
+button.sec{background:#fff;color:var(--accent)}
+button.sec:hover:not(:disabled){background:#fdf3e7}
+button.danger{background:#fff;color:var(--err);border-color:var(--err)}
+button.danger:hover:not(:disabled){background:#fdecea}
+button:disabled{opacity:.45;cursor:not-allowed}
+.hint{color:var(--muted);font-size:12.5px}
+.status{font-weight:600}
+.status.ok{color:var(--ok)} .status.bad{color:var(--err)} .status.wait{color:var(--warn)}
+details{margin-top:8px}
+summary{cursor:pointer;color:var(--accent);font-weight:600}
+code,pre{font-family:var(--mono);font-size:12.5px;background:#eef1f6;border-radius:4px}
+code{padding:1px 5px}
+pre{padding:10px 12px;overflow:auto;margin:6px 0}
+#drop{border:2px dashed #aab7cc;border-radius:8px;padding:22px;text-align:center;color:var(--muted);background:#fafbfd;cursor:pointer}
+#drop.over{border-color:var(--accent);background:#fdf3e7}
+#drop strong{color:var(--ink)}
+.grille-ia{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grille-finale{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grille-finale .agent{grid-column:1}
+@media (max-width:820px){.grille-ia,.grille-finale{grid-template-columns:repeat(2,1fr)}.grille-finale .agent{grid-column:1}}
+@media (max-width:540px){.grille-ia,.grille-finale{grid-template-columns:1fr}}
+.avis-traduction{margin:10px 0 4px;padding:12px 16px;background:#fff6e0;border:1px solid #e8a93b;border-radius:8px;font-size:13px;line-height:1.6;color:#8a5a00}
+.sep-ia{border:none;border-top:1px solid var(--line);margin:20px 0 14px}
+.sous-titre-ia{margin:0 0 4px;font-size:15px;color:var(--accent)}
+.agent{border:1px solid var(--line);border-radius:6px;padding:10px 12px;background:#fbfcfe;display:flex;flex-direction:column;gap:8px}
+.agent.final{border-color:var(--accent);background:#fdf3e7}
+.agent h3{margin:0;font-size:13.5px}
+.agent .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.agent .field{min-width:0}
+.agent input[type=text],.agent input[type=number],.agent textarea{width:100%}
+.lvl{display:grid;grid-template-columns:200px 1fr 1fr;gap:8px;padding:8px 0;border-top:1px solid var(--line);align-items:start}
+.lvl:first-child{border-top:none}
+.lvl .nm{font-weight:600}
+.lvl .nm small{display:block;font-weight:400;color:var(--muted)}
+.bar{height:10px;background:#e6ebf2;border-radius:6px;overflow:hidden}
+.bar .fill{height:100%;width:0;background:var(--accent);transition:width .25s}
+.prog{display:grid;grid-template-columns:230px 1fr 130px;gap:10px;align-items:center;margin:6px 0}
+.prog .lab{font-weight:600}
+.prog .num{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+/* Le journal n'occupe la place que s'il a quelque chose a dire. */
+/* Numero de version : discret, mais lisible sans effort. Il permet de
+   verifier d'un coup d'oeil quelle version du fichier est en ligne. */
+.version{margin:10px 0 18px;font-size:10.5px;color:var(--muted);
+  font-family:var(--mono);letter-spacing:.3px;text-align:right;
+  padding-right:4px}
+.journal{margin-top:10px;font-family:var(--mono);font-size:12px;line-height:1.7}
+.journal:empty{display:none}
+.journal > div{padding:2px 0}
+#log .warn{color:var(--warn)} #log .err{color:var(--err)} #log .ok{color:var(--ok)}
+table{border-collapse:collapse;width:100%}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f0f3f8;font-size:12px;color:var(--muted);position:sticky;top:0}
+table.res td.txt{max-width:420px}
+table.res tr.main{cursor:pointer}
+table.res tr.main:hover{background:#f6f9fe}
+table.res tr.det td{background:#fafbfd}
+.chip{display:inline-block;min-width:28px;text-align:center;padding:1px 7px;border-radius:10px;font-weight:600;font-size:12px;color:#1f2933;font-variant-numeric:tabular-nums}
+.chip.none{background:#eceff3;color:#8a94a3;font-weight:400}
+.chip.err{background:#fdecea;color:var(--err)}
+.l0{background:#cfd8dc}.l1{background:#bbdefb}.l2{background:#90caf9}.l3{background:#80cbc4}.l4{background:#a5d6a7}.l5{background:#ffe082}.l6{background:#ffab91}
+.small{font-size:12px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px}
+.stat{background:#f6f8fc;border:1px solid var(--line);border-radius:6px;padding:8px 12px}
+.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:12px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.pager{display:flex;gap:8px;align-items:center}
+.banner{background:#fff8e6;border:1px solid #f0d38a;border-radius:6px;padding:8px 12px;margin-top:10px;display:none}
+.tag{display:inline-block;background:#eef2fa;color:var(--accent);border-radius:4px;padding:0 6px;font-size:12px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.checks{display:flex;flex-wrap:wrap;gap:16px}
+.checks label{display:flex;align-items:center;gap:6px}
+
+.grille-roles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media (min-width:1100px){.grille-roles{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:820px){.grille-roles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="langue-switch">
+  <button id="btnLangueFr" onclick="appliquerLangueInterface('fr')">FR</button>
+  <button id="btnLangueEn" onclick="appliquerLangueInterface('en')">EN</button>
+</div>
+
+<div class="top">
+  <h1>Rétrotraduction assistée par IA</h1>
+  <p>GenItem, traitement local avec Ollama — traduction, rétrotraduction à l’aveugle et comparaison</p>
+</div>
+
+<main>
+
+<!-- 1. Demarrer Ollama -->
+<section class="card" id="s-conn">
+  <h2><span class="n">1</span>Démarrer Ollama</h2>
+  <div class="hint">Fenêtre 1&nbsp;: démarrer Ollama, et laisser cette fenêtre ouverte.</div>
+  <div class="row" style="margin-top:8px; align-items:center">
+    <strong>PowerShell 1</strong>
+    <button id="btnCopierOllama" type="button" data-texte='$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" -and (Test-Path -LiteralPath $_.Root) } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\models"\n  &amp; (Join-Path $DRIVE "ollama\ollama.exe") serve\n}'>Copier</button>
+  </div>
+</section>
+
+<!-- 2. Fichier texte -->
+<section class="card" id="s-file">
+  <h2><span class="n">2</span>Texte à traduire</h2>
+  <p class="hint" style="margin-top:0">Un fichier <code>.txt</code>, un segment par ligne. Les lignes vides sont ignorées. Chaque segment est traité séparément&nbsp;: c’est l’unité de comparaison.</p>
+  <div id="drop"><strong>Déposez le fichier .txt ici</strong> ou cliquez pour le choisir<br><span class="small">Une ligne par item, phrase ou consigne à faire circuler d’une langue à l’autre.</span></div>
+  <input type="file" id="file" accept=".txt,.md" hidden>
+  <div id="fileInfo" class="hint" style="margin-top:8px"></div>
+
+  <div class="row" id="ligneLangues" style="margin-top:12px; display:none">
+    <div class="field" style="min-width:220px">
+      <label for="langueSource">Langue d’origine</label>
+      <select id="langueSource"></select>
+    </div>
+    <div class="field" style="min-width:220px">
+      <label for="langueCible">Langue de traduction</label>
+      <select id="langueCible"></select>
+    </div>
+    <div class="hint" id="avisLangues" style="flex:1; min-width:240px; align-self:flex-end"></div>
+  </div>
+
+  <div id="apercu" style="margin-top:12px"></div>
+</section>
+
+<!-- 3. Les IA -->
+<section class="card" id="s-agents">
+  <h2><span class="n">3</span>Les IA</h2>
+  <p class="hint" style="margin-top:0">La rétrotraduction repose sur l’indépendance des étapes&nbsp;: celle qui retraduit ne doit pas avoir vu le texte d’origine, et celle qui compare ne doit avoir traduit ni dans un sens ni dans l’autre. Un modèle ne peut donc occuper qu’un seul rôle.</p>
+
+  <div class="grille-roles" id="rolesGrid"></div>
+
+  <div class="hint" id="avisRoles" style="margin-top:10px"></div>
+
+  <hr class="sep-ia">
+
+  <div class="checks">
+    <label><input type="checkbox" id="oThink"> Avec réflexion (modèles à raisonnement&nbsp;: deepseek-r1, qwen3)</label>
+    <label><input type="checkbox" id="oSecondPassage"> Second passage sur les segments problématiques</label>
+  </div>
+  <p class="hint">Le second passage reprend les seuls segments jugés «&nbsp;non&nbsp;» ou «&nbsp;partiellement&nbsp;» équivalents, avec une température plus basse. Le premier verdict est conservé à côté du second.</p>
+  <p class="hint">Sans réflexion, les réponses sont plus rapides. Un segment qui dépasse dix minutes est abandonné et laissé vide.</p>
+</section>
+
+<!-- 4. Preparer -->
+<section class="card" id="s-run">
+  <h2><span class="n">4</span>Préparer le traitement</h2>
+  <div class="hint">Le traitement se fait sur votre ordinateur, par un script. Cette page ne fait que le préparer.<br>Le script écrit un classeur <code>retrotraduction_AAAAMMJJ_HHMMSS.xlsx</code> dans <code>\projet\</code>. La première feuille porte le résultat : pour chaque segment, la traduction retenue en langue cible, sa provenance et son verdict. La deuxième garde le détail, traductions et rétrotraductions des deux passages. La troisième récapitule le déroulement.</div>
+  <div class="tools" style="margin-top:8px">
+    <button id="btnExporter" type="button" disabled>Exporter retrotraduction.txt</button>
+    <span id="runState" class="status wait"></span>
+  </div>
+  <div class="row" style="margin-top:12px; align-items:center">
+    <strong>PowerShell 2</strong>
+    <button id="btnCopierLancer" type="button" data-texte='$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" -and (Test-Path -LiteralPath $_.Root) } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable." -ForegroundColor Red\n} else {\n  Set-Location (Join-Path $DRIVE "projet")\n  $script = if (Test-Path "retrotraduction.py") { "retrotraduction.py" } else { "retrotraduction.txt" }\n  &amp; (Join-Path $DRIVE "python\python.exe") $script\n}'>Copier</button>
+  </div>
+  <div id="log" aria-live="polite" class="journal"></div>
+</section>
+
+<div class="version">v.21.09.2026-04:20:00</div>
+
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* =====================================================================
+   Langues proposees
+   ===================================================================== */
+const LANGUES = {
+  en: 'English', fr: 'français', de: 'Deutsch', es: 'español', it: 'italiano',
+  pt: 'português', nl: 'Nederlands', pl: 'polski', ro: 'română', sv: 'svenska',
+  zh: '中文', ja: '日本語', ko: '한국어', ar: 'العربية', ru: 'русский', tr: 'Türkçe'
+};
+
+/* =====================================================================
+   Les trois roles de la retrotraduction
+   L'ordre compte : c'est celui du deroulement.
+   ===================================================================== */
+const ROLES = [
+  { cle: 'traduction', titre: 'Traduction',
+    desc: 'Traduit chaque segment de la langue d’origine vers la langue de traduction.' },
+  { cle: 'retro', titre: 'Rétrotraduction A',
+    desc: 'Retraduit vers la langue d’origine. Elle ne voit que la traduction, jamais le texte de départ.' },
+  { cle: 'retro2', titre: 'Rétrotraduction B',
+    desc: 'Second retour indépendant, par un autre modèle. Facultatif : laissez « aucun » pour ne faire qu’une rétrotraduction.',
+    facultatif: true },
+  { cle: 'comparaison', titre: 'Comparaison',
+    desc: 'Compare le texte d’origine et la rétrotraduction, puis rédige les remarques. Elle n’a traduit dans aucun sens.' }
+];
+
+const cfg = {
+  roles: { traduction: '', retro: '', retro2: '', comparaison: '' },
+  langueSource: 'fr',
+  langueCible: 'en',
+  think: false,
+  secondPassage: false
+};
+
+const state = { modeles: [], segments: [], fileName: '' };
+
+function saveCfg(){
+  try { localStorage.setItem('retroCfg', JSON.stringify(cfg)); } catch (e) {}
+}
+function loadCfg(){
+  try {
+    const o = JSON.parse(localStorage.getItem('retroCfg') || 'null');
+    if (o) Object.assign(cfg, o);
+  } catch (e) {}
+}
+
+function log(msg, cls){
+  const el = $('#log');
+  const d = document.createElement('div');
+  if (cls) d.className = cls;
+  d.textContent = '[' + new Date().toTimeString().slice(0, 8) + '] ' + msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+
+/* =====================================================================
+   Modeles enregistres sur le compte Genitem
+   ===================================================================== */
+function contexteGenitem(){
+  try { if (window.parent && window.parent.GenitemAuth) return window.parent.GenitemAuth; } catch (e) {}
+  return window.GenitemAuth || null;
+}
+
+async function chargerModelesDuCompte(){
+  if (typeof fetch !== 'function') return;
+  const ctx = contexteGenitem();
+  const base = (ctx && ctx.rest) ? ctx.rest : (window.location.origin + '/wp-json/genitem/v1/');
+  try {
+    const r = await fetch(base + 'jeton', { credentials: 'same-origin', cache: 'no-store' });
+    if (!r.ok) return;
+    const session = await r.json();
+    if (!session || !session.connecte || !session.modeles || !session.modeles.length) return;
+    state.modeles = session.modeles;
+    construireRoles();
+    log(session.modeles.length + ' modèle(s) repris de votre compte Genitem.', 'ok');
+  } catch (e) { /* silencieux */ }
+}
+
+/* =====================================================================
+   Choix des IA : un modele ne peut occuper qu'un seul role
+   ===================================================================== */
+function modelesDisponiblesPour(cle){
+  const pris = ROLES.map(r => r.cle).filter(c => c !== cle).map(c => cfg.roles[c]).filter(Boolean);
+  return state.modeles.filter(m => pris.indexOf(m) === -1);
+}
+
+function construireRoles(){
+  $('#rolesGrid').innerHTML = ROLES.map((r, i) => {
+    const choisi = cfg.roles[r.cle];
+    const dispo = modelesDisponiblesPour(r.cle);
+    // Le modele deja retenu pour ce role reste propose, meme s'il vient
+    // d'une configuration enregistree et n'est plus dans la liste.
+    if (choisi && dispo.indexOf(choisi) === -1) dispo.unshift(choisi);
+    const options = '<option value="">— aucun —</option>'
+      + dispo.map(m => '<option value="' + esc(m) + '"' + (m === choisi ? ' selected' : '') + '>' + esc(m) + '</option>').join('');
+    return '<div class="agent' + (r.cle === 'comparaison' ? ' final' : '') + '">'
+      + '<h3>' + (i + 1) + '. ' + esc(r.titre) + (choisi ? ' — ' + esc(choisi) : ' — non choisi') + '</h3>'
+      + '<p class="hint" style="margin:0 0 8px">' + esc(r.desc) + '</p>'
+      + '<div class="field"><label>Modèle Ollama</label><select data-role="' + r.cle + '">' + options + '</select></div>'
+      + '</div>';
+  }).join('');
+
+  $$('#rolesGrid select[data-role]').forEach(sel => {
+    sel.addEventListener('change', () => {
+      cfg.roles[sel.dataset.role] = sel.value;
+      saveCfg();
+      construireRoles();   // les autres menus perdent le modele retenu
+      majEtat();
+    });
+  });
+
+  $$('#rolesGrid .agent').forEach((bloc, i) => {
+    bloc.style.opacity = cfg.roles[ROLES[i].cle] ? '' : '0.6';
+  });
+
+  majAvisRoles();
+}
+
+function majAvisRoles(){
+  const el = $('#avisRoles');
+  if (!el) return;
+  const n = state.modeles.length;
+  const manquants = ROLES.filter(r => !r.facultatif && !cfg.roles[r.cle]).length;
+  if (!n){
+    el.innerHTML = '<span style="color:var(--warn)">Aucun modèle dans votre compte. Connectez-vous et ajoutez vos modèles depuis la page Aide.</span>';
+  } else if (n < 3){
+    el.innerHTML = '<span style="color:var(--warn)">' + n + ' modèle(s) disponible(s) pour 3 rôles distincts\u00a0: '
+      + 'installez-en d\u2019autres, sinon deux étapes partageraient le même modèle et la rétrotraduction perdrait son sens.</span>';
+  } else if (manquants){
+    el.textContent = n + ' modèles disponibles. ' + manquants + ' rôle(s) encore à pourvoir\u00a0; '
+      + 'chaque choix retire le modèle des autres menus.';
+  } else {
+    const n2 = ROLES.filter(r => cfg.roles[r.cle]).length;
+    el.innerHTML = '<span style="color:var(--ok)">' + n2 + ' rôles pourvus par ' + n2 + ' modèles distincts'
+      + (cfg.roles.retro2 ? ', dont deux rétrotraductions indépendantes' : '') + '.</span>';
+  }
+}
+
+/* =====================================================================
+   Langues
+   ===================================================================== */
+function construireLangues(){
+  const options = Object.keys(LANGUES).map(c =>
+    '<option value="' + c + '">' + esc(LANGUES[c]) + '</option>').join('');
+  $('#langueSource').innerHTML = options;
+  $('#langueCible').innerHTML = options;
+  $('#langueSource').value = cfg.langueSource;
+  $('#langueCible').value = cfg.langueCible;
+
+  ['#langueSource', '#langueCible'].forEach(s => {
+    $(s).addEventListener('change', () => {
+      cfg.langueSource = $('#langueSource').value;
+      cfg.langueCible = $('#langueCible').value;
+      saveCfg();
+      majAvisLangues();
+      majEtat();
+    });
+  });
+  majAvisLangues();
+}
+
+function majAvisLangues(){
+  const el = $('#avisLangues');
+  if (!el) return;
+  if (cfg.langueSource === cfg.langueCible){
+    el.innerHTML = '<span style="color:var(--err)">Les deux langues sont identiques\u00a0: choisissez une langue de traduction différente.</span>';
+  } else {
+    el.textContent = LANGUES[cfg.langueSource] + ' \u2192 ' + LANGUES[cfg.langueCible]
+      + ' \u2192 ' + LANGUES[cfg.langueSource] + ' (retour à l\u2019origine, à l\u2019aveugle).';
+  }
+}
+
+/* =====================================================================
+   Fichier texte
+   ===================================================================== */
+function setupDrop(){
+  const d = $('#drop'), f = $('#file');
+  d.addEventListener('click', () => f.click());
+  d.addEventListener('dragover', e => { e.preventDefault(); d.classList.add('over'); });
+  d.addEventListener('dragleave', () => d.classList.remove('over'));
+  d.addEventListener('drop', e => {
+    e.preventDefault(); d.classList.remove('over');
+    if (e.dataTransfer.files[0]) chargerTexte(e.dataTransfer.files[0]);
+  });
+  f.addEventListener('change', () => { if (f.files[0]) chargerTexte(f.files[0]); });
+
+}
+
+async function chargerTexte(file){
+  try {
+    const brut = await file.text();
+    const segments = brut.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    if (!segments.length){
+      $('#fileInfo').innerHTML = '<span style="color:var(--err)">Le fichier ne contient aucune ligne exploitable.</span>';
+      return;
+    }
+    state.segments = segments;
+    state.fileName = file.name;
+
+    $('#fileInfo').innerHTML = '<b>' + esc(file.name) + '</b> : ' + segments.length + ' segment(s).';
+    $('#ligneLangues').style.display = '';
+
+    // Les langues sont demandees des le depot : c'est le premier choix a faire.
+    $('#langueSource').focus();
+    $('#apercu').innerHTML = '<div class="hint" style="margin-bottom:4px">Trois premiers segments\u00a0:</div>'
+      + '<ul style="margin:0;padding-left:20px">'
+      + segments.slice(0, 3).map(s => '<li class="hint">' + esc(s.slice(0, 160)) + (s.length > 160 ? '\u2026' : '') + '</li>').join('')
+      + '</ul>';
+    majEtat();
+  } catch (e) {
+    $('#fileInfo').innerHTML = '<span style="color:var(--err)">Lecture impossible\u00a0: ' + esc(e.message || e) + '</span>';
+  }
+}
+
+function majEtat(){
+  const pret = state.segments.length
+    && cfg.langueSource !== cfg.langueCible
+    && ROLES.every(r => r.facultatif || cfg.roles[r.cle]);
+  $('#btnExporter').disabled = !pret;
+  const st = $('#runState');
+  if (!state.segments.length) st.textContent = '';
+  else if (!pret) st.textContent = 'Complétez les langues et les trois rôles.';
+  else st.textContent = state.segments.length + ' segment(s) prêts.';
+}
+
+function copierTexte(btn, texte){
+  const fini = () => {
+    const avant = btn.textContent;
+    btn.textContent = 'Copié';
+    setTimeout(() => { btn.textContent = avant; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(texte).then(fini).catch(() => copieDeSecours(texte, fini));
+  } else {
+    copieDeSecours(texte, fini);
+  }
+}
+
+
+function copieDeSecours(texte, fini){
+  const z = document.createElement('textarea');
+  z.value = texte;
+  z.style.position = 'fixed';
+  z.style.opacity = '0';
+  document.body.appendChild(z);
+  z.select();
+  try { document.execCommand('copy'); fini(); } catch (e) {}
+  document.body.removeChild(z);
+}
+
+/* =====================================================================
+   Generation du script Python
+   ===================================================================== */
+function pyStr(s){ return JSON.stringify(String(s == null ? '' : s)); }
+
+function construireScript(){
+  const segmentsPy = state.segments.map(s => '    ' + pyStr(s)).join(',\n');
+
+  return `# =====================================================================
+# Retrotraduction assistee par IA
+# Genere par la page ia-retrotraduction de Genitem. A lancer dans PowerShell.
+#
+# Depose ce fichier dans le dossier \\projet\\, puis lance la commande
+# "PowerShell 2" donnee sur la page.
+#
+# Deroulement, pour chaque segment :
+#   1. le modele TRADUCTION traduit de la langue source vers la langue cible
+#   2. le modele RETRO retraduit vers la langue source, sans voir l'original
+#   3. le modele COMPARAISON confronte l'original et la retrotraduction
+# =====================================================================
+
+import datetime
+import difflib
+import glob
+import json
+import os
+import shutil
+import sys
+import time
+
+try:
+    import ollama
+except ImportError:
+    print("Le module ollama est absent. Installe-le avec : pip install ollama")
+    sys.exit(1)
+
+try:
+    from openpyxl import Workbook
+    from openpyxl.styles import Alignment, Font, PatternFill
+except ImportError:
+    print("Le module openpyxl est absent. Installe-le avec : pip install openpyxl")
+    sys.exit(1)
+
+
+# --- Configuration, reprise de la page -------------------------------
+
+LANGUE_SOURCE = ${pyStr(LANGUES[cfg.langueSource])}
+LANGUE_CIBLE = ${pyStr(LANGUES[cfg.langueCible])}
+
+MODELE_TRADUCTION = ${pyStr(cfg.roles.traduction)}
+MODELE_RETRO = ${pyStr(cfg.roles.retro)}
+MODELE_RETRO2 = ${pyStr(cfg.roles.retro2)}   # vide si une seule retrotraduction
+MODELE_COMPARAISON = ${pyStr(cfg.roles.comparaison)}
+
+AVEC_REFLEXION = ${cfg.think ? 'True' : 'False'}
+SECOND_PASSAGE = ${cfg.secondPassage ? 'True' : 'False'}   # reprise des segments douteux
+DELAI_MAX = 600           # un segment qui depasse 10 minutes est abandonne
+
+SEGMENTS = [
+${segmentsPy}
+]
+
+
+# --- Appel a Ollama --------------------------------------------------
+
+def interroger(modele, systeme, message, schema, debut):
+    """Un appel. Au-dela de DELAI_MAX pour le segment, on abandonne : mieux
+    vaut une cellule vide qu'une serie bloquee."""
+    if time.time() - debut > DELAI_MAX:
+        return None
+    try:
+        reponse = ollama.chat(
+            model=modele,
+            messages=[{"role": "system", "content": systeme},
+                      {"role": "user", "content": message}],
+            format=schema,
+            think=AVEC_REFLEXION,
+            options={"temperature": 0.2, "num_predict": 3000 if AVEC_REFLEXION else 800},
+        )
+        return json.loads(reponse["message"]["content"])
+    except Exception as e:
+        print("      echec : " + str(e)[:90])
+        return None
+
+
+def similarite(a, b):
+    """Proportion de mots communs entre l'original et la retrotraduction.
+    Mesure grossiere mais instantanee : elle ne juge pas le sens, elle
+    signale les ecarts de surface qui meritent un coup d'oeil."""
+    if not a or not b:
+        return ""
+    mots_a = a.lower().split()
+    mots_b = b.lower().split()
+    if not mots_a or not mots_b:
+        return ""
+    return round(difflib.SequenceMatcher(None, mots_a, mots_b).ratio(), 2)
+
+
+def traduction_suspecte(texte, systeme=""):
+    """Repere les reponses ou le modele a recopie la consigne au lieu de
+    traduire. Le controle ne peut pas se limiter a des mots-cles : le modele
+    traduit parfois la consigne elle-meme (\"Tu es\" devient \"Vous etes\",
+    ou passe en anglais). On mesure donc aussi le recouvrement avec le texte
+    de la consigne."""
+    if not texte or not texte.strip():
+        return True
+
+    t = texte.lower()
+
+    # Formulations rencontrees, dans les deux langues et les deux registres
+    amorces = ("traducteur professionnel", "professional translator",
+               "traduis de ", "traduis le texte", "traduisez",
+               "translate the text", "translate from",
+               "<texte>", "</texte>",
+               "objet json", "json object", "champ traduction",
+               "reponds uniquement", "reply only", "repondez uniquement")
+    if any(a in t for a in amorces):
+        return True
+
+    # Recouvrement avec la consigne : au-dela de 40 %, c'est un echo.
+    if systeme:
+        recouvrement = difflib.SequenceMatcher(None, t.split(), systeme.lower().split()).ratio()
+        if recouvrement > 0.40:
+            return True
+
+    return False
+
+
+def ecart_longueur(a, b):
+    """Ecart de longueur en mots, en pourcentage du texte d'origine.
+    Un ecart marque signale un ajout ou une omission, que la similarite
+    seule ne revele pas toujours."""
+    if not a or not b:
+        return ""
+    na, nb = len(a.split()), len(b.split())
+    if not na:
+        return ""
+    return round(100.0 * (nb - na) / na)
+
+
+SCHEMA_TRADUCTION = {"type": "object",
+                     "properties": {"traduction": {"type": "string"}},
+                     "required": ["traduction"]}
+
+SCHEMA_COMPARAISON = {
+    "type": "object",
+    "properties": {"equivalent": {"type": "string", "enum": ["oui", "partiellement", "non"]},
+                   "remarques": {"type": "string"}},
+    "required": ["equivalent", "remarques"]}
+
+
+def systeme_traduction(depuis, vers):
+    return ("Tu es traducteur professionnel. Tu traduis de " + depuis + " vers " + vers + ".\\n"
+            "Rends le sens, le registre et le niveau de precision, sans ajouter, retrancher ni "
+            "expliquer. Ne commente pas, ne reformule pas au-dela de ce qu'exige la langue "
+            "d'arrivee. Si le texte contient un terme technique, conserve sa precision.\\n\\n"
+            "Ne recopie jamais ces instructions : ta reponse ne contient que la traduction du "
+            "texte place entre les balises.\\n\\n"
+            "Reponds uniquement par un objet JSON avec un champ \\"traduction\\".")
+
+
+def message_traduction(texte, depuis, vers):
+    """Le texte est delimite et l'instruction repetee dans le message meme :
+    sans cela, un petit modele confond la consigne et le contenu, et renvoie
+    parfois l'instruction en guise de traduction."""
+    return ("Traduis de " + depuis + " vers " + vers + " le texte place entre les balises "
+            "<texte> et </texte>. Ne traduis rien d'autre, et ne reponds rien d'autre.\\n\\n"
+            "<texte>\\n" + texte + "\\n</texte>")
+
+
+SYSTEME_COMPARAISON = (
+    "Tu es specialiste de la validation d'instruments par retrotraduction. On te donne un texte "
+    "d'origine et une ou deux retrotraductions : le texte est passe par une langue intermediaire, "
+    "puis est revenu vers sa langue de depart, par des traducteurs differents qui ne se sont pas "
+    "vus et qui n'ont jamais vu l'original.\\n\\n"
+    "Ta tache : dire si le retour est equivalent au texte d'origine, et signaler ce qui s'est "
+    "perdu ou deplace. Concentre-toi sur le sens, pas sur le style : une formulation differente "
+    "qui dit la meme chose est equivalente.\\n\\n"
+    "Examine le segment DANS SON INTEGRALITE, de son premier mot a son dernier. S'il contient "
+    "plusieurs phrases ou propositions, verifie-les toutes : une seule divergence sur une partie "
+    "suffit a repondre \\"partiellement\\". Ne juge pas sur le debut du segment.\\n\\n"
+    "Signale en particulier : un changement de portee (toujours/souvent), un terme technique rendu "
+    "par un mot courant, une nuance de modalite (doit/peut), un ajout ou une omission, un "
+    "changement de sujet grammatical qui deplace la responsabilite, une negation perdue.\\n\\n"
+    "Si deux retrotraductions te sont donnees, compare-les aussi entre elles : leur ecart revele "
+    "ce qui tient au traducteur plutot qu'au texte. Mentionne-le dans tes remarques.\\n\\n"
+    "Reponds uniquement par un objet JSON avec deux champs : \\"equivalent\\" (\\"oui\\", "
+    "\\"partiellement\\" ou \\"non\\") puis \\"remarques\\" (une a quatre phrases ; si tout est "
+    "equivalent, dis-le brievement).")
+
+
+
+def comparer(segment, retro, retro2, debut):
+    """Confronte l'original et le ou les retours. Renvoie (verdict, remarques)."""
+    if not retro:
+        return "", ""
+    message = ("Texte d'origine (" + LANGUE_SOURCE + ") :\\n" + segment
+               + "\\n\\nRetrotraduction A (" + LANGUE_SOURCE + ") :\\n" + retro)
+    if retro2:
+        message += "\\n\\nRetrotraduction B (" + LANGUE_SOURCE + ") :\\n" + retro2
+    message += "\\n\\nCompare l'integralite du segment."
+    r = interroger(MODELE_COMPARAISON, SYSTEME_COMPARAISON, message, SCHEMA_COMPARAISON, debut)
+    if not r:
+        return "", ""
+    return r.get("equivalent", ""), r.get("remarques", "").strip()
+
+
+# --- Deroulement -----------------------------------------------------
+
+SORTIE = "retrotraduction_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".xlsx"
+
+
+def archiver_anciens_fichiers():
+    """Les classeurs deja presents sont deplaces dans le sous-dossier
+    archive : on ne perd rien, et le dossier de travail reste lisible."""
+    anciens = sorted(glob.glob("retrotraduction_*.xlsx"))
+    if not anciens:
+        return
+
+    # Un sous-dossier date par execution : on retrouve d'un coup d'oeil
+    # ce qui a ete mis de cote, et quand.
+    dossier = os.path.join("archive", datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
+    if not os.path.isdir(dossier):
+        os.makedirs(dossier)
+
+    deplaces = 0
+    for chemin in anciens:
+        cible = os.path.join(dossier, os.path.basename(chemin))
+        try:
+            shutil.move(chemin, cible)
+            deplaces += 1
+        except Exception as e:
+            print("   impossible d'archiver " + chemin + " : " + str(e)[:60])
+
+    if deplaces:
+        print(str(deplaces) + " ancien(s) classeur(s) deplace(s) dans " + dossier)
+        print("")
+
+
+def main():
+    archiver_anciens_fichiers()
+    print("=" * 66)
+    print("RETROTRADUCTION ASSISTEE PAR IA")
+    print("=" * 66)
+    print("Parcours          : " + LANGUE_SOURCE + " -> " + LANGUE_CIBLE + " -> " + LANGUE_SOURCE)
+    print("")
+    print("1. Traduction     : " + MODELE_TRADUCTION)
+    print("2. Retrotraduction A : " + MODELE_RETRO)
+    print("2. Retrotraduction B : " + (MODELE_RETRO2 if MODELE_RETRO2 else "(aucune)"))
+    print("3. Comparaison    : " + MODELE_COMPARAISON)
+    print("")
+    print("Reflexion         : " + ("oui" if AVEC_REFLEXION else "non"))
+    print("Second passage    : " + ("oui, sur les segments douteux" if SECOND_PASSAGE else "non"))
+    print("Delai par segment : " + str(DELAI_MAX) + " s")
+    print("")
+    print("Segments a traiter : " + str(len(SEGMENTS)))
+
+    # Nombre d'appels prevus : utile pour estimer la duree avant de s'engager.
+    par_segment = 2 + (1 if MODELE_RETRO2 else 0) + 1
+    print("Appels prevus     : " + str(len(SEGMENTS) * par_segment)
+          + " (" + str(par_segment) + " par segment)"
+          + (", plus la reprise des douteux" if SECOND_PASSAGE else ""))
+    print("=" * 66)
+    print("")
+
+    resultats = []
+    abandons = 0
+
+    try:
+      for i, segment in enumerate(SEGMENTS):
+        debut = time.time()
+        print("Segment " + str(i + 1) + "/" + str(len(SEGMENTS)))
+
+        # 1. Traduction
+        r = interroger(MODELE_TRADUCTION, systeme_traduction(LANGUE_SOURCE, LANGUE_CIBLE),
+                       message_traduction(segment, LANGUE_SOURCE, LANGUE_CIBLE),
+                       SCHEMA_TRADUCTION, debut)
+        traduction = (r or {}).get("traduction", "").strip()
+        if traduction_suspecte(traduction, systeme_traduction(LANGUE_SOURCE, LANGUE_CIBLE)):
+            print("   ATTENTION : consigne recopiee au lieu de la traduction, ignoree.")
+            traduction = ""
+        print("   traduction : " + (traduction[:70] if traduction else "echec"))
+
+        # 2. Retrotraduction(s), a l'aveugle : ces modeles ne recoivent que
+        #    la traduction, jamais l'original.
+        retro, retro2 = "", ""
+        if traduction:
+            r = interroger(MODELE_RETRO, systeme_traduction(LANGUE_CIBLE, LANGUE_SOURCE),
+                           message_traduction(traduction, LANGUE_CIBLE, LANGUE_SOURCE),
+                           SCHEMA_TRADUCTION, debut)
+            retro = (r or {}).get("traduction", "").strip()
+            if traduction_suspecte(retro, systeme_traduction(LANGUE_CIBLE, LANGUE_SOURCE)):
+                print("   ATTENTION : retour A invalide (consigne recopiee), ignore.")
+                retro = ""
+            print("   retour A   : " + (retro[:70] if retro else "echec"))
+
+            if MODELE_RETRO2:
+                r = interroger(MODELE_RETRO2, systeme_traduction(LANGUE_CIBLE, LANGUE_SOURCE),
+                               message_traduction(traduction, LANGUE_CIBLE, LANGUE_SOURCE),
+                               SCHEMA_TRADUCTION, debut)
+                retro2 = (r or {}).get("traduction", "").strip()
+                if traduction_suspecte(retro2, systeme_traduction(LANGUE_CIBLE, LANGUE_SOURCE)):
+                    print("   ATTENTION : retour B invalide (consigne recopiee), ignore.")
+                    retro2 = ""
+                print("   retour B   : " + (retro2[:70] if retro2 else "echec"))
+
+        # 3. Comparaison
+        equivalent, remarques = comparer(segment, retro, retro2, debut)
+        if equivalent:
+            print("   equivalent : " + equivalent)
+
+        if not remarques:
+            abandons += 1
+
+        resultats.append({"source": segment, "cible": traduction,
+                          "retro": retro, "retro2": retro2,
+                          "equivalent": equivalent, "remarques": remarques,
+                          "similarite": similarite(segment, retro),
+                          "similarite2": similarite(segment, retro2),
+                          "ecart_trad": ecart_longueur(segment, traduction),
+                          "ecart_retour": ecart_longueur(segment, retro),
+                          "reprise": None})
+
+        if (i + 1) % 10 == 0 and (i + 1) < len(SEGMENTS):
+            ecrire(resultats, definitif=False)
+
+      print("")
+      if abandons:
+          print(str(abandons) + " segment(s) sans comparaison (delai depasse ou erreur).")
+
+      # Second passage : on refait la chaine sur les seuls segments douteux.
+      # Les modeles sont les memes, mais l'appel est neuf : les ecarts entre
+      # les deux passages disent ce qui tient a l'instabilite du modele.
+      if SECOND_PASSAGE:
+          douteux = [k for k, r in enumerate(resultats) if r["equivalent"] != "oui"]
+          if not douteux:
+              print("Second passage : aucun segment a reprendre.")
+          else:
+              print("")
+              print("Second passage sur " + str(len(douteux)) + " segment(s) douteux...")
+              for rang, k in enumerate(douteux, 1):
+                  debut = time.time()
+                  segment = resultats[k]["source"]
+                  print("Reprise " + str(rang) + "/" + str(len(douteux))
+                        + " (segment " + str(k + 1) + ")")
+
+                  r = interroger(MODELE_TRADUCTION, systeme_traduction(LANGUE_SOURCE, LANGUE_CIBLE),
+                                 message_traduction(segment, LANGUE_SOURCE, LANGUE_CIBLE),
+                                 SCHEMA_TRADUCTION, debut)
+                  trad2 = (r or {}).get("traduction", "").strip()
+
+                  ret2a, ret2b = "", ""
+                  if trad2:
+                      r = interroger(MODELE_RETRO, systeme_traduction(LANGUE_CIBLE, LANGUE_SOURCE),
+                                     message_traduction(trad2, LANGUE_CIBLE, LANGUE_SOURCE),
+                                     SCHEMA_TRADUCTION, debut)
+                      ret2a = (r or {}).get("traduction", "").strip()
+                      if MODELE_RETRO2:
+                          r = interroger(MODELE_RETRO2, systeme_traduction(LANGUE_CIBLE, LANGUE_SOURCE),
+                                         message_traduction(trad2, LANGUE_CIBLE, LANGUE_SOURCE),
+                                         SCHEMA_TRADUCTION, debut)
+                          ret2b = (r or {}).get("traduction", "").strip()
+
+                  eq2, rem2 = comparer(segment, ret2a, ret2b, debut)
+                  resultats[k]["reprise"] = {"cible": trad2, "retro": ret2a, "retro2": ret2b,
+                                             "equivalent": eq2, "remarques": rem2}
+                  print("   " + (resultats[k]["equivalent"] or "-") + " -> " + (eq2 or "echec"))
+
+              mieux = sum(1 for k in douteux
+                          if (resultats[k]["reprise"] or {}).get("equivalent") == "oui")
+              print("")
+              print("Second passage : " + str(mieux) + "/" + str(len(douteux))
+                    + " segment(s) juge(s) equivalents a la reprise.")
+
+    except KeyboardInterrupt:
+        print("")
+        print("Interruption demandee. Enregistrement de ce qui est deja fait...")
+        ecrire(resultats)
+        sys.exit(0)
+
+    ecrire(resultats)
+
+
+RANG_EQUIVALENCE = {"oui": 3, "partiellement": 2, "non": 1, "": 0}
+
+
+def version_retenue(r):
+    """La version a garder, en langue cible, avec sa provenance.
+
+    Le premier passage l'emporte par defaut. La reprise ne prend sa place
+    que si elle a produit un texte ET que son verdict est meilleur : on ne
+    remplace pas une traduction jugee equivalente par une seconde tentative
+    moins bien notee."""
+    rep = r.get("reprise") or {}
+    rang_rep = RANG_EQUIVALENCE.get(rep.get("equivalent", ""), 0)
+    rang_pre = RANG_EQUIVALENCE.get(r.get("equivalent", ""), 0)
+    if rep.get("cible") and rang_rep > rang_pre:
+        return rep["cible"], "reprise", rep.get("equivalent", ""), rep.get("remarques", "")
+    return r.get("cible", ""), "1er passage", r.get("equivalent", ""), r.get("remarques", "")
+
+
+def ecrire(resultats, definitif=True):
+    classeur = Workbook()
+
+    teintes = {"oui": "E6F4EA", "partiellement": "FFF4E5", "non": "FCE8E6"}
+
+    # --- Feuille 1 : ce qu'on emporte ----------------------------------
+    # Le detail sert a juger ; cette feuille-ci porte le resultat, soit
+    # l'item traduit dans la version a conserver. C'est elle qu'on ouvre
+    # en premier, et souvent la seule qu'on relise.
+    t = classeur.active
+    t.title = "Traduction retenue"
+
+    entetes_t = ["N", "Original (" + LANGUE_SOURCE + ")",
+                 "Traduction retenue (" + LANGUE_CIBLE + ")",
+                 "Provenance", "Equivalence", "Remarques"]
+    t.append(entetes_t)
+    for c in range(1, len(entetes_t) + 1):
+        t.cell(row=1, column=c).font = Font(bold=True)
+        t.cell(row=1, column=c).alignment = Alignment(wrap_text=True, vertical="center")
+    t.freeze_panes = "A2"
+
+    for n, r in enumerate(resultats, 1):
+        texte, provenance, eq, rem = version_retenue(r)
+        t.append([n, r["source"], texte or "(echec)", provenance,
+                  eq or "(non evalue)", rem or ""])
+        couleur = teintes.get(eq)
+        if couleur:
+            t.cell(row=n + 1, column=5).fill = PatternFill("solid", fgColor=couleur)
+
+    for k, largeur in enumerate([5, 42, 42, 14, 16, 48]):
+        t.column_dimensions[chr(65 + k)].width = largeur
+    for rang in t.iter_rows(min_row=2):
+        for cellule in rang:
+            cellule.alignment = Alignment(wrap_text=True, vertical="top")
+
+    # --- Feuille 2 : le detail, une ligne par segment ------------------
+    f = classeur.create_sheet("Detail")
+
+    entetes = ["N", "Original (" + LANGUE_SOURCE + ")",
+               "1. Traduction (" + LANGUE_CIBLE + ")",
+               "2. Retrotraduction A (" + LANGUE_SOURCE + ")"]
+    if MODELE_RETRO2:
+        entetes.append("2. Retrotraduction B (" + LANGUE_SOURCE + ")")
+    entetes += ["3. Equivalence", "3. Remarques",
+                "Similarite A", "Ecart mots trad. (%)", "Ecart mots retour (%)"]
+    if SECOND_PASSAGE:
+        entetes += ["Reprise : traduction (" + LANGUE_CIBLE + ")",
+                    "Reprise : equivalence", "Reprise : retrotraduction",
+                    "Reprise : remarques"]
+    f.append(entetes)
+    for c in range(1, len(entetes) + 1):
+        f.cell(row=1, column=c).font = Font(bold=True)
+        f.cell(row=1, column=c).alignment = Alignment(wrap_text=True, vertical="center")
+    f.freeze_panes = "A2"
+
+    # Les trois couleurs de fond sont celles de la premiere feuille : le
+    # survol visuel suffit a reperer les segments a relire.
+
+    col_eq = 5 + (1 if MODELE_RETRO2 else 0)   # position de la colonne Equivalence
+
+    for n, r in enumerate(resultats, 1):
+        ligne = [n, r["source"], r["cible"], r["retro"]]
+        if MODELE_RETRO2:
+            ligne.append(r.get("retro2", ""))
+        ligne += [r["equivalent"] or "(non evalue)",
+                  r["remarques"] or "(pas de comparaison)",
+                  r.get("similarite", ""),
+                  r.get("ecart_trad", ""), r.get("ecart_retour", "")]
+        if SECOND_PASSAGE:
+            rep = r.get("reprise") or {}
+            ligne += [rep.get("cible", ""), rep.get("equivalent", ""),
+                      rep.get("retro", ""), rep.get("remarques", "")]
+        f.append(ligne)
+
+        couleur = teintes.get(r["equivalent"])
+        if couleur:
+            f.cell(row=n + 1, column=col_eq).fill = PatternFill("solid", fgColor=couleur)
+        if SECOND_PASSAGE:
+            c2 = teintes.get((r.get("reprise") or {}).get("equivalent"))
+            if c2:
+                f.cell(row=n + 1, column=len(entetes) - 2).fill = PatternFill("solid", fgColor=c2)
+
+    largeurs = [5, 42, 42, 42] + ([42] if MODELE_RETRO2 else []) + [16, 48, 12, 14, 14]
+    if SECOND_PASSAGE:
+        largeurs += [42, 16, 42, 48]
+    for k, largeur in enumerate(largeurs):
+        f.column_dimensions[chr(65 + k)].width = largeur
+    for rang in f.iter_rows(min_row=2):
+        for cellule in rang:
+            cellule.alignment = Alignment(wrap_text=True, vertical="top")
+
+    # --- Feuille 2 : le retour sur ce qui a ete fait -------------------
+    p = classeur.create_sheet("Deroulement")
+
+    total = len(resultats)
+    compte = {"oui": 0, "partiellement": 0, "non": 0, "": 0}
+    for r in resultats:
+        compte[r["equivalent"] if r["equivalent"] in compte else ""] += 1
+    sims = [r["similarite"] for r in resultats if isinstance(r.get("similarite"), (int, float))]
+
+    def ligne(cle, valeur):
+        p.append([cle, valeur])
+        p.cell(row=p.max_row, column=1).font = Font(bold=True)
+
+    def titre(t):
+        p.append([])
+        p.append([t])
+        p.cell(row=p.max_row, column=1).font = Font(bold=True, size=12)
+
+    p.append(["Retrotraduction assistee par IA"])
+    p.cell(row=1, column=1).font = Font(bold=True, size=14)
+    p.append([datetime.datetime.now().strftime("%d.%m.%Y a %H:%M")])
+
+    titre("Parcours")
+    ligne("Langue d'origine", LANGUE_SOURCE)
+    ligne("Langue de traduction", LANGUE_CIBLE)
+    ligne("Chemin", LANGUE_SOURCE + " -> " + LANGUE_CIBLE + " -> " + LANGUE_SOURCE)
+
+    titre("Modeles employes")
+    ligne("1. Traduction", MODELE_TRADUCTION)
+    ligne("2. Retrotraduction A (a l'aveugle)", MODELE_RETRO)
+    ligne("2. Retrotraduction B", MODELE_RETRO2 or "(aucune)")
+    ligne("3. Comparaison", MODELE_COMPARAISON)
+    ligne("Reflexion activee", "oui" if AVEC_REFLEXION else "non")
+    ligne("Delai maximal par segment", str(DELAI_MAX) + " s")
+    ligne("Second passage sur les douteux", "oui" if SECOND_PASSAGE else "non")
+
+    titre("Resultat")
+    ligne("Segments traites", total)
+    ligne("Equivalents", str(compte["oui"]) + (" (" + str(round(100 * compte["oui"] / total)) + " %)" if total else ""))
+    ligne("Partiellement equivalents", compte["partiellement"])
+    ligne("Non equivalents", compte["non"])
+    ligne("Sans evaluation", compte[""])
+    if SECOND_PASSAGE:
+        venues = sum(1 for r in resultats if version_retenue(r)[1] == "reprise")
+        ligne("Versions retenues issues de la reprise", venues)
+    if sims:
+        ligne("Similarite moyenne", str(round(sum(sims) / len(sims), 2)))
+        ligne("Similarite la plus basse", str(round(min(sims), 2)))
+
+    titre("Lecture")
+    for texte in [
+        "La feuille << Traduction retenue >> porte le resultat : pour chaque",
+        "segment, la version a conserver en langue cible. La colonne Provenance",
+        "dit d'ou elle vient, du premier passage ou de la reprise ; la reprise",
+        "ne l'emporte que si son verdict est meilleur.",
+        "",
+        "La feuille << Detail >> garde la trace complete : traductions,",
+        "retrotraductions et remarques des deux passages. Elle sert a justifier",
+        "un choix, pas a le transmettre.",
+        "",
+        "La colonne Similarite compare mot a mot l'original et la retrotraduction.",
+        "Elle ne remplace pas le jugement de l'IA : deux formulations differentes",
+        "peuvent dire la meme chose (similarite basse, equivalence oui), et deux",
+        "textes proches peuvent diverger sur un mot decisif (l'inverse).",
+        "",
+        "Les segments a relire en priorite sont ceux marques << non >> ou",
+        "<< partiellement >>, et ceux dont la similarite est nettement en dessous",
+        "de la moyenne.",
+        "",
+        "Cette procedure ne vaut pas validation : elle signale des ecarts, elle",
+        "ne les tranche pas. La decision reste humaine.",
+    ]:
+        p.append([texte])
+
+    p.column_dimensions["A"].width = 36
+    p.column_dimensions["B"].width = 60
+
+    classeur.save(SORTIE)
+    if definitif:
+        print("")
+        print("Resultats enregistres dans : " + SORTIE)
+        print("  feuille 1 : les traductions retenues | feuille 2 : le detail")
+        if total:
+            print("  equivalents : " + str(compte["oui"]) + "/" + str(total)
+                  + " | partiels : " + str(compte["partiellement"])
+                  + " | non : " + str(compte["non"]))
+    else:
+        print("   [sauvegarde : " + str(len(resultats)) + " segment(s) dans " + SORTIE + "]")
+
+
+if __name__ == "__main__":
+    main()
+`;
+}
+
+function exporterScript(){
+  const code = construireScript();
+  const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'retrotraduction.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  log('retrotraduction.txt téléchargé (' + state.segments.length + ' segment(s), '
+      + LANGUES[cfg.langueSource] + ' \u2192 ' + LANGUES[cfg.langueCible] + ').', 'ok');
+}
+
+
+/* =====================================================================
+   Langue de l'interface
+   ===================================================================== */
+const TRAD_EN = {
+  "Rétrotraduction assistée par IA": "AI-assisted back-translation",
+  "GenItem, traitement local avec Ollama — traduction, rétrotraduction à l’aveugle et comparaison":
+    "GenItem, local processing with Ollama — translation, blind back-translation and comparison",
+  "Démarrer Ollama": "Start Ollama",
+  "Fenêtre 1 : démarrer Ollama, et laisser cette fenêtre ouverte.":
+    "Window 1: start Ollama, and leave this window open.",
+  "Copier": "Copy",
+  "Texte à traduire": "Text to translate",
+  "Déposez le fichier .txt ici": "Drop the .txt file here",
+  "ou cliquez pour le choisir": "or click to choose it",
+  "Une ligne par item, phrase ou consigne à faire circuler d’une langue à l’autre.":
+    "One line per item, sentence or instruction to pass from one language to the other.",
+  "Langue d’origine": "Source language",
+  "Langue de traduction": "Target language",
+  "Les IA": "The AI",
+  "Traduction": "Translation",
+  "Rétrotraduction": "Back-translation",
+  "Comparaison": "Comparison",
+  "Modèle Ollama": "Ollama model",
+  "Avec réflexion (modèles à raisonnement : deepseek-r1, qwen3)":
+    "With reasoning (reasoning models: deepseek-r1, qwen3)",
+  "Sans réflexion, les réponses sont plus rapides. Un segment qui dépasse dix minutes est abandonné et laissé vide.":
+    "Without reasoning, answers are faster. A segment that takes more than ten minutes is abandoned and left empty.",
+  "Préparer le traitement": "Prepare the processing",
+  "Le traitement se fait sur votre ordinateur, par un script. Cette page ne fait que le préparer.":
+    "The processing runs on your computer, through a script. This page only prepares it.",
+  ". La première feuille porte le résultat : pour chaque segment, la traduction retenue en langue cible, sa provenance et son verdict. La deuxième garde le détail, traductions et rétrotraductions des deux passages. La troisième récapitule le déroulement.":
+    ". The first sheet carries the result: for each segment, the translation to keep in the target language, where it came from and its verdict. The second holds the detail, translations and back-translations from both passes. The third summarises the run.",
+  "Exporter retrotraduction.txt": "Export retrotraduction.txt",
+  
+  
+  
+};
+
+let LANGUE_INTERFACE = 'fr';
+
+function traduireNoeuds(racine, dico){
+  const ignorer = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, CODE: 1 };
+  const marche = document.createTreeWalker(racine, NodeFilter.SHOW_TEXT, {
+    acceptNode(n){
+      if (ignorer[n.parentNode.nodeName]) return NodeFilter.FILTER_REJECT;
+      // Les noms de langues et les resultats gardent leur libelle
+      if (n.parentNode.closest && n.parentNode.closest('#langueSource, #langueCible, #tbl, #apercu'))
+        return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const noeuds = [];
+  let n;
+  while ((n = marche.nextNode())) noeuds.push(n);
+  noeuds.forEach(noeud => {
+    const brut = noeud.nodeValue;
+    const cle = brut.replace(/\s+/g, ' ').trim();
+    if (!cle || dico[cle] === undefined) return;
+    noeud.nodeValue = brut.match(/^\s*/)[0] + dico[cle] + brut.match(/\s*$/)[0];
+  });
+}
+
+function inverserDico(d){
+  const r = {};
+  Object.keys(d).forEach(k => { if (d[k] !== k) r[d[k]] = k; });
+  return r;
+}
+
+function appliquerLangueInterface(langue){
+  if (langue === LANGUE_INTERFACE) return;
+  traduireNoeuds(document.body, langue === 'en' ? TRAD_EN : inverserDico(TRAD_EN));
+  LANGUE_INTERFACE = langue;
+  $('#btnLangueFr').classList.toggle('langue-active', langue === 'fr');
+  $('#btnLangueEn').classList.toggle('langue-active', langue === 'en');
+  try { localStorage.setItem('langueInterfaceRetro', langue); } catch (e) {}
+}
+
+function surveillerInterface(){
+  const cible = document.querySelector('main');
+  let enCours = false;
+  new MutationObserver(() => {
+    if (enCours || LANGUE_INTERFACE !== 'en') return;
+    enCours = true;
+    traduireNoeuds(cible, TRAD_EN);
+    enCours = false;
+  }).observe(cible, { childList: true, subtree: true });
+}
+
+/* =====================================================================
+   Demarrage
+   ===================================================================== */
+function demarrer(){
+  loadCfg();
+  construireLangues();
+  construireRoles();
+  setupDrop();
+  majEtat();
+
+  $('#oThink').checked = cfg.think;
+  $('#oThink').addEventListener('change', () => { cfg.think = $('#oThink').checked; saveCfg(); });
+  $('#oSecondPassage').checked = cfg.secondPassage;
+  $('#oSecondPassage').addEventListener('change', () => { cfg.secondPassage = $('#oSecondPassage').checked; saveCfg(); });
+
+  $('#btnCopierOllama').addEventListener('click', function(){
+    copierTexte(this, (this.getAttribute('data-texte') || '').replace(/\\n/g, '\n'));
+  });
+  $('#btnCopierLancer').addEventListener('click', function(){
+    copierTexte(this, (this.getAttribute('data-texte') || '').replace(/\\n/g, '\n'));
+  });
+  $('#btnExporter').addEventListener('click', exporterScript);
+
+  surveillerInterface();
+  let lgUI = 'fr';
+  try {
+    const m = localStorage.getItem('langueInterfaceRetro');
+    if (m === 'fr' || m === 'en') lgUI = m;
+    else lgUI = (navigator.language || 'fr').toLowerCase().indexOf('fr') === 0 ? 'fr' : 'en';
+  } catch (e) {}
+  $('#btnLangueFr').classList.toggle('langue-active', lgUI === 'fr');
+  $('#btnLangueEn').classList.toggle('langue-active', lgUI === 'en');
+  if (lgUI === 'en') appliquerLangueInterface('en');
+
+  chargerModelesDuCompte();
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
+else demarrer();
+
+</script>
+</body>
+</html>

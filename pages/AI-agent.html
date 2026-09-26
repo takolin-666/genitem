@@ -1,0 +1,2639 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Configurateur d'agents IA locaux</title>
+<link rel="icon" type="image/png" href="https://genitem.recherche-formation.com/wp-content/uploads/2026/09/favicon.png">
+<link rel="apple-touch-icon" href="https://genitem.recherche-formation.com/wp-content/uploads/2026/09/favicon.png">
+<style>
+  :root {
+    --navy: #1a2c56;
+    --blue: #2f5aa8;
+    --blue-light: #e8effa;
+    --teal: #0f6e56;
+    --teal-light: #e1f5ee;
+    --border: #cfd6e4;
+    --text: #23262f;
+    --text-muted: #5a5f6d;
+    --bg: #f6f7fb;
+    --card-bg: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    position: relative;
+    margin: 0;
+    padding: 32px 20px 80px;
+    background: var(--bg);
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+  }
+  h1 {
+    text-align: center;
+    color: var(--navy);
+    font-size: 24px;
+    margin: 0 0 28px;
+  }
+  .flow {
+    width: 80vw;
+    max-width: 80vw;
+    margin: 0 auto;
+  }
+  .fork {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0 24px;
+  }
+  .fork-caption {
+    font-size: 12px;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .fork-trunk {
+    width: 1.5px;
+    height: 12px;
+    background: var(--navy);
+  }
+  .fork-rail {
+    height: 1.5px;
+    background: var(--navy);
+    box-sizing: border-box;
+    margin-left: calc(16.6667% - 6px);
+    margin-right: calc(16.6667% - 6px);
+    width: auto;
+    align-self: stretch;
+  }
+  .fork-ticks, .merge-ticks {
+    position: relative;
+    height: 14px;
+    margin-left: calc(16.6667% - 6px);
+    margin-right: calc(16.6667% - 6px);
+    align-self: stretch;
+  }
+  .fork-tick, .merge-tick {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 14px;
+    border-left: 1.5px solid var(--navy);
+    transform: translateX(-1px);
+  }
+  .fork-tick::after {
+    content: "";
+    position: absolute;
+    left: -4px;
+    bottom: -1px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid var(--navy);
+  }
+  .fork-trunk.arrow-end {
+    position: relative;
+  }
+  .fork-trunk.arrow-end::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%);
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid var(--navy);
+  }
+  .row-single {
+    display: flex;
+    justify-content: center;
+  }
+  .row-single .card {
+    width: calc((100% - 36px) / 3);
+  }
+  .reviewer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    width: 100%;
+    position: relative;
+  }
+  .close-card {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+  }
+  .close-card:hover { background: #f1e3e3; color: #b3261e; }
+  .close-card.hidden { display: none; }
+  .card.generator { border-color: var(--blue); }
+  .card.reviewer { border-color: var(--teal); }
+  .card.revision { border-color: var(--blue); }
+  .add-card {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--teal);
+    cursor: pointer;
+    min-height: 140px;
+    transition: background 0.15s, border-color 0.15s;
+    user-select: none;
+  }
+  .add-card:hover { background: var(--teal-light); border-color: var(--teal); }
+  .add-card.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .generator .badge, .revision .badge { background: var(--blue); }
+  .reviewer .badge { background: var(--teal); }
+  .card-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .card-head span.name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    padding: 2px 4px;
+  }
+  .card-head input.name {
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    padding: 2px 4px;
+    width: 100%;
+    font-family: inherit;
+  }
+  .card-head input.name:focus { outline: 1px solid var(--border); border-radius: 4px; }
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 8px 0 4px;
+  }
+  select.model {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: monospace;
+    background: #fff;
+  }
+  .model-warning {
+    display: none;
+    color: #b3261e;
+    font-size: 11.5px;
+    font-weight: 600;
+    margin: 5px 0 0;
+    line-height: 1.4;
+  }
+  .model-warning.show { display: block; }
+  .mini-settings {
+    display: flex;
+    gap: 24px;
+    margin: 8px 0 4px;
+  }
+  .type-item-choice {
+    display: flex;
+    gap: 20px;
+    margin: 6px 0 2px;
+    flex-wrap: wrap;
+  }
+  .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 400;
+  }
+  .radio-label input[type="radio"] {
+    margin: 0;
+    cursor: pointer;
+  }
+  .mini-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  /* Curseur pleine largeur : le libelle au-dessus, puis le curseur qui
+     occupe toute la largeur du bloc comme les zones de texte voisines.
+     Table plutot que flex : le curseur s etire de maniere fiable. */
+  .champ-curseur { width: 100%; margin: 8px 0 4px; }
+  .champ-curseur label { display: block; margin: 0 0 4px; }
+  .ligne-curseur { display: table; width: 100%; }
+  .ligne-curseur input[type="range"] {
+    display: table-cell;
+    width: 100%;
+    vertical-align: middle;
+  }
+  .ligne-curseur span {
+    display: table-cell;
+    width: 2.6em;
+    padding-left: 10px;
+    font-weight: 600;
+    text-align: right;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  .mini-field label {
+    margin: 0;
+    white-space: nowrap;
+  }
+  input.mini {
+    width: 2.4em;
+    text-align: center;
+    padding: 4px 2px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: monospace;
+  }
+  textarea.prompt {
+    width: 100%;
+    min-height: 221px;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: monospace;
+    resize: vertical;
+    line-height: 1.4;
+  }
+  .export-zone {
+    max-width: 900px;
+    margin: 30px auto 0;
+    text-align: center;
+  }
+  button#exportBtn {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button#exportBtn:hover { background: var(--blue); }
+  .export-warning {
+    max-width: 700px;
+    margin: 16px auto 0;
+    text-align: center;
+    background: #fdeaea;
+    border: 2px solid #c0392b;
+    border-radius: 8px;
+    padding: 12px 18px;
+    color: #a4241a;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  #status {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--teal);
+    min-height: 18px;
+  }
+
+  .guide-section {
+    width: auto;
+    max-width: 700px;
+    margin: 60px auto 0;
+    padding-top: 30px;
+  }
+  .guide-title {
+    text-align: center;
+    color: var(--navy);
+    font-size: 22px;
+    margin: 0 0 8px;
+  }
+  .step-card-top {
+    width: 80vw;
+    max-width: 700px;
+    margin: 0 auto 50px;
+  }
+  .accordion {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px 20px;
+  }
+  .accordion-title {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--navy);
+    padding: 14px 0;
+    list-style: none;
+  }
+  .accordion-title::-webkit-details-marker { display: none; }
+  .accordion-title::before {
+    content: "▸ ";
+    color: var(--teal);
+  }
+  details[open] .accordion-title::before {
+    content: "▾ ";
+  }
+  .accordion-body {
+    padding: 4px 0 18px;
+  }
+  .accordion-body input[type="text"], .accordion-body select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: monospace;
+    margin-bottom: 10px;
+  }
+  .accordion-body a {
+    color: var(--teal);
+    font-size: 13px;
+  }
+  .btn-accordion {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-accordion:hover { background: var(--blue); }
+  .accordion-result {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--border);
+  }
+  .perf-section {
+    width: 80vw;
+    max-width: 80vw;
+    margin: 50px auto 0;
+  }
+  .perf-title {
+    text-align: center;
+    color: var(--navy);
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+  .perf-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 18px;
+  }
+  .perf-table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  table.perf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--card-bg);
+  }
+  table.perf-table th {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 9px;
+    text-align: center;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  table.perf-table td {
+    padding: 9px 9px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  table.perf-table td:first-child, table.perf-table td:nth-child(2) {
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--navy);
+    text-align: left;
+    background: #f6f7fb;
+  }
+  table.perf-table tr:last-child td { border-bottom: none; }
+  table.perf-table td:last-child { border-right: none; }
+  .perf-ok { background: #e1f5ee; }
+  .perf-mid { background: #fff6d9; }
+  .perf-bad { background: #fde3e3; }
+  .guide-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 30px;
+  }
+  .step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 8px;
+  }
+  .step-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0 0 6px;
+  }
+  .step-text ol {
+    margin: 4px 0;
+    padding-left: 20px;
+  }
+  .code-block {
+    position: relative;
+    background: #1a2c56;
+    border-radius: 8px;
+    margin: 10px 0;
+    padding: 14px 90px 14px 16px;
+  }
+  .code-block pre {
+    margin: 0;
+    color: #e8effa;
+    font-family: Consolas, monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .copy-btn:hover { background: #0a5642; }
+  .copy-btn.copied { background: var(--blue); }
+
+  .step-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .copy-btn-inline {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .copy-btn-inline:hover { background: #0a5642; }
+  .copy-btn-inline.copied { background: var(--blue); }
+
+  .info-box-large {
+    max-width: 700px;
+    margin: 30px auto 0;
+    text-align: center;
+    background: #fff6e0;
+    border: 2px solid #e8a93b;
+    border-radius: 10px;
+    padding: 18px 22px;
+    color: #8a5a00;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .logo-genitem-page {
+    display: block;
+    width: 300px;
+    max-width: 100%;
+    height: auto;
+    margin: 6px 0 26px 6px;
+  }
+
+  /* --- Bloc d'assignation des facteurs (integre, plus d'iframe) --- */
+  :root {
+    --navy: #1a2c56;
+    --blue: #2f5aa8;
+    --teal: #0f6e56;
+    --teal-light: #e1f5ee;
+    --border: #cfd6e4;
+    --text: #23262f;
+    --text-muted: #5a5f6d;
+    --bg: #f6f7fb;
+    --card-bg: #ffffff;
+    --red: #b3261e;
+    --red-light: #fdecec;
+  }
+  /* La regle body du bloc facteurs est retiree : elle ecrasait celle de
+     cette page (marges et police differentes). */
+  h1 {
+    text-align: center;
+    color: var(--navy);
+    font-size: 24px;
+    margin: 0 0 28px;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+  }
+  .card > label.titre-etape {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+  input[type="file"] { font-size: 13px; }
+  .hint { font-size: 12.5px; color: var(--text-muted); margin-top: 8px; }
+  input[type="range"] { width: 100%; margin: 8px 0 4px; accent-color: var(--teal); }
+  .nb-facteurs { font-weight: 700; color: var(--teal); }
+  .resume-facteurs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  .resume-facteurs span.badge {
+    color: var(--navy);
+    font-weight: 600;
+  }
+  .compteur-global {
+    font-size: 13px;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .compteur-global b { color: var(--teal); }
+  .compteur-global .avert { color: var(--red); font-weight: 600; }
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td {
+    border-bottom: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: middle;
+  }
+  thead th {
+    background: var(--navy);
+    color: #fff;
+    position: sticky;
+    top: 0;
+  }
+  thead th input[type="text"] {
+    width: 100%;
+    min-width: 90px;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 5px;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    padding: 4px 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  thead th input[type="text"]::placeholder { color: rgba(255,255,255,0.7); }
+  th.col-item, td.col-item {
+    min-width: 340px;
+    position: sticky;
+    left: 0;
+    background: #fff;
+  }
+  thead th.col-item { z-index: 3; }
+  tbody td.col-item { z-index: 1; box-shadow: 2px 0 4px -2px rgba(0,0,0,0.12); }
+  tr:nth-child(even):not(.non-assigne) td.col-item { background: #fafbfd; }
+  tr.non-assigne td.col-item { background: var(--red-light); }
+  td.case-centre { text-align: center; }
+  td.case-centre input[type="checkbox"] { width: 17px; height: 17px; cursor: pointer; accent-color: var(--teal); }
+  tr.non-assigne { background: var(--red-light); }
+  tr:nth-child(even):not(.non-assigne) td { background: #fafbfd; }
+  .zone-depot {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 26px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    margin-bottom: 10px;
+  }
+  .zone-depot.survolee { background: var(--teal-light); border-color: var(--teal); color: var(--teal); }
+  .zone-depot strong { color: var(--navy); }
+  .info-box-large {
+    max-width: 700px;
+    margin: 24px auto 20px;
+    text-align: center;
+    background: #fff6e0;
+    border: 2px solid #e8a93b;
+    border-radius: 10px;
+    padding: 18px 22px;
+    color: #8a5a00;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  button#btnExporter {
+    display: none;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 12px 26px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  button#btnExporter:hover { background: var(--blue); }
+  #statutExport { margin-top: 10px; font-size: 13px; color: var(--teal); font-weight: 600; }
+  .step-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .step-title-etape4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0;
+  }
+  .copy-btn-inline {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .copy-btn-inline:hover { background: #0a5642; }
+  .copy-btn-inline.copied { background: var(--blue); }
+  /* absolute et non fixed : ces pages sont affichees dans un cadre, ou
+     un element fixe se positionne par rapport a la zone visible du cadre
+     et peut se retrouver hors champ. */
+  .langue-switch {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .langue-switch button {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .langue-switch button.langue-active {
+    background: var(--navy);
+    color: #fff;
+  }
+  .version {
+    max-width: 1100px;
+    margin: 10px auto 24px;
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-family: Consolas, Menlo, monospace;
+    letter-spacing: .3px;
+    text-align: right;
+    padding-right: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="langue-switch">
+  <button id="btnLangueFr" onclick="appliquerLangue('fr')">FR</button>
+  <button id="btnLangueEn" onclick="appliquerLangue('en')">EN</button>
+</div>
+
+<div class="step-card-top">
+  <div class="step-card">
+    <div class="step-title" data-i18n="etape1_titre">Étape 1 — Créer agents.txt avec le configurateur ci-dessous</div>
+  </div>
+</div>
+
+<div class="flow">
+
+  <div class="row-single">
+    <div class="card generator" id="agent1">
+      <div class="card-head">
+        <span class="badge">1</span>
+        <span class="name">Item generator</span>
+      </div>
+      <label data-i18n="lbl_modele">Modèle Ollama</label>
+      <select class="model" onchange="updateWarning(this)">
+        <option value="mistral-nemo:12b">mistral-nemo:12b</option>
+        <option value="qwen3.5:9b">qwen3.5:9b</option>
+        <option value="qwen3.5:0.8b" selected>qwen3.5:0.8b</option>
+      </select>
+      <div class="model-warning" data-i18n="warn_modele_leger">⚠️ Modèle léger : peut mal respecter les consignes précises ⚠️</div>
+      <label data-i18n="lbl_type_item">Type d'item</label>
+      <div class="type-item-choice">
+        <label class="radio-label">
+          <input type="radio" name="typeItem" value="dichotomique" onchange="updateTypeItem()">
+          <span data-i18n="opt_dichotomique">Item dichotomique</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="typeItem" value="accord" checked onchange="updateTypeItem()">
+          <span data-i18n="opt_accord">Item avec niveau d'accord</span>
+        </label>
+      </div>
+      <div class="mini-settings">
+        <div class="champ-curseur">
+          <label for="nbItems" data-i18n="lbl_nb_items">Nombre d'items</label>
+          <div class="ligne-curseur">
+            <input type="range" id="nbItems" min="1" max="50" step="1" value="3"
+                   oninput="document.getElementById('nbItemsValeur').textContent = this.value;">
+            <span id="nbItemsValeur">3</span>
+          </div>
+        </div>
+      </div>
+      <label data-i18n="lbl_instructions">Instructions (rôle de l'agent)</label>
+      <textarea class="prompt">- Minimiser le temps de lecture : items courts et clairs.
+- Formuler chaque item comme une affirmation claire (pas une question).
+- Rappeler l'echelle utilisee.
+- Eviter le "window dressing" : pas de details inutiles.
+- Formuler l'item de maniere positive ; eviter la double negation.
+- Un seul concept par item (eviter les items "double-barreled").
+- Eviter les termes absolus ("toujours", "jamais", "tous", "aucun").
+- Garder une longueur homogene entre les items.
+- Chaque item doit couvrir une facette differente du construit mesure.</textarea>
+    </div>
+  </div>
+
+  <div class="fork">
+    <div class="fork-caption" data-i18n="fork_caption">Exécution en parallèle — consensus itératif</div>
+    <div class="mini-settings" style="margin: 2px 0 10px;">
+      <div class="mini-field">
+        <label for="nbTours" data-i18n="lbl_nb_tours">Nombre de tours</label>
+        <input type="range" id="nbTours" min="1" max="10" step="1" value="3"
+               style="width:160px; vertical-align:middle;"
+               oninput="document.getElementById('nbToursValeur').textContent = this.value;">
+        <span id="nbToursValeur" style="font-weight:600; min-width:1.4em; text-align:center; display:inline-block;">3</span>
+      </div>
+    </div>
+    <div class="fork-trunk"></div>
+    <div class="fork-rail"></div>
+    <div class="fork-ticks">
+      <span class="fork-tick" style="left:0%"></span>
+      <span class="fork-tick" style="left:50%"></span>
+      <span class="fork-tick" style="left:100%"></span>
+    </div>
+  </div>
+
+  <div class="reviewer-grid" id="reviewerGrid">
+    <div class="card reviewer" id="agent2">
+      <span class="close-card" onclick="fermerReviewer(this)" title="Retirer cet agent" data-i18n-title="title_retirer_agent">✕</span>
+      <div class="card-head">
+        <span class="badge">2</span>
+        <input class="name" value="Content reviewer">
+      </div>
+      <label data-i18n="lbl_modele">Modèle Ollama</label>
+      <select class="model" onchange="updateWarning(this)">
+        <option value="mistral-nemo:12b">mistral-nemo:12b</option>
+        <option value="qwen3.5:9b">qwen3.5:9b</option>
+        <option value="qwen3.5:0.8b" selected>qwen3.5:0.8b</option>
+      </select>
+      <div class="model-warning" data-i18n="warn_modele_leger">⚠️ Modèle léger : peut mal respecter les consignes précises ⚠️</div>
+      <label data-i18n="lbl_instructions">Instructions (rôle de l'agent)</label>
+      <textarea class="prompt">Tu es un relecteur de contenu. Verifie que chaque item correspond bien a l'objectif et au theme demandes, sans hors-sujet ni item redondant.</textarea>
+    </div>
+
+    <div class="card reviewer" id="agent3">
+      <span class="close-card" onclick="fermerReviewer(this)" title="Retirer cet agent" data-i18n-title="title_retirer_agent">✕</span>
+      <div class="card-head">
+        <span class="badge">3</span>
+        <input class="name" value="Item rules reviewer">
+      </div>
+      <label data-i18n="lbl_modele">Modèle Ollama</label>
+      <select class="model" onchange="updateWarning(this)">
+        <option value="mistral-nemo:12b">mistral-nemo:12b</option>
+        <option value="qwen3.5:9b">qwen3.5:9b</option>
+        <option value="qwen3.5:0.8b" selected>qwen3.5:0.8b</option>
+      </select>
+      <div class="model-warning" data-i18n="warn_modele_leger">⚠️ Modèle léger : peut mal respecter les consignes précises ⚠️</div>
+      <label data-i18n="lbl_instructions">Instructions (rôle de l'agent)</label>
+      <textarea class="prompt">Tu es un relecteur specialise dans les regles de redaction d'items. Verifie strictement le respect de ces regles, item par item :
+
+- L'item doit etre une affirmation a la premiere personne que le repondant note pour lui-meme (ex: "Je me sens..."). Si un item ressemble a une idee, un fait ou une explication generale sur le sujet plutot qu'a une affirmation personnelle notable, signale-le explicitement comme une erreur a corriger en priorite.
+- Minimiser le temps de lecture : items courts et clairs.
+- Formuler chaque item comme une affirmation claire (pas une question).
+- Rappeler l'echelle utilisee.
+- Eviter le "window dressing" : pas de details inutiles.
+- Formuler l'item de maniere positive ; eviter la double negation.
+- Un seul concept par item (eviter les items "double-barreled").
+- Eviter les termes absolus ("toujours", "jamais", "tous", "aucun").
+- Garder une longueur homogene entre les items.
+- Chaque item doit couvrir une facette differente du construit mesure.</textarea>
+    </div>
+
+    <div class="card reviewer" id="agent4">
+      <span class="close-card" onclick="fermerReviewer(this)" title="Retirer cet agent" data-i18n-title="title_retirer_agent">✕</span>
+      <div class="card-head">
+        <span class="badge">4</span>
+        <input class="name" value="Fairness reviewer">
+      </div>
+      <label data-i18n="lbl_modele">Modèle Ollama</label>
+      <select class="model" onchange="updateWarning(this)">
+        <option value="mistral-nemo:12b">mistral-nemo:12b</option>
+        <option value="qwen3.5:9b">qwen3.5:9b</option>
+        <option value="qwen3.5:0.8b" selected>qwen3.5:0.8b</option>
+      </select>
+      <div class="model-warning" data-i18n="warn_modele_leger">⚠️ Modèle léger : peut mal respecter les consignes précises ⚠️</div>
+      <label data-i18n="lbl_instructions">Instructions (rôle de l'agent)</label>
+      <textarea class="prompt">Tu es un relecteur specialise en equite et inclusivite. Verifie que les items ne contiennent aucun biais culturel, de genre, socio-economique ou autre, et qu'ils restent comprehensibles pour tous les etudiants vises.</textarea>
+    </div>
+
+    <div class="add-card" id="addReviewerBtn" onclick="ajouterReviewer()" title="Ajouter un agent de relecture" data-i18n-title="title_ajouter_agent">+</div>
+  </div>
+
+  <div class="fork">
+    <div class="merge-ticks" id="mergeTicks">
+      <span class="merge-tick" style="left:0%"></span>
+      <span class="merge-tick" style="left:50%"></span>
+      <span class="merge-tick" style="left:100%"></span>
+    </div>
+    <div class="fork-rail"></div>
+    <div class="fork-trunk arrow-end"></div>
+  </div>
+
+  <div class="row-single">
+    <div class="card revision" id="agentFinal">
+      <div class="card-head">
+        <span class="badge" id="finalBadge">5</span>
+        <span class="name">Revision agent</span>
+      </div>
+      <label data-i18n="lbl_modele">Modèle Ollama</label>
+      <select class="model" onchange="updateWarning(this)">
+        <option value="mistral-nemo:12b">mistral-nemo:12b</option>
+        <option value="qwen3.5:9b">qwen3.5:9b</option>
+        <option value="qwen3.5:0.8b" selected>qwen3.5:0.8b</option>
+      </select>
+      <div class="model-warning" data-i18n="warn_modele_leger">⚠️ Modèle léger : peut mal respecter les consignes précises ⚠️</div>
+      <label data-i18n="lbl_instructions">Instructions (rôle de l'agent)</label>
+      <textarea class="prompt">Tu es charge de reviser un pool d'items d'echelle de Likert en tenant compte des avis independants de chaque relecteur. Produis la version finale, numerotee, sans commentaire ajoute.</textarea>
+    </div>
+  </div>
+
+</div>
+
+<div class="step-card-top" style="margin-top:40px;">
+  <div class="step-card">
+    <div class="step-title" data-i18n="etape2_titre">Étape 2 — Exporter agents.txt</div>
+    <div style="text-align:center; margin: 10px 0 4px;">
+      <button id="exportBtn" data-i18n="btn_exporter">Exporter agents.txt</button>
+      <div id="status"></div>
+    </div>
+    <div class="export-warning" style="margin-top:8px;" data-i18n-html="export_warning">Sauvegarde le fichier <strong>agents.txt</strong> téléchargé dans le dossier \projet\ du disque de travail</div>
+    <div style="text-align:center;">
+      <button id="btnSauvegarderAgentsMaj" class="btn-accordion" style="margin-top:12px; display:none;" onclick="telechargerPageEntiere()" data-i18n="btn_sauver_agents">Sauvegarder les agents mis à jour</button>
+    </div>
+  </div>
+</div>
+
+<div class="guide-section">
+
+  <div class="step-card">
+    <div class="step-title-row">
+      <span class="step-title" data-i18n="etape3_titre">Étape 3 — Générer des items</span>
+    </div>
+    <div class="step-text" data-i18n="etape3_texte">Fenêtre 1 : démarrer Ollama (à laisser ouverte). Fenêtre 2 : générer les items.</div>
+    <div class="step-title-row" style="margin-top:8px;">
+      <span class="step-title">PowerShell 1</span>
+      <button class="copy-btn-inline" data-texte='$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d&#39;un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\"\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\"\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\models"\n  & (Join-Path $DRIVE "ollama\ollama.exe") serve\n}' onclick="copierBloc(this)">Copier</button>
+    </div>
+    <div class="step-title-row" style="margin-top:8px;">
+      <span class="step-title">PowerShell 2</span>
+      <button class="copy-btn-inline" data-texte='$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d&#39;un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\"\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\"\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\models"\n  Set-Location (Join-Path $DRIVE "projet")\n  & (Join-Path $DRIVE "python\python.exe") $(if (Test-Path "agents.py") { "agents.py" } else { "agents.txt" })\n}' onclick="copierBloc(this)">Copier</button>
+    </div>
+  </div>
+
+  <div class="choix-analyse">
+    <style>
+      .choix-analyse {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      .choix-analyse .choix-btn {
+        flex: 1 1 260px;
+        display: block;
+        background: #fff;
+        border: 2px solid var(--teal);
+        border-radius: 10px;
+        padding: 18px 20px;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--teal);
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .choix-analyse .choix-btn:hover { background: var(--teal-light); }
+      .choix-analyse .choix-btn.actif { background: var(--teal); color: #fff; }
+      .choix-analyse .choix-soustitre {
+        display: block;
+        margin-top: 6px;
+        font-size: 12.5px;
+        font-weight: 400;
+        color: var(--text-muted);
+      }
+      .choix-analyse .choix-btn.actif .choix-soustitre { color: #dbeee5; }
+    </style>
+
+    <button type="button" class="choix-btn" id="btnValiderItems" onclick="afficherEtape4()">
+      <span data-i18n="btn_valider_items">Valider les items</span>
+      <span class="choix-soustitre" data-i18n="btn_valider_items_sous">Un seul construit : analyse directe des items generes</span>
+    </button>
+
+    <button type="button" class="choix-btn" id="btnAssignerFacteurs" onclick="afficherFacteurs()">
+      <span data-i18n="btn_assigner_facteurs">Assigner les facteurs</span>
+      <span class="choix-soustitre" data-i18n="btn_assigner_facteurs_sous">Plusieurs construits : repartir d&#39;abord les items par facteur</span>
+    </a>
+  </div>
+
+  <div class="step-card" id="carteEtape4" style="display:none;">
+    <div class="step-title-row">
+      <span class="step-title" data-i18n="etape4_titre">Étape 4 — Analyser avec AI-GENIE</span>
+      <button class="copy-btn-inline" data-texte='$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d&#39;un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\"\n      Write-Host "Chemin long detecte -- lecteur virtuel deja associe : $DRIVE" -ForegroundColor Green\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\"\n        Write-Host "Chemin trop long pour Windows -- lecteur virtuel cree : $DRIVE (vers $cheminLong)" -ForegroundColor Green\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) { Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red } else { Write-Host "Dossier d&#39;installation detecte : $DRIVE" -ForegroundColor Green }\n\n$env:Path = (Join-Path $DRIVE "uv") + ";" + $env:Path\n$env:APPDATA = Join-Path $DRIVE "rd"\n&amp; (Join-Path $DRIVE "R\bin\Rscript.exe") (Join-Path $DRIVE "R\analyse_genie.R")' onclick="copierBloc(this)">Copier</button>
+    </div>
+    <div class="step-text">À exécuter dans PowerShell.</div>
+  </div>
+
+  <div id="blocFacteurs" style="display:none;">
+<div class="wrap">
+  <h1 data-i18n="h1_titre">Assignation des facteurs pour AI-GENIE</h1>
+
+  <div class="card">
+    <label class="titre-etape" data-i18n="etape1_titre">1. Charger le fichier AI-GENIE.txt</label>
+    <div class="zone-depot" id="zoneDepot">
+      <span data-i18n-html="zone_depot_texte">Glisse ton fichier ici, ou <strong>clique pour choisir un fichier</strong></span>
+    </div>
+    <input type="file" id="fichierInput" accept=".txt" style="display:none;">
+    <div class="hint" id="infoChargement"></div>
+  </div>
+
+  <div class="card">
+    <label class="titre-etape"><span data-i18n="etape2_titre">2. Nombre de facteurs :</span> <span class="nb-facteurs" id="nbFacteursAffiche">2</span></label>
+    <input type="range" id="curseurFacteurs" min="2" max="10" value="2">
+    <div class="resume-facteurs" id="resumeFacteurs"></div>
+  </div>
+
+  <div class="card" id="zoneTableau" style="display:none;">
+    <label class="titre-etape" data-i18n="etape3_titre">3. Cocher le facteur de chaque item</label>
+    <div class="compteur-global" id="compteurGlobal"></div>
+    <div class="table-wrap">
+      <table id="tableItems"></table>
+    </div>
+  </div>
+
+  <button id="btnExporter" data-i18n="btn_exporter">Exporter pour AI-GENIE</button>
+  <div id="statutExport"></div>
+
+  <div class="info-box-large" data-i18n-html="avertissement_projet">
+    ⚠️ Dépose le fichier <code>AI-GENIE_construits.csv</code> téléchargé dans le dossier \projet\ du disque de travail ⚠️
+  </div>
+
+  <div class="card">
+    <div class="step-title-row">
+      <span class="step-title-etape4" data-i18n="etape4_titre">Étape 4 — Analyser avec AI-GENIE</span>
+      <button class="copy-btn-inline" data-texte='$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d&#39;un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\"\n      Write-Host "Chemin long detecte -- lecteur virtuel deja associe : $DRIVE" -ForegroundColor Green\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\"\n        Write-Host "Chemin trop long pour Windows -- lecteur virtuel cree : $DRIVE (vers $cheminLong)" -ForegroundColor Green\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) { Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red } else { Write-Host "Dossier d&#39;installation detecte : $DRIVE" -ForegroundColor Green }\n\n$env:Path = (Join-Path $DRIVE "uv") + ";" + $env:Path\n$env:APPDATA = Join-Path $DRIVE "rd"\n& (Join-Path $DRIVE "R\bin\Rscript.exe") (Join-Path $DRIVE "R\analyse_genie_multi_construits.R")' onclick="copierBloc(this)">Copier</button>
+    </div>
+    <div class="hint" data-i18n="etape4_texte">À exécuter dans PowerShell.</div>
+  </div>
+</div>
+  </div>
+</div>
+
+
+<script>
+function afficherFacteurs() {
+  document.getElementById('blocFacteurs').style.display = '';
+  document.getElementById('carteEtape4').style.display = 'none';
+  document.getElementById('btnAssignerFacteurs').classList.add('actif');
+  document.getElementById('btnValiderItems').classList.remove('actif');
+  document.getElementById('blocFacteurs').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function afficherEtape4() {
+  document.getElementById('carteEtape4').style.display = '';
+  document.getElementById('blocFacteurs').style.display = 'none';
+  document.getElementById('btnValiderItems').classList.add('actif');
+  document.getElementById('btnAssignerFacteurs').classList.remove('actif');
+  document.getElementById('carteEtape4').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copierBloc(btn) {
+  let texte;
+  const dataTexte = btn.getAttribute('data-texte');
+  if (dataTexte !== null) {
+    texte = dataTexte.replace(/\\n/g, '\n');
+  } else {
+    texte = btn.nextElementSibling.textContent;
+  }
+  navigator.clipboard.writeText(texte).then(function () {
+    const original = btn.textContent;
+    btn.textContent = 'Copié !';
+    btn.classList.add('copied');
+    setTimeout(function () {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 1500);
+  }).catch(function () {
+    const zoneTemp = document.createElement('textarea');
+    zoneTemp.value = texte;
+    document.body.appendChild(zoneTemp);
+    zoneTemp.select();
+    document.execCommand('copy');
+    document.body.removeChild(zoneTemp);
+    btn.textContent = 'Copié !';
+    setTimeout(function () { btn.textContent = 'Copier'; }, 1500);
+  });
+}
+</script>
+
+<script>
+// --- Gestion dynamique de la liste des modeles disponibles ---
+let MODELS = ['qwen3.5:0.8b']; // MODELES_MARKER
+let SNAPSHOT_TEXTES = {};
+
+// --- Langue de l'interface (detection auto + preference sauvegardee) ---
+let LANGUE_ACTUELLE = 'fr';
+(function detecterLangueInitiale() {
+  // 1) langue transmise par la page d'accueil (index.html)
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const demandee = params.get('lang');
+    if (demandee === 'fr' || demandee === 'en') {
+      LANGUE_ACTUELLE = demandee;
+      return;
+    }
+  } catch (e) {}
+  // 2) preference deja enregistree
+  try {
+    const sauvegardee = localStorage.getItem('langueConfigurateur');
+    if (sauvegardee === 'fr' || sauvegardee === 'en') {
+      LANGUE_ACTUELLE = sauvegardee;
+      return;
+    }
+  } catch (e) {}
+  const langueNavigateur = (navigator.language || navigator.userLanguage || 'fr').toLowerCase();
+  LANGUE_ACTUELLE = langueNavigateur.startsWith('fr') ? 'fr' : 'en';
+})();
+
+function genererOptionsHTML(valeurSelectionnee) {
+  return MODELS.map(function (m) {
+    return '<option value="' + m + '"' + (m === valeurSelectionnee ? ' selected' : '') + '>' + m + '</option>';
+  }).join('');
+}
+
+function rafraichirSelectsModeles() {
+  document.querySelectorAll('select.model').forEach(function (sel) {
+    const actuel = sel.value;
+    const valeurAGarder = MODELS.includes(actuel) ? actuel : MODELS[0];
+    sel.innerHTML = genererOptionsHTML(valeurAGarder);
+    updateWarning(sel);
+  });
+  const selSuppr = document.getElementById('selectSupprimerModele');
+  if (selSuppr) {
+    const actuel = selSuppr.value;
+    const valeurAGarder = MODELS.includes(actuel) ? actuel : MODELS[0];
+    selSuppr.innerHTML = genererOptionsHTML(valeurAGarder);
+  }
+}
+
+const MODELES_LEGERS = ['qwen3.5:0.8b'];
+const MAX_REVIEWERS = 8; // badges 2 a 9
+
+function updateWarning(selectEl) {
+  const warning = selectEl.parentElement.querySelector('.model-warning');
+  if (!warning) return;
+  if (MODELES_LEGERS.includes(selectEl.value)) {
+    warning.classList.add('show');
+  } else {
+    warning.classList.remove('show');
+  }
+}
+
+const REGLES_ACCORD_FR = `- L'item doit etre une affirmation a la premiere personne que le repondant note pour lui-meme (ex: "Je me sens..."), jamais une idee, un fait ou une explication generale sur le sujet.
+- Minimiser le temps de lecture : items courts et clairs.
+- Formuler chaque item comme une affirmation claire (pas une question).
+- Rappeler l'echelle utilisee.
+- Eviter le "window dressing" : pas de details inutiles.
+- Formuler l'item de maniere positive ; eviter la double negation.
+- Un seul concept par item (eviter les items "double-barreled").
+- Eviter les termes absolus ("toujours", "jamais", "tous", "aucun").
+- Garder une longueur homogene entre les items.
+- Chaque item doit couvrir une facette differente du construit mesure.`; // REGLES_ACCORD_FR_MARKER
+
+const REGLES_ACCORD_EN = `- The item must be a first-person statement that the respondent rates about themselves (e.g., "I feel..."), never a general idea, fact, or explanation about the topic.
+- Minimise reading time: keep items short and clear.
+- Word each item as a clear statement (not a question).
+- Remind the reader of the scale being used.
+- Avoid "window dressing": no unnecessary detail.
+- Word the item positively; avoid double negatives.
+- One concept per item (avoid "double-barreled" items).
+- Avoid absolute terms ("always", "never", "all", "none").
+- Keep a consistent length across items.
+- Each item should cover a different facet of the construct being measured.`; // REGLES_ACCORD_EN_MARKER
+
+const REGLES_DICHOTOMIQUE_FR = `Regle 0 (format) : L'item doit etre une affirmation ou question a la premiere personne a laquelle le repondant repond par oui/non a propos de lui-meme, jamais une idee ou un fait general sur le sujet.
+Regle 2 : Eviter les items a choix multiples complexes (type K, combinaisons de reponses).
+Regle 6 : Minimiser le temps de lecture (etre concis).
+Regle 8 : Baser l'item sur un objectif pedagogique precis.
+Regle 10 : Utiliser un vocabulaire adapte au niveau des apprenants.
+Regle 18 : Utiliser le format question, pas le format a completer (phrase a trous).
+Regle 19 : Ne pas laisser de blanc au milieu de l'enonce.
+Regle 20 : Donner des consignes claires dans l'enonce.
+Regle 21 : Eviter les details inutiles ("window dressing") dans l'enonce.
+Regle 22 : Formuler l'enonce de maniere positive, eviter les tournures negatives.
+Regle 24 : Developper autant de distracteurs fonctionnels que possible.
+Regle 27 : Garder des options homogenes (meme nature, meme categorie).
+Regle 28 : Garder une longueur assez constante entre les options.
+Regle 29 : Eviter l'option "Toutes les reponses ci-dessus".
+Regle 30 : Eviter l'option "Aucune des reponses ci-dessus".
+Regle 31 : Eviter l'option "Je ne sais pas".
+Regle 32 : Formuler les options de maniere positive.
+Regle 33 : Ne pas utiliser de distracteurs qui donnent des indices aux eleves "test-wise".
+Regle 34 : Eviter les indices grammaticaux (accord entre enonce et bonne reponse).
+Regle 36 : Equilibrer la position de la bonne reponse parmi les options.
+Regle 38 : Utiliser des distracteurs plausibles.
+Regle 39 : Baser les distracteurs sur des erreurs frequentes des eleves.
+Regle 40 : Eviter les distracteurs formules de maniere trop technique.
+Regle 43 : Eviter l'humour dans la formulation des options.`; // REGLES_DICHOTOMIQUE_FR_MARKER
+
+const REGLES_DICHOTOMIQUE_EN = `Rule 0 (format): The item must be a first-person statement or question that the respondent answers yes/no about themselves, never a general idea or fact about the topic.
+Rule 2: Avoid complex multiple-choice items (type K, combinations of answers).
+Rule 6: Minimise reading time (be concise).
+Rule 8: Base the item on a precise learning objective.
+Rule 10: Use vocabulary suited to the learners' level.
+Rule 18: Use question format, not fill-in-the-blank format.
+Rule 19: Do not leave a blank in the middle of the stem.
+Rule 20: Give clear instructions in the stem.
+Rule 21: Avoid unnecessary detail ("window dressing") in the stem.
+Rule 22: Word the stem positively, avoid negative phrasing.
+Rule 24: Develop as many functional distractors as possible.
+Rule 27: Keep options homogeneous (same nature, same category).
+Rule 28: Keep a fairly consistent length across options.
+Rule 29: Avoid the option "All of the above".
+Rule 30: Avoid the option "None of the above".
+Rule 31: Avoid the option "I don't know".
+Rule 32: Word the options positively.
+Rule 33: Do not use distractors that give clues to "test-wise" students.
+Rule 34: Avoid grammatical clues (agreement between stem and correct answer).
+Rule 36: Balance the position of the correct answer among the options.
+Rule 38: Use plausible distractors.
+Rule 39: Base distractors on students' common errors.
+Rule 40: Avoid distractors worded in an overly technical way.
+Rule 43: Avoid humor in the wording of the options.`; // REGLES_DICHOTOMIQUE_EN_MARKER
+
+// --- Textes par defaut FR/EN des 4 autres agents (pour bascule de langue) ---
+const AGENT2_FR = "Tu es un relecteur de contenu. Verifie que chaque item correspond bien a l'objectif et au theme demandes, sans hors-sujet ni item redondant.";
+const AGENT2_EN = "You are a content reviewer. Check that each item matches the requested objective and theme, with no off-topic or redundant items.";
+
+const AGENT3_FR = `Tu es un relecteur specialise dans les regles de redaction d'items. Verifie strictement le respect de ces regles, item par item :
+
+- L'item doit etre une affirmation a la premiere personne que le repondant note pour lui-meme (ex: "Je me sens..."). Si un item ressemble a une idee, un fait ou une explication generale sur le sujet plutot qu'a une affirmation personnelle notable, signale-le explicitement comme une erreur a corriger en priorite.
+- Minimiser le temps de lecture : items courts et clairs.
+- Formuler chaque item comme une affirmation claire (pas une question).
+- Rappeler l'echelle utilisee.
+- Eviter le "window dressing" : pas de details inutiles.
+- Formuler l'item de maniere positive ; eviter la double negation.
+- Un seul concept par item (eviter les items "double-barreled").
+- Eviter les termes absolus ("toujours", "jamais", "tous", "aucun").
+- Garder une longueur homogene entre les items.
+- Chaque item doit couvrir une facette differente du construit mesure.`;
+const AGENT3_EN = `You are a reviewer specialised in item-writing rules. Strictly check compliance with these rules, item by item:
+
+- The item must be a first-person statement that the respondent rates about themselves (e.g., "I feel..."). If an item looks like a general idea, fact, or explanation about the topic rather than a notable personal statement, flag it explicitly as an error to fix as a priority.
+- Minimise reading time: keep items short and clear.
+- Word each item as a clear statement (not a question).
+- Remind the reader of the scale being used.
+- Avoid "window dressing": no unnecessary detail.
+- Word the item positively; avoid double negatives.
+- One concept per item (avoid "double-barreled" items).
+- Avoid absolute terms ("always", "never", "all", "none").
+- Keep a consistent length across items.
+- Each item should cover a different facet of the construct being measured.`;
+
+const AGENT4_FR = "Tu es un relecteur specialise en equite et inclusivite. Verifie que les items ne contiennent aucun biais culturel, de genre, socio-economique ou autre, et qu'ils restent comprehensibles pour tous les etudiants vises.";
+const AGENT4_EN = "You are a reviewer specialised in fairness and inclusivity. Check that the items contain no cultural, gender, socio-economic, or other bias, and that they remain understandable for all targeted students.";
+
+const AGENTFINAL_FR = "Tu es charge de reviser un pool d'items d'echelle de Likert en tenant compte des avis independants de chaque relecteur. Produis la version finale, numerotee, sans commentaire ajoute.";
+const AGENTFINAL_EN = "You are in charge of revising a pool of Likert-scale items, taking into account the independent feedback from each reviewer. Produce the final, numbered version, with no comment added.";
+
+function basculerTextesAgentsFixes(langueCible) {
+  const paires = [
+    { id: 'agent2', fr: AGENT2_FR, en: AGENT2_EN },
+    { id: 'agent3', fr: AGENT3_FR, en: AGENT3_EN },
+    { id: 'agent4', fr: AGENT4_FR, en: AGENT4_EN },
+    { id: 'agentFinal', fr: AGENTFINAL_FR, en: AGENTFINAL_EN },
+  ];
+  paires.forEach(function (p) {
+    const carte = document.getElementById(p.id);
+    if (!carte) return;
+    const zone = carte.querySelector('.prompt');
+    if (!zone) return;
+    if (zone.value === p.fr || zone.value === p.en) {
+      zone.value = (langueCible === 'en') ? p.en : p.fr;
+    }
+    // Sinon : texte personnalise par l'utilisateur, on n'y touche pas.
+  });
+}
+
+function updateTypeItem() {
+  const type = document.querySelector('input[name="typeItem"]:checked').value;
+
+  const zoneTexte = document.querySelector('#agent1 .prompt');
+  const langue = (typeof LANGUE_ACTUELLE !== 'undefined') ? LANGUE_ACTUELLE : 'fr';
+  if (type === 'accord') {
+    zoneTexte.value = (langue === 'en') ? REGLES_ACCORD_EN : REGLES_ACCORD_FR;
+  } else {
+    zoneTexte.value = (langue === 'en') ? REGLES_DICHOTOMIQUE_EN : REGLES_DICHOTOMIQUE_FR;
+  }
+
+  if (typeof capturerSnapshotTextes === 'function') capturerSnapshotTextes();
+}
+
+function renumeroterReviewers() {
+  const cards = Array.from(document.querySelectorAll('#reviewerGrid .card.reviewer'));
+  cards.forEach(function (card, index) {
+    const num = index + 2;
+    card.id = 'agent' + num;
+    card.querySelector('.badge').textContent = num;
+  });
+  document.getElementById('finalBadge').textContent = cards.length + 2;
+
+  const addBtn = document.getElementById('addReviewerBtn');
+  if (cards.length >= MAX_REVIEWERS) {
+    addBtn.classList.add('disabled');
+  } else {
+    addBtn.classList.remove('disabled');
+  }
+
+  // On garde toujours au moins 1 agent relecteur : la croix est cachee
+  // sur la seule case restante pour empecher de tout fermer.
+  cards.forEach(function (card) {
+    const croix = card.querySelector('.close-card');
+    if (!croix) return;
+    croix.classList.toggle('hidden', cards.length <= 1);
+  });
+}
+
+function fermerReviewer(croixEl) {
+  const grid = document.getElementById('reviewerGrid');
+  const cards = grid.querySelectorAll('.card.reviewer');
+  if (cards.length <= 1) return;
+  const card = croixEl.closest('.card.reviewer');
+  card.remove();
+  renumeroterReviewers();
+  if (typeof capturerSnapshotTextes === 'function') capturerSnapshotTextes();
+}
+
+function ajouterReviewer() {
+  const grid = document.getElementById('reviewerGrid');
+  const cards = grid.querySelectorAll('.card.reviewer');
+  if (cards.length >= MAX_REVIEWERS) return;
+
+  const div = document.createElement('div');
+  div.className = 'card reviewer';
+  div.innerHTML =
+    '<span class="close-card" onclick="fermerReviewer(this)" title="Retirer cet agent" data-i18n-title="title_retirer_agent">✕</span>' +
+    '<div class="card-head">' +
+      '<span class="badge"></span>' +
+      '<input class="name" value="" placeholder="Nom de l\'agent" data-i18n-placeholder="placeholder_nom_agent">' +
+    '</div>' +
+    '<label data-i18n="lbl_modele">Modèle Ollama</label>' +
+    '<select class="model" onchange="updateWarning(this)">' +
+      genererOptionsHTML('qwen3.5:0.8b') +
+    '</select>' +
+    '<div class="model-warning" data-i18n="warn_modele_leger">⚠️ Modèle léger : peut mal respecter les consignes précises ⚠️</div>' +
+    '<label data-i18n="lbl_instructions">Instructions (rôle de l\'agent)</label>' +
+    '<textarea class="prompt"></textarea>';
+
+  const addBtn = document.getElementById('addReviewerBtn');
+  grid.insertBefore(div, addBtn);
+
+  renumeroterReviewers();
+  updateWarning(div.querySelector('.model'));
+
+  // Traduire immediatement la nouvelle case dans la langue actuellement affichee
+  if (typeof TRADUCTIONS !== 'undefined' && typeof LANGUE_ACTUELLE !== 'undefined') {
+    const dict = TRADUCTIONS[LANGUE_ACTUELLE];
+    div.querySelectorAll('[data-i18n]').forEach(function (el) {
+      const cle = el.getAttribute('data-i18n');
+      if (dict[cle] !== undefined) el.textContent = dict[cle];
+    });
+    div.querySelectorAll('[data-i18n-title]').forEach(function (el) {
+      const cle = el.getAttribute('data-i18n-title');
+      if (dict[cle] !== undefined) el.title = dict[cle];
+    });
+    div.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+      const cle = el.getAttribute('data-i18n-placeholder');
+      if (dict[cle] !== undefined) el.placeholder = dict[cle];
+    });
+  }
+
+  const nouvelleZone = div.querySelector('.prompt');
+  if (nouvelleZone && typeof verifierModificationsTextes === 'function') {
+    nouvelleZone.addEventListener('input', verifierModificationsTextes);
+  }
+  if (typeof capturerSnapshotTextes === 'function') capturerSnapshotTextes();
+}
+
+const TRADUCTIONS = {
+  fr: {
+    h1_titre: "Génération d'items avec l'IA",
+    etape1_titre: "Étape 1 — Créer agents.txt avec le configurateur ci-dessous",
+    lbl_modele: "Modèle Ollama",
+    lbl_instructions: "Instructions (rôle de l'agent)",
+    warn_modele_leger: "⚠️ Modèle léger : peut mal respecter les consignes précises ⚠️",
+    lbl_type_item: "Type d'item",
+    opt_dichotomique: "Item dichotomique",
+    opt_accord: "Item avec niveau d'accord",
+    lbl_nb_items: "Nombre d'items",
+    lbl_nb_tours: "Nombre de tours",
+    fork_caption: "Exécution en parallèle — consensus itératif",
+    etape2_titre: "Étape 2 — Exporter agents.txt",
+    btn_exporter: "Exporter agents.txt",
+    export_warning: 'Sauvegarde le fichier <strong>agents.txt</strong> téléchargé dans le dossier \\projet\\ du disque de travail',
+    btn_sauver_agents: "Sauvegarder les agents mis à jour",
+    etape3_titre: "Étape 3 — Générer des items",
+    etape3_texte: "Fenêtre 1\u00a0: démarrer Ollama (à laisser ouverte). Fenêtre 2\u00a0: générer les items.",
+    etape4_titre: "Étape 4 — Analyser avec AI-GENIE",
+    btn_valider_items: "Valider les items",
+    btn_valider_items_sous: "Un seul construit\u00a0: analyse directe des items générés",
+    btn_assigner_facteurs: "Assigner les facteurs",
+    btn_assigner_facteurs_sous: "Plusieurs construits\u00a0: répartir d\u2019abord les items par facteur",
+    titre_ajouter: "Ajouter modèle",
+    btn_installer: "Installer",
+    lien_ollama_search: "Parcourir tous les modèles disponibles sur ollama.com",
+    ajout_texte: "Fenêtre 1\u00a0: démarrer Ollama (à laisser ouverte). Fenêtre 2\u00a0: installer le modèle.",
+    titre_supprimer: "Supprimer modèle",
+    btn_supprimer: "Supprimer",
+    suppr_texte: "Fenêtre 1\u00a0: démarrer Ollama (à laisser ouverte). Fenêtre 2\u00a0: supprimer le modèle.",
+    titre_methodes_alt: "Méthodes alternatives — à utiliser uniquement si «\u00a0Ajouter modèle\u00a0» ou «\u00a0Supprimer modèle\u00a0» ci-dessus échoue sur une machine",
+    intro_methodes_alt: "Les boutons d'origine restent inchangés. Ces méthodes attendent réellement que le serveur Ollama réponde, cherchent <em>ollama.exe</em> à plus d'endroits, et proposent une voie de secours qui n'utilise pas le client en ligne de commande.",
+    titre_diagnostic: "Diagnostic Ollama — à lancer d'abord en cas d'échec",
+    diag1_titre: "1. Vérifier l'exécutable, le port 11434, le dossier des modèles et les journaux",
+    diag1_texte: "À exécuter dans PowerShell. Ne modifie rien : n'affiche que l'état réel de l'installation.",
+    diag2_titre: "2. Lister les modèles installés",
+    diag2_texte: "Nécessite qu'Ollama tourne déjà (lance d'abord un «\u00a0PowerShell 1\u00a0» ci-dessus).",
+    diag3_titre: "3. Arrêter tous les processus Ollama en cours",
+    diag3_texte: "Utile pour repartir sur une base propre si plusieurs instances tournent en même temps.",
+    diag4_titre: "4. Nettoyer un manifeste bloqué (modifie le nom avant de coller)",
+    diag4_texte: 'Remplace la valeur de <code>$M</code> par le nom exact du modèle qui bloque (visible dans le message d\'erreur «\u00a0Access is denied\u00a0»), puis colle et exécute. Corrige l\'erreur «\u00a0Error: remove ...: Access is denied\u00a0» au démarrage du serveur.',
+    diag5_titre: "5. Nettoyer les fichiers de données orphelins (libère de l'espace disque)",
+    diag5_texte: "Supprime les fichiers de poids qui ne sont plus référencés par aucun modèle installé (restes d'une suppression ou d'un téléchargement interrompu). Sans danger pour les modèles encore installés.",
+    diag6_titre: "6. Démarrage avec nettoyage automatique en boucle (recommandé)",
+    diag6_texte: "Détecte tout seul quel manifeste bloque (message «\u00a0Access is denied\u00a0»), le supprime automatiquement, et réessaie — jusqu'à 10 fois si besoin — avant de lancer le serveur normalement. Remplace avantageusement la technique 4 quand plusieurs modèles bloquent d'un coup ou que tu ne veux pas identifier le nom toi-même.",
+    titre_ajout_alt: "Ajouter modèle — méthodes alternatives",
+    btn_preparer: "Préparer les commandes",
+    methode_b_titre: "Méthode B — client Ollama, avec attente réelle du serveur (jusqu'à 60 s)",
+    methode_b_texte: "À essayer en premier. Affiche la progression du téléchargement.",
+    methode_c_titre: "Méthode C — API locale, sans passer par le client en ligne de commande",
+    methode_c_texte: "Contourne l'erreur «\u00a0could not locate ollama app\u00a0» : parle directement au serveur. Aucun affichage pendant le téléchargement, soyez patient.",
+    methode_d_titre: "Méthode D — fenêtre serveur séparée, puis téléchargement (dernier recours)",
+    methode_d_texte: "Deux fenêtres PowerShell : la première garde le serveur visible et affiche ses erreurs, la seconde télécharge.",
+    titre_suppr_alt: "Supprimer modèle — méthodes alternatives",
+    methode_e_titre: "Méthode E — suppression des fichiers, serveur éteint (dernier recours)",
+    methode_e_texte: "Fonctionne même si le serveur refuse de démarrer : retire le manifeste du modèle, puis les blocs de données devenus orphelins. Affiche l'espace libéré et demande confirmation avant d'effacer.",
+    titre_maj_liste: "Mettre à jour la liste du fichier, sans rien installer",
+    maj_liste_texte: "Utile quand un modèle est déjà installé sur la machine mais absent des menus déroulants, ou quand le téléchargement automatique de la page a échoué. Le fichier est réenregistré sous son nom d'origine.",
+    btn_ajouter_liste: "Ajouter à la liste",
+    btn_retirer_liste: "Retirer de la liste",
+    btn_telecharger_maj: "Télécharger la page mise à jour",
+    perf_titre: "Performance indicative selon le matériel",
+    perf_sous_titre: "Vitesse de génération approximative (quantification Q4) selon la taille du modèle et le matériel disponible",
+    perf_th1: "Taille du modèle (Q4)",
+    perf_th2: "VRAM / RAM",
+    perf_th3: "Sans GPU (16 Go RAM)",
+    perf_th4: "Sans GPU (64 Go RAM)",
+    perf_th5: "GPU 8 Go VRAM",
+    perf_th6: "GPU 16 Go VRAM (RTX 4080)",
+    perf_th7: "GPU 32 Go VRAM (RTX 5090)",
+    title_retirer_agent: "Retirer cet agent",
+    title_ajouter_agent: "Ajouter un agent de relecture",
+    placeholder_modele: "par exemple : ollama run qwen3.5:0.8b",
+    placeholder_suppr_libre: "ou saisir un autre nom, par exemple : mistral-nemo:12b",
+    placeholder_liste_ajout: "nom du modèle à ajouter aux menus, par exemple : llama3.2:3b",
+    placeholder_nom_agent: "Nom de l'agent",
+    copier: "Copier",
+    copie: "Copié !",
+    btn_accueil: "Accueil",
+  },
+  en: {
+    h1_titre: "AI Item Generation",
+    etape1_titre: "Step 1 — Create agents.txt with the configurator below",
+    lbl_modele: "Ollama Model",
+    lbl_instructions: "Instructions (agent's role)",
+    warn_modele_leger: "⚠️ Light model: may not follow precise instructions well ⚠️",
+    lbl_type_item: "Item type",
+    opt_dichotomique: "Dichotomous item",
+    opt_accord: "Likert-type item",
+    lbl_nb_items: "Number of items",
+    lbl_nb_tours: "Number of rounds",
+    fork_caption: "Parallel execution — iterative consensus",
+    etape2_titre: "Step 2 — Export agents.txt",
+    btn_exporter: "Export agents.txt",
+    export_warning: 'Save the downloaded <strong>agents.txt</strong> file in the \\projet\\ folder of the working drive',
+    btn_sauver_agents: "Save updated agents",
+    etape3_titre: "Step 3 — Generate items",
+    etape3_texte: "Window 1: start Ollama (keep it open). Window 2: generate the items.",
+    etape4_titre: "Step 4 — Analyse with AI-GENIE",
+    btn_valider_items: "Validate the items",
+    btn_valider_items_sous: "A single construct: analyse the generated items directly",
+    btn_assigner_facteurs: "Assign the factors",
+    btn_assigner_facteurs_sous: "Several constructs: first sort the items by factor",
+    titre_ajouter: "Add model",
+    btn_installer: "Install",
+    lien_ollama_search: "Browse all available models on ollama.com",
+    ajout_texte: "Window 1: start Ollama (keep it open). Window 2: install the model.",
+    titre_supprimer: "Remove model",
+    btn_supprimer: "Remove",
+    suppr_texte: "Window 1: start Ollama (keep it open). Window 2: remove the model.",
+    titre_methodes_alt: "Alternative methods — use only if \u201cAdd model\u201d or \u201cRemove model\u201d above fails on a machine",
+    intro_methodes_alt: "The original buttons stay unchanged. These methods actually wait for the Ollama server to respond, look for <em>ollama.exe</em> in more places, and offer a fallback that doesn't rely on the command-line client.",
+    titre_diagnostic: "Ollama diagnostics — run this first if something fails",
+    diag1_titre: "1. Check the executable, port 11434, the models folder, and the logs",
+    diag1_texte: "Run in PowerShell. Changes nothing: only shows the actual state of the installation.",
+    diag2_titre: "2. List installed models",
+    diag2_texte: "Requires Ollama to already be running (start \u201cPowerShell 1\u201d above first).",
+    diag3_titre: "3. Stop all running Ollama processes",
+    diag3_texte: "Useful to start fresh if several instances are running at once.",
+    diag4_titre: "4. Clean up a stuck manifest (edit the name before pasting)",
+    diag4_texte: 'Replace the value of <code>$M</code> with the exact name of the model that\u2019s stuck (shown in the \u201cAccess is denied\u201d error message), then paste and run. Fixes the \u201cError: remove ...: Access is denied\u201d error at server startup.',
+    diag5_titre: "5. Clean up orphaned data files (frees disk space)",
+    diag5_texte: "Deletes weight files no longer referenced by any installed model (leftovers from a removal or an interrupted download). Safe for models still installed.",
+    diag6_titre: "6. Startup with automatic loop cleanup (recommended)",
+    diag6_texte: "Automatically detects which manifest is stuck (\u201cAccess is denied\u201d message), removes it, and retries — up to 10 times if needed — before starting the server normally. A better alternative to technique 4 when several models are stuck at once or you don't want to identify the name yourself.",
+    titre_ajout_alt: "Add model — alternative methods",
+    btn_preparer: "Prepare the commands",
+    methode_b_titre: "Method B — Ollama client, with real wait for the server (up to 60 s)",
+    methode_b_texte: "Try this first. Shows download progress.",
+    methode_c_titre: "Method C — local API, without going through the command-line client",
+    methode_c_texte: "Works around the \u201ccould not locate ollama app\u201d error: talks directly to the server. No display during the download, be patient.",
+    methode_d_titre: "Method D — separate server window, then download (last resort)",
+    methode_d_texte: "Two PowerShell windows: the first keeps the server visible and shows its errors, the second downloads.",
+    titre_suppr_alt: "Remove model — alternative methods",
+    methode_e_titre: "Method E — file deletion, server off (last resort)",
+    methode_e_texte: "Works even if the server refuses to start: removes the model's manifest, then any data blocks left orphaned. Shows freed space and asks for confirmation before deleting.",
+    titre_maj_liste: "Update the file's list, without installing anything",
+    maj_liste_texte: "Useful when a model is already installed on the machine but missing from the dropdown menus, or when the page's automatic download failed. The file is re-saved under its original name.",
+    btn_ajouter_liste: "Add to list",
+    btn_retirer_liste: "Remove from list",
+    btn_telecharger_maj: "Download the updated page",
+    perf_titre: "Indicative performance by hardware",
+    perf_sous_titre: "Approximate generation speed (Q4 quantisation) depending on model size and available hardware",
+    perf_th1: "Model size (Q4)",
+    perf_th2: "VRAM / RAM",
+    perf_th3: "No GPU (16 GB RAM)",
+    perf_th4: "No GPU (64 GB RAM)",
+    perf_th5: "GPU 8 GB VRAM",
+    perf_th6: "GPU 16 GB VRAM (RTX 4080)",
+    perf_th7: "GPU 32 GB VRAM (RTX 5090)",
+    title_retirer_agent: "Remove this agent",
+    title_ajouter_agent: "Add a review agent",
+    placeholder_modele: "for example: ollama run qwen3.5:0.8b",
+    placeholder_suppr_libre: "or type another name, for example: mistral-nemo:12b",
+    placeholder_liste_ajout: "model name to add to the menus, for example: llama3.2:3b",
+    placeholder_nom_agent: "Agent name",
+    copier: "Copy",
+    copie: "Copied!",
+    btn_accueil: "Home",
+  }
+};
+
+function appliquerLangue(langue) {
+  LANGUE_ACTUELLE = langue;
+  const dict = TRADUCTIONS[langue];
+
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n');
+    if (dict[cle] !== undefined) el.textContent = dict[cle];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n-html');
+    if (dict[cle] !== undefined) el.innerHTML = dict[cle];
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n-title');
+    if (dict[cle] !== undefined) el.title = dict[cle];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n-placeholder');
+    if (dict[cle] !== undefined) el.placeholder = dict[cle];
+  });
+  // Boutons "Copier" (idle uniquement -- ne touche pas un bouton qui affiche "Copie !"/"Copied!")
+  document.querySelectorAll('[onclick="copierBloc(this)"]').forEach(function (btn) {
+    if (btn.textContent === TRADUCTIONS.fr.copier || btn.textContent === TRADUCTIONS.en.copier) {
+      btn.textContent = dict.copier;
+    }
+  });
+
+  basculerTextesAgentsFixes(langue);
+  updateTypeItem(); // reapplique le texte de l'agent 1 dans la bonne langue
+
+  if (typeof facAppliquerLangue === 'function') facAppliquerLangue(langue);
+
+  const btnFr = document.getElementById('btnLangueFr');
+  const btnEn = document.getElementById('btnLangueEn');
+  if (btnFr && btnEn) {
+    btnFr.classList.toggle('langue-active', langue === 'fr');
+    btnEn.classList.toggle('langue-active', langue === 'en');
+  }
+  document.documentElement.setAttribute('lang', langue);
+
+  try { localStorage.setItem('langueConfigurateur', langue); } catch (e) {}
+}
+
+function basculerLangue() {
+  appliquerLangue(LANGUE_ACTUELLE === 'fr' ? 'en' : 'fr');
+}
+
+updateTypeItem();
+renumeroterReviewers();
+
+document.querySelectorAll('select.model').forEach(function (sel) {
+  updateWarning(sel);
+});
+
+// --- Detection des modifications manuelles de texte (agents) ---
+
+function capturerSnapshotTextes() {
+  SNAPSHOT_TEXTES = {};
+  document.querySelectorAll('.prompt').forEach(function (ta) {
+    const carte = ta.closest('.card');
+    if (carte) SNAPSHOT_TEXTES[carte.id] = ta.value;
+  });
+  verifierModificationsTextes();
+}
+
+function verifierModificationsTextes() {
+  let modifie = false;
+  document.querySelectorAll('.prompt').forEach(function (ta) {
+    const carte = ta.closest('.card');
+    if (!carte) return;
+    if (!(carte.id in SNAPSHOT_TEXTES) || SNAPSHOT_TEXTES[carte.id] !== ta.value) {
+      modifie = true;
+    }
+  });
+  const bouton = document.getElementById('btnSauvegarderAgentsMaj');
+  if (bouton) bouton.style.display = modifie ? 'inline-block' : 'none';
+}
+
+document.querySelectorAll('.prompt').forEach(function (ta) {
+  ta.addEventListener('input', verifierModificationsTextes);
+});
+capturerSnapshotTextes();
+appliquerLangue(LANGUE_ACTUELLE);
+
+// =====================================================================
+// MODELES DE L'UTILISATEUR CONNECTE
+// La liste ci-dessus n'est qu'un repli. Si la personne est connectee, on
+// charge la sienne, enregistree par le plugin, et les menus se mettent a
+// jour. La gestion (ajout/suppression) se fait sur la page Aide.
+// =====================================================================
+(function chargerModelesUtilisateur() {
+  function contexteAuth() {
+    try {
+      if (window.parent && window.parent.GenitemAuth) return window.parent.GenitemAuth;
+    } catch (e) {}
+    return window.GenitemAuth || null;
+  }
+
+  if (typeof fetch !== 'function') return;
+
+  // Adresse des routes : deduite du domaine si la page parente ne l'a pas
+  // fournie (page mise en cache, ou fichier ouvert hors WordPress).
+  var ctx = contexteAuth();
+  var base = (ctx && ctx.rest) ? ctx.rest : (window.location.origin + '/wp-json/genitem/v1/');
+
+  // On demande au serveur un jeton frais plutot que d'utiliser celui inscrit
+  // dans la page parente : si celle-ci est servie par un cache, ce jeton
+  // appartient a une autre session et l'appel serait refuse.
+  function appliquerModeles(liste) {
+    MODELS = liste;
+    if (typeof rafraichirSelectsModeles === 'function') rafraichirSelectsModeles();
+    if (typeof initialiserSelectSuppression === 'function') initialiserSelectSuppression();
+  }
+
+  // Affichage immediat de la derniere liste connue, le temps que le serveur
+  // reponde. Elle est remplacee des l'arrivee de la reponse.
+  try {
+    var enCache = sessionStorage.getItem('genitemModeles');
+    if (enCache) {
+      var listeCache = JSON.parse(enCache);
+      if (listeCache && listeCache.length) appliquerModeles(listeCache);
+    }
+  } catch (e) {}
+
+  fetch(base + 'jeton', { credentials: 'same-origin', cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .catch(function () { return null; })
+    .then(function (session) {
+      // Repli : si /jeton ne repond pas (plugin pas encore mis a jour), on
+      // utilise le jeton depose par la page parente.
+      if (!session || !session.connecte) {
+        if (ctx && ctx.connecte && ctx.nonce) session = { connecte: true, nonce: ctx.nonce };
+        else return null;
+      }
+      // La liste accompagne desormais le jeton : un seul aller-retour suffit.
+      // Le second appel ne sert plus qu'avec une ancienne version du plugin.
+      if (session.modeles && session.modeles.length) {
+        return { ok: true, modeles: session.modeles };
+      }
+      return fetch(base + 'modeles', {
+        credentials: 'same-origin',
+        headers: { 'X-WP-Nonce': session.nonce }
+      }).then(function (r) { return (r && r.ok) ? r.json() : null; });
+    })
+    .then(function (donnees) {
+      if (!donnees || !donnees.modeles || !donnees.modeles.length) return;
+      appliquerModeles(donnees.modeles);
+      try { sessionStorage.setItem('genitemModeles', JSON.stringify(donnees.modeles)); } catch (e) {}
+    })
+    .catch(function () { /* silencieux : la liste de repli reste utilisable */ });
+})();
+
+// --- Section "Ajouter modele" / "Supprimer modele" ---
+
+const CMD_PS1_DEMARRER = '$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\\\" } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d\'un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\\"\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\\"\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\\models"\n  & (Join-Path $DRIVE "ollama\\ollama.exe") serve\n}';
+const CMD_INSTALLER_AVANT = '$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\\\" } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d\'un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\\"\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\\"\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\\models"\n  & (Join-Path $DRIVE "ollama\\ollama.exe") pull ';
+const CMD_INSTALLER_APRES = '\n}';
+const CMD_SUPPRIMER_AVANT = '$DRIVE = $(\n  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\\ollama.exe") } | Select-Object -First 1).Root\n  if (-not $racine) {\n    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow\n    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\\\" } | Sort-Object { $_.Root -like "C:*" })) {\n      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }\n    }\n  }\n  $racine\n)\n\nif (-not $DRIVE) {\n  Write-Host "Non trouve a la racine d\'un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow\n  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1\n\n  if ($trouve) {\n    $cheminLong = $trouve.Directory.Parent.FullName\n    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1\n\n    if ($lettreExistante) {\n      $DRIVE = "$lettreExistante\\"\n    } else {\n      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1\n      if ($lettreLibre) {\n        subst "$lettreLibre`:" $cheminLong\n        $DRIVE = "$lettreLibre`:\\"\n      }\n    }\n  }\n}\n\nif (-not $DRIVE) {\n  Write-Host "Installation introuvable -- verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red\n} else {\n  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\\models"\n  & (Join-Path $DRIVE "ollama\\ollama.exe") rm ';
+const CMD_SUPPRIMER_APRES = '\n}';
+
+function pourAttribut(texte) {
+  return texte.replace(/\n/g, '\\n');
+}
+
+function initialiserSelectSuppression() {
+  const sel = document.getElementById('selectSupprimerModele');
+  if (sel) sel.innerHTML = genererOptionsHTML(MODELS[0]);
+}
+initialiserSelectSuppression();
+rafraichirSelectsModeles();
+
+function installerNouveauModele() {
+  const saisie = document.getElementById('nouveauModeleInput').value.trim();
+  if (!saisie) return;
+  const nomModele = saisie.replace(/^ollama\s+(run|pull)\s+/i, '').trim();
+  if (!nomModele) return;
+
+  if (!MODELS.includes(nomModele)) {
+    MODELS.push(nomModele);
+    rafraichirSelectsModeles();
+    initialiserSelectSuppression();
+  }
+
+  document.getElementById('btnCopierAjoutPS1').setAttribute('data-texte', pourAttribut(CMD_PS1_DEMARRER));
+  document.getElementById('btnCopierInstaller').setAttribute(
+    'data-texte',
+    pourAttribut(CMD_INSTALLER_AVANT + nomModele + CMD_INSTALLER_APRES)
+  );
+  document.getElementById('resultatAjoutModele').style.display = 'block';
+  telechargerPageEntiere();
+}
+
+function supprimerModeleChoisi() {
+  const sel = document.getElementById('selectSupprimerModele');
+  const nomModele = sel.value;
+  if (!nomModele) return;
+  if (MODELS.length <= 1) {
+    alert("Impossible de supprimer le dernier modele restant.");
+    return;
+  }
+  if (!confirm('Es-tu sur de vouloir supprimer le modele "' + nomModele + '" ?')) return;
+
+  MODELS = MODELS.filter(function (m) { return m !== nomModele; });
+  rafraichirSelectsModeles();
+  initialiserSelectSuppression();
+
+  document.getElementById('btnCopierSupprPS1').setAttribute('data-texte', pourAttribut(CMD_PS1_DEMARRER));
+  document.getElementById('btnCopierSupprimer').setAttribute(
+    'data-texte',
+    pourAttribut(CMD_SUPPRIMER_AVANT + nomModele + CMD_SUPPRIMER_APRES)
+  );
+  document.getElementById('resultatSupprModele').style.display = 'block';
+  telechargerPageEntiere();
+}
+
+function telechargerPageEntiere() {
+  // Les accordeons doivent apparaitre fermes dans le fichier telecharge,
+  // meme si l'un d'eux est ouvert dans la session en cours (necessaire
+  // pour interagir avec lui). On les referme juste le temps de la
+  // capture, puis on restaure immediatement leur etat visible.
+  const accordeons = document.querySelectorAll('details.accordion');
+  const etatsOriginaux = Array.from(accordeons).map(function (d) { return d.open; });
+  accordeons.forEach(function (d) { d.open = false; });
+
+  let html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  const nouvelleDeclaration = "let MODELS = " + JSON.stringify(MODELS) + "; // MODELES_MARKER";
+  html = html.replace(/let MODELS = \[.*?\];\s*\/\/ MODELES_MARKER/, nouvelleDeclaration);
+
+  // Sauvegarde les instructions actuelles de l'Agent 1 dans la constante
+  // correspondant au type actuellement selectionne (accord ou dichotomique)
+  // ET a la langue actuelle (FR ou EN), pour que ce texte reste celui
+  // affiche si on rouvre ce fichier plus tard sur cette meme combinaison.
+  const typeActuel = document.querySelector('input[name="typeItem"]:checked').value;
+  const texteAgent1 = document.querySelector('#agent1 .prompt').value;
+  const langueActuelle = (typeof LANGUE_ACTUELLE !== 'undefined') ? LANGUE_ACTUELLE.toUpperCase() : 'FR';
+  const baseConstante = (typeActuel === 'accord') ? 'REGLES_ACCORD' : 'REGLES_DICHOTOMIQUE';
+  const nomConstante = baseConstante + '_' + langueActuelle;
+  const regexConst = new RegExp('const ' + nomConstante + ' = `[\\s\\S]*?`;\\s*//\\s*' + nomConstante + '_MARKER');
+  const nouvelleConst = 'const ' + nomConstante + ' = ' + JSON.stringify(texteAgent1) + '; // ' + nomConstante + '_MARKER';
+  html = html.replace(regexConst, nouvelleConst);
+
+  accordeons.forEach(function (d, i) { d.open = etatsOriginaux[i]; });
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Genitem.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  if (typeof capturerSnapshotTextes === 'function') capturerSnapshotTextes();
+}
+
+function getAgent(id) {
+  const card = document.getElementById(id);
+  const nameEl = card.querySelector('.name');
+  const name = (nameEl.tagName === 'INPUT') ? (nameEl.value.trim() || 'Reviewer') : nameEl.textContent.trim();
+  return {
+    name: name,
+    model: card.querySelector('.model').value.trim(),
+    prompt: card.querySelector('.prompt').value
+  };
+}
+
+function pyStr(s) {
+  // Encode proprement une chaine multi-ligne en litteral Python valide
+  return JSON.stringify(s);
+}
+
+function buildScript() {
+  const a1 = getAgent('agent1');
+  const typeItem = document.querySelector('input[name="typeItem"]:checked').value;
+  const nbItems = document.getElementById('nbItems').value.trim() || '3';
+  const nbNiveaux = '5'; // champ retire de l'interface, valeur fixe conservee pour le prompt genere
+  const typeItemLabel = (typeItem === 'dichotomique') ? "Item dichotomique" : "Item avec niveau d'accord";
+  const langueExport = (typeof LANGUE_ACTUELLE !== 'undefined') ? LANGUE_ACTUELLE : 'fr';
+
+  const introAgent1 = (langueExport === 'en')
+    ? ((typeItem === 'dichotomique')
+        ? ('You are a generator of dichotomous items (2-category response, e.g. ' +
+           'True/False or Yes/No). ' +
+           'You produce exactly ' + nbItems + ' numbered items, following:\n\n')
+        : ('You are a generator of Likert-scale items (' + nbNiveaux +
+           ' levels, 1 = Strongly disagree, ' + nbNiveaux + ' = Strongly agree). ' +
+           'You produce exactly ' + nbItems + ' numbered items, following:\n\n'))
+    : ((typeItem === 'dichotomique')
+        ? ('Tu es un generateur d\'items dichotomiques (reponse en 2 categories, par ' +
+           'exemple Vrai/Faux ou Oui/Non). ' +
+           'Tu produis exactement ' + nbItems + ' items numerotes, en respectant :\n\n')
+        : ('Tu es un generateur d\'items d\'echelle de Likert (' + nbNiveaux +
+           ' niveaux, 1 = Pas du tout d\'accord, ' + nbNiveaux + ' = Tout a fait d\'accord). ' +
+           'Tu produis exactement ' + nbItems + ' items numerotes, en respectant :\n\n'));
+
+  const rappelAgent1 = (langueExport === 'en')
+    ? ('\n\nIMPORTANT REMINDER: you must produce EXACTLY ' + nbItems + ' items, ' +
+       'numbered from 1 to ' + nbItems + ', one item per line, with no introduction ' +
+       'or conclusion sentence. Expected format:\n1. [item 1]\n2. [item 2]\n...\n' +
+       nbItems + '. [item ' + nbItems + ']')
+    : ('\n\nRAPPEL IMPORTANT : tu dois produire EXACTEMENT ' + nbItems + ' items, ' +
+       'numerotes de 1 a ' + nbItems + ', un item par ligne, sans phrase d\'introduction ' +
+       'ni de conclusion. Format attendu :\n1. [item 1]\n2. [item 2]\n...\n' +
+       nbItems + '. [item ' + nbItems + ']');
+  a1.prompt = introAgent1 + a1.prompt + rappelAgent1;
+
+  const reviewerCards = Array.from(document.querySelectorAll('#reviewerGrid .card.reviewer'));
+  const reviewersAvecVides = reviewerCards.map(getAgent2);
+  const reviewers = reviewersAvecVides.filter(function (r) {
+    return r.prompt.trim().length > 0;
+  });
+  const nbIgnores = reviewersAvecVides.length - reviewers.length;
+
+  function getAgent2(card) {
+    const nameEl = card.querySelector('.name');
+    return {
+      name: (nameEl.value.trim() || 'Reviewer'),
+      model: card.querySelector('.model').value.trim(),
+      prompt: card.querySelector('.prompt').value
+    };
+  }
+
+  const aFinal = getAgent('agentFinal');
+  const nbTours = document.getElementById('nbTours').value.trim() || '3';
+  const desactiverThinking = true; // Toujours desactive : la case a ete retiree de l'interface.
+
+  const reviewersPyList = reviewers.map(function (r) {
+    return '    {"nom": ' + pyStr(r.name) + ', "modele": ' + pyStr(r.model) + ', "systeme": ' + pyStr(r.prompt) + '},';
+  }).join('\n');
+
+  const niveauxAppendLine = (typeItem === 'accord')
+    ? ('    lignes_criteres.append("Niveaux d\'echelle : ' + nbNiveaux + '")\n')
+    : '';
+
+  const ligneThink = desactiverThinking ? '\n        think=False,' : '';
+
+  const L = (langueExport === 'en') ? {
+    tache: 'Task',
+    produireExactement: 'Produce exactly ' + nbItems + ' numbered items.',
+    specification: 'Specification',
+    items: 'Items',
+    avisCollegues: "Your colleagues' feedback from the previous round",
+    reviseAvis: "Revise your feedback taking their comments into account, aiming to converge on a shared consensus.",
+    avisParen: 'Feedback',
+    itemsInitiaux: 'Initial items',
+    consigneFinale: 'Produce the revised pool of items. Each item MUST remain a ' +
+      'first-person statement that the respondent rates about themselves (e.g., ' +
+      '"I feel..."). If the feedback suggests rewording an item into a general ' +
+      'explanation or idea about the topic, REFUSE that suggestion and keep the ' +
+      'personal-statement format. You MUST produce EXACTLY ' + nbItems + ' distinct ' +
+      'items, never fewer, never more, even if the feedback suggests merging or ' +
+      'removing some: in that case, reword instead of reducing the item count. ' +
+      'RESPOND ONLY with the numbered list of the ' + nbItems + ' items (1. ... ' +
+      '2. ... etc.), one line per item, with NO text before, no title, no comment, ' +
+      'no conclusion, and no analysis section after the list.'
+  } : {
+    tache: 'Tache',
+    produireExactement: 'Produis exactement ' + nbItems + ' items numerotes.',
+    specification: 'Specification',
+    items: 'Items',
+    avisCollegues: 'Avis de tes collegues au tour precedent',
+    reviseAvis: "Revise ton avis en tenant compte de leurs remarques, dans le but de converger vers un consensus commun.",
+    avisParen: 'Avis',
+    itemsInitiaux: 'Items initiaux',
+    consigneFinale: "Produis le pool d'items revise. Chaque item DOIT rester une " +
+      "affirmation a la premiere personne que le repondant note pour " +
+      "lui-meme (ex: \"Je me sens...\"). Si les avis suggerent de " +
+      "reformuler un item en explication generale ou en idee sur le sujet, " +
+      "REFUSE cette suggestion et garde le format d'affirmation personnelle. " +
+      "Tu dois IMPERATIVEMENT produire " +
+      "EXACTEMENT " + nbItems + " items distincts, jamais moins, jamais plus, " +
+      "meme si les avis suggerent d'en fusionner ou d'en retirer : dans ce " +
+      "cas, reformule plutot que de reduire le nombre d'items. REPONDS " +
+      "UNIQUEMENT avec la liste numerotee des " + nbItems + " items (1. ... " +
+      "2. ... etc.), une ligne par item, SANS aucun texte avant, sans " +
+      "titre, sans commentaire, sans conclusion et sans section d'analyse " +
+      "apres la liste. N'entoure aucun item d'asterisques, de tirets bas " +
+      "ou de tout autre balisage Markdown, et n'insere aucune ligne de " +
+      "separation (***, ---) entre les items. Ne recopie jamais la consigne."
+  };
+
+  const code = `import ollama
+import datetime
+import re
+import time
+import unicodedata
+import difflib
+import os
+import shutil
+from concurrent.futures import ThreadPoolExecutor
+
+# --- Configuration des agents (genere depuis le configurateur HTML) ---
+
+MODEL_AGENT1 = ${pyStr(a1.model)}   # ${a1.name}
+SYSTEME_AGENT1 = ${pyStr(a1.prompt)}
+
+REVIEWERS = [
+${reviewersPyList}
+]
+
+MODEL_FINAL = ${pyStr(aFinal.model)}   # ${aFinal.name}
+SYSTEME_FINAL = ${pyStr(aFinal.prompt)}
+NOM_FINAL = ${pyStr(aFinal.name)}
+
+NB_TOURS = ${nbTours}   # nombre de tours d'echange entre les agents relecteurs
+NB_ITEMS = ${nbItems}   # nombre d'items demande, sert aussi de controle a la fin
+LONGUEUR_MAX_ITEM = 300   # au-dela, c'est un paragraphe et non un item
+
+
+def appeler(modele, systeme, message):
+    reponse = ollama.chat(
+        model=modele,
+        messages=[
+            {"role": "system", "content": systeme},
+            {"role": "user", "content": message},
+        ],
+        options={"num_ctx": 8192},${ligneThink}
+    )
+    return reponse["message"]["content"]
+
+
+def agent1_generateur(tache):
+    message = "${L.tache} :\\n" + tache + "\\n\\n${L.produireExactement}"
+    return appeler(MODEL_AGENT1, SYSTEME_AGENT1, message)
+
+
+def agent_reviewer(reviewer, tache, items, avis_autres=None):
+    message = "${L.specification} :\\n" + tache + "\\n\\n${L.items} :\\n" + items
+    if avis_autres:
+        message += (
+            "\\n\\n${L.avisCollegues} :\\n" + avis_autres +
+            "\\n\\n${L.reviseAvis}"
+        )
+    return appeler(reviewer["modele"], reviewer["systeme"], message)
+
+
+def agent_final_revision(tache, items, avis_liste):
+    corps_avis = ""
+    for nom, texte in avis_liste:
+        corps_avis += "${L.avisParen} (" + nom + ") :\\n" + texte + "\\n\\n"
+    message = (
+        "${L.specification} :\\n" + tache + "\\n\\n"
+        "${L.itemsInitiaux} :\\n" + items + "\\n\\n" +
+        corps_avis +
+        ${pyStr(L.consigneFinale)}
+    )
+    return appeler(MODEL_FINAL, SYSTEME_FINAL, message)
+
+
+def nettoyer_ligne(ligne):
+    """Retire la numerotation, les puces et le balisage Markdown autour d'un item."""
+    t = ligne.strip()
+    t = re.sub(r"^(\\d+)[\\.\\)]\\s*", "", t)
+    t = re.sub(r"^[-\\u2013\\u2022\\*]\\s+", "", t)
+    t = t.strip()
+    for balise in ("**", "__", "*", "_", "\`"):
+        if len(t) > 2 * len(balise) and t.startswith(balise) and t.endswith(balise):
+            t = t[len(balise):-len(balise)].strip()
+            break
+    return t
+
+
+def est_un_item(ligne):
+    """Ecarte les separateurs, les titres et la consigne recopiee par le modele."""
+    if not ligne:
+        return False
+    if re.fullmatch(r"[\\*\\-_=~#\\s]{2,}", ligne):
+        return False
+    if ligne.endswith(":"):
+        return False
+    if len(ligne) < 15:
+        return False
+    # Au-dela de cette longueur, ce n'est plus un item mais un paragraphe.
+    # Sans ce controle, une reponse en prose etait acceptee telle quelle et
+    # se retrouvait seule dans AI-GENIE.txt.
+    if len(ligne) > LONGUEUR_MAX_ITEM:
+        return False
+    amorces = ("tu es charge", "je suis charge", "produis la version",
+               "vous etes charge", "you are in charge", "produce the final",
+               "version finale", "final version", "liste finale", "final list",
+               "voici les", "here are the", "en tenant compte des avis")
+    # Comparaison sans accents : le modele ecrit "charge" ou "chargé" selon
+    # les cas, et la consigne recopiee passait au travers du filtre.
+    sans_accents = unicodedata.normalize("NFD", ligne.lower())
+    sans_accents = "".join(c for c in sans_accents if unicodedata.category(c) != "Mn")
+    debut = sans_accents[:60]
+    return not any(a in debut for a in amorces)
+
+
+def extraire_items(texte):
+    """Extrait les items, un par ligne, sans numerotation ni balisage.
+
+    Deux passes. La premiere lit une liste numerotee (cas nominal). La seconde
+    sert quand le modele n'a pas numerote -- frequent avec les petits modeles :
+    sans elle, extraire_items renvoyait une liste vide et le programme ecrivait
+    la sortie brute dans AI-GENIE.txt (consigne recopiee, separateurs ***,
+    items entoures d'asterisques), fichier inutilisable par le script R."""
+    lignes = [l.strip() for l in texte.strip().split("\\n")]
+
+    items = []
+    for ligne in lignes:
+        if not ligne:
+            continue
+        correspondance = re.match(r"^(\\d+)[\\.\\)]\\s+(.*)", ligne)
+        if correspondance:
+            items.append(nettoyer_ligne(correspondance.group(2)))
+        elif items:
+            break
+    items = [i for i in items if i]
+    if len(items) >= 2:
+        return items
+
+    items = []
+    for ligne in lignes:
+        candidat = nettoyer_ligne(ligne)
+        if est_un_item(candidat):
+            items.append(candidat)
+    if items:
+        return items
+
+    # Dernier recours : le modele a repondu d'un seul bloc, sans retour a la
+    # ligne ni numerotation. On decoupe alors par phrases, faute de mieux.
+    return decouper_en_phrases(" ".join(lignes))
+
+
+def decouper_en_phrases(texte):
+    """Decoupe un paragraphe en phrases exploitables comme items."""
+    morceaux = re.split(r"(?<=[.!?])\\s+", texte.strip())
+    phrases = []
+    for morceau in morceaux:
+        phrase = nettoyer_ligne(morceau)
+        if phrase and 15 <= len(phrase) <= LONGUEUR_MAX_ITEM:
+            phrases.append(phrase)
+    return phrases
+
+
+def detecter_doublons(items, seuil=0.72):
+    """Compare chaque paire d'items par similarite de texte (pas seulement
+    mot pour mot), pour reperer les reformulations qui disent la meme chose
+    (ex: 'cibler un objectif' vs 'atteindre un objectif'). Renvoie une liste
+    de tuples (numero_item_1, numero_item_2, texte_1, texte_2, similarite)."""
+    doublons = []
+    for i in range(len(items)):
+        for j in range(i + 1, len(items)):
+            ratio = difflib.SequenceMatcher(None, items[i].lower(), items[j].lower()).ratio()
+            if ratio >= seuil:
+                doublons.append((i + 1, j + 1, items[i], items[j], ratio))
+    return doublons
+
+
+def pipeline(tache):
+    print("\\n--- Agent 1 : ${a1.name} ---")
+    items = agent1_generateur(tache)
+    print(items)
+
+    avis_precedents = {r["nom"]: None for r in REVIEWERS}
+
+    for tour in range(1, NB_TOURS + 1):
+        noms_tour = " / ".join(r["nom"] for r in REVIEWERS)
+        print("\\n=== Tour " + str(tour) + "/" + str(NB_TOURS) + " : " + noms_tour + " (en parallele) ===")
+
+        with ThreadPoolExecutor(max_workers=len(REVIEWERS)) as executor:
+            futurs = {}
+            for r in REVIEWERS:
+                avis_autres = None
+                if tour > 1:
+                    morceaux = []
+                    for autre in REVIEWERS:
+                        if autre["nom"] != r["nom"]:
+                            morceaux.append("Avis (" + autre["nom"] + ") :\\n" + avis_precedents[autre["nom"]])
+                    avis_autres = "\\n\\n".join(morceaux)
+                futurs[r["nom"]] = executor.submit(agent_reviewer, r, tache, items, avis_autres)
+
+            avis_actuels = {}
+            for nom, futur in futurs.items():
+                avis_actuels[nom] = futur.result()
+
+        avis_precedents = avis_actuels
+        for r in REVIEWERS:
+            print("\\nAvis " + r["nom"] + " :\\n", avis_precedents[r["nom"]])
+
+    avis_liste = [(r["nom"], avis_precedents[r["nom"]]) for r in REVIEWERS]
+
+    print("\\n--- Agent final : " + NOM_FINAL + " ---")
+    items_revises = agent_final_revision(tache, items, avis_liste)
+    print(items_revises)
+
+    return items_revises, avis_liste, items
+
+
+def archiver_anciens_fichiers():
+    """Deplace tout fichier deja present dans le dossier courant (autre que
+    ce script lui-meme) dans un sous-dossier nomme par date-heure, avant de
+    generer de nouveaux items. Les anciens dossiers d'archives (crees lors
+    d'executions precedentes) ne sont pas re-deplaces."""
+    nom_script = os.path.basename(__file__) if "__file__" in globals() else "agents.py"
+    fichiers_existants = [
+        f for f in os.listdir(".")
+        if os.path.isfile(f) and f != nom_script
+    ]
+    if fichiers_existants:
+        dossier_archive = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        os.makedirs(dossier_archive, exist_ok=True)
+        for f in fichiers_existants:
+            shutil.move(f, os.path.join(dossier_archive, f))
+        print("Anciens fichiers deplaces dans le dossier : " + dossier_archive)
+
+
+if __name__ == "__main__":
+    archiver_anciens_fichiers()
+
+    tache = input("Sujet des items a construire - Subject of the items to be created : ")
+
+    debut_chrono = time.time()
+    resultat_brut, avis_liste_finale, items_initiaux = pipeline(tache)
+
+    items_finaux = extraire_items(resultat_brut)
+
+    # REGLE : seuls les items de l'agent final sont conserves. Le pool initial
+    # de l'agent 1 n'est JAMAIS repris en remplacement, meme s'il est plus
+    # fourni : ces items-la n'ont pas traverse les relecteurs, et les melanger
+    # aux autres fausserait la comparaison. Mieux vaut trois items valides et
+    # une perte documentee que vingt-sept items d'origines inegales.
+    items_perdus = NB_ITEMS - len(items_finaux)
+
+    if items_perdus > 0:
+        print(
+            "\\nATTENTION : l'agent final n'a renvoye que "
+            + str(len(items_finaux)) + " item(s) sur " + str(NB_ITEMS) + " demande(s)."
+        )
+        print(
+            str(items_perdus) + " item(s) perdu(s) en chemin. Seuls les items de "
+            "l'agent final sont conserves : le pool initial n'est pas repris."
+        )
+        print("Le detail figure dans le fichier details_*.txt.")
+    elif items_perdus < 0:
+        print(
+            "\\nATTENTION : " + str(len(items_finaux)) + " item(s) obtenu(s) pour "
+            + str(NB_ITEMS) + " demande(s) -- l'agent final en a produit en trop."
+        )
+
+    # Securite : join() sur une chaine la decouperait caractere par caractere.
+    if isinstance(items_finaux, str):
+        items_finaux = extraire_items(items_finaux)
+
+    resultat = "\\n".join(items_finaux) if items_finaux else resultat_brut
+
+    print("\\n=== ITEMS FINAUX ===\\n" + resultat)
+
+    doublons_detectes = detecter_doublons(items_finaux) if items_finaux else []
+    if doublons_detectes:
+        print("\\n=== ATTENTION : DOUBLONS PROBABLES DETECTES ===")
+        for num1, num2, texte1, texte2, ratio in doublons_detectes:
+            print(f"Item {num1} et Item {num2} (similarite {ratio:.0%}) :")
+            print("  " + str(num1) + ". " + texte1)
+            print("  " + str(num2) + ". " + texte2)
+        print("Ces items disent probablement la meme chose autrement. A verifier manuellement.")
+
+    duree_s = time.time() - debut_chrono
+    duree_min = round(duree_s / 60)
+    duree_texte = str(duree_min) + " min"
+
+    lignes_criteres = [
+        "Type d'item : ${typeItemLabel}",
+        "Nombre d'items demande : ${nbItems}",
+    ]
+${niveauxAppendLine}    lignes_criteres.append("Agent 1 (${a1.name}) = " + MODEL_AGENT1)
+    for r in REVIEWERS:
+        lignes_criteres.append("Agent (" + r["nom"] + ") = " + r["modele"])
+    lignes_criteres.append("Agent final (" + NOM_FINAL + ") = " + MODEL_FINAL)
+    lignes_criteres.append("Nombre de tours = " + str(NB_TOURS))
+    lignes_criteres.append("Raisonnement (thinking) desactive = ${desactiverThinking}")
+    criteres_texte = "\\n".join(lignes_criteres)
+
+    horodatage = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # --- Fichier 1 : les items seuls, un par ligne ---
+    nom_fichier_items = "items_" + horodatage + ".txt"
+    with open(nom_fichier_items, "w", encoding="utf-8") as f:
+        f.write(resultat)
+
+    # --- Fichier 3 : copie des items sous un nom fixe, pour usage direct
+    # dans un script R (AI-GENIE) sans avoir a changer le nom a chaque fois.
+    # Ecrase le fichier precedent a chaque nouvelle execution.
+    nom_fichier_genie = "AI-GENIE.txt"
+    with open(nom_fichier_genie, "w", encoding="utf-8") as f:
+        f.write(resultat)
+
+    # --- Fichier 2 : requete, criteres, duree, doublons, feedback des agents ---
+    nom_fichier_details = "details_" + horodatage + ".txt"
+    with open(nom_fichier_details, "w", encoding="utf-8") as f:
+        f.write("=== REQUETE ===\\n")
+        f.write("Theme : " + tache + "\\n\\n")
+
+        f.write("=== CRITERES DE CHOIX ===\\n")
+        f.write(criteres_texte + "\\n\\n")
+
+        # Bilan du rendement : ce qui a ete demande, ce qui a ete obtenu, et
+        # ce qui s'est perdu entre les deux. Seuls les items de l'agent final
+        # sont conserves ; le pool initial n'est jamais repris a la place.
+        f.write("=== BILAN DES ITEMS ===\\n")
+        f.write("Items demandes : " + str(NB_ITEMS) + "\\n")
+        f.write("Items produits par l'agent 1 : " + str(len(extraire_items(items_initiaux))) + "\\n")
+        f.write("Items conserves (agent final) : " + str(len(items_finaux)) + "\\n")
+        if items_perdus > 0:
+            f.write("Items perdus en chemin : " + str(items_perdus) + "\\n")
+            f.write(
+                "Ces items ont disparu lors de la synthese finale. Ils ne sont PAS\\n"
+                "remplaces par ceux de l'agent 1 : seuls les items ayant traverse\\n"
+                "tous les relecteurs sont conserves.\\n"
+            )
+        elif items_perdus < 0:
+            f.write("Items excedentaires : " + str(-items_perdus) + "\\n")
+        else:
+            f.write("Aucune perte : le compte demande est respecte.\\n")
+        f.write("\\n")
+
+        f.write("=== DUREE ===\\n")
+        f.write(duree_texte + "\\n\\n")
+
+        f.write("=== POOL D'ITEMS INITIAL (Agent 1 : ${a1.name}) ===\\n")
+        f.write(items_initiaux + "\\n\\n")
+
+        if doublons_detectes:
+            f.write("=== DOUBLONS PROBABLES DETECTES ===\\n")
+            for num1, num2, texte1, texte2, ratio in doublons_detectes:
+                f.write(f"Item {num1} et Item {num2} (similarite {ratio:.0%}) :\\n")
+                f.write("  " + str(num1) + ". " + texte1 + "\\n")
+                f.write("  " + str(num2) + ". " + texte2 + "\\n")
+            f.write("\\n")
+
+        f.write("=== FEEDBACK FINAL DE CHAQUE AGENT RELECTEUR ===\\n\\n")
+        for nom, texte in avis_liste_finale:
+            f.write("--- " + nom + " ---\\n")
+            f.write(texte + "\\n\\n")
+
+        f.write("=== SORTIE COMPLETE DU COORDINATEUR FINAL (" + NOM_FINAL + ") ===\\n")
+        f.write(resultat_brut + "\\n")
+
+    print("\\nItems enregistres dans : " + nom_fichier_items)
+    print("Copie a nom fixe pour AI-GENIE : " + nom_fichier_genie)
+    print("Details enregistres dans : " + nom_fichier_details)
+`;
+
+  return { code: code, nbIgnores: nbIgnores };
+}
+
+function download(filename, text, mime) {
+  const blob = new Blob([text], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('exportBtn').addEventListener('click', function () {
+  const resultat = buildScript();
+  download('agents.txt', resultat.code, 'text/plain');
+  let message = 'agents.txt telecharge.';
+  if (resultat.nbIgnores > 0) {
+    message += ' (' + resultat.nbIgnores + ' case(s) vide(s) ignoree(s), non incluses dans le script)';
+  }
+  document.getElementById('status').textContent = message;
+});
+</script>
+
+
+
+
+<script>
+// La page d'accueil ayant disparu de ce fichier, la langue est appliquee ici au chargement.
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof appliquerLangue === 'function') appliquerLangue(LANGUE_ACTUELLE);
+});
+</script>
+
+<script>
+// Force Divi (et le navigateur) a recalculer la hauteur de la page des
+// qu'un accordeon s'ouvre ou se ferme, pour eviter la zone blanche residuelle.
+document.querySelectorAll('details.accordion').forEach(function (d) {
+  d.addEventListener('toggle', function () {
+    window.dispatchEvent(new Event('resize'));
+  });
+});
+</script>
+
+<script>
+// ===== Assignation des facteurs, integree a cette page =====
+// Auparavant une page separee chargee dans un cadre, ce qui dupliquait
+// le menu et le pied de page du site. Le contenu est desormais ici,
+// masque jusqu'au clic sur "Assigner les facteurs".
+
+let facItems = [];         // {id, statement}
+let facAssignation = [];   // par item : index du facteur (0-based) ou null
+let facNomsFacteurs = ["Facteur 1", "Facteur 2"];
+
+const FAC_TRADUCTIONS = {
+  fr: {
+    h1_titre: "Assignation des facteurs pour AI-GENIE",
+    etape1_titre: "1. Charger le fichier AI-GENIE.txt",
+    zone_depot_texte: 'Glisse ton fichier ici, ou <strong>clique pour choisir un fichier</strong>',
+    etape2_titre: "2. Nombre de facteurs :",
+    etape3_titre: "3. Cocher le facteur de chaque item",
+    btn_exporter: "Exporter pour AI-GENIE",
+    avertissement_projet: '⚠️ Dépose le fichier <code>AI-GENIE_construits.csv</code> téléchargé dans le dossier \\projet\\ du disque de travail ⚠️',
+    etape4_titre: "Étape 4 — Analyser avec AI-GENIE",
+    etape4_texte: "À exécuter dans PowerShell.",
+    copier: "Copier",
+    copie: "Copié !",
+    col_item: "Item",
+    facteur_defaut: "Facteur",
+    items_suffixe: "item(s)"
+  },
+  en: {
+    h1_titre: "Factor Assignment for AI-GENIE",
+    etape1_titre: "1. Load the AI-GENIE.txt file",
+    zone_depot_texte: 'Drop your file here, or <strong>click to choose a file</strong>',
+    etape2_titre: "2. Number of factors:",
+    etape3_titre: "3. Check the factor for each item",
+    btn_exporter: "Export for AI-GENIE",
+    avertissement_projet: '⚠️ Place the downloaded <code>AI-GENIE_construits.csv</code> file in the \\projet\\ folder of the working drive ⚠️',
+    etape4_titre: "Step 4 — Analyse with AI-GENIE",
+    etape4_texte: "Run in PowerShell.",
+    copier: "Copy",
+    copie: "Copied!",
+    col_item: "Item",
+    facteur_defaut: "Factor",
+    items_suffixe: "item(s)"
+  }
+};
+
+function texteCompteurGlobal(assignes, total, nonAssignes) {
+  const suffixeAssignes = LANGUE_ACTUELLE === 'en' ? 'items assigned' : 'items assignés';
+  const suffixeNonAssignes = LANGUE_ACTUELLE === 'en' ? 'unassigned' : 'non assigné(s)';
+  return '<b>' + assignes + '</b> / ' + total + ' ' + suffixeAssignes +
+    (nonAssignes > 0 ? ' — <span class="avert">' + nonAssignes + ' ' + suffixeNonAssignes + '</span>' : '');
+}
+
+function texteChargement(nbItems, nomFichier) {
+  return LANGUE_ACTUELLE === 'en'
+    ? (nbItems + ' item(s) loaded from ' + nomFichier + '.')
+    : (nbItems + ' item(s) chargé(s) depuis ' + nomFichier + '.');
+}
+
+function texteExportTermine(nbExportes, nonAssignes) {
+  if (LANGUE_ACTUELLE === 'en') {
+    return 'Export complete: ' + nbExportes + ' item(s) exported' +
+      (nonAssignes > 0 ? ', ' + nonAssignes + ' unassigned item(s) skipped' : '') + '.';
+  }
+  return 'Export terminé : ' + nbExportes + ' item(s) exporté(s)' +
+    (nonAssignes > 0 ? ', ' + nonAssignes + ' non assigné(s) ignoré(s)' : '') + '.';
+}
+
+function facAppliquerLangue(langue) {
+  LANGUE_ACTUELLE = langue;
+  const dict = FAC_TRADUCTIONS[langue];
+
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n');
+    if (dict[cle] !== undefined) el.textContent = dict[cle];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+    const cle = el.getAttribute('data-i18n-html');
+    if (dict[cle] !== undefined) el.innerHTML = dict[cle];
+  });
+  document.querySelectorAll('#blocFacteurs [onclick="copierBloc(this)"]').forEach(function (btn) {
+    if (btn.textContent === TRADUCTIONS.fr.copier || btn.textContent === TRADUCTIONS.en.copier) {
+      btn.textContent = TRADUCTIONS[langue].copier;
+    }
+  });
+
+  // Si un nom de facteur est encore a sa valeur par defaut (dans l'une ou
+  // l'autre langue), on le retraduit -- sans jamais toucher un nom que la
+  // personne a personnalise elle-meme.
+  facNomsFacteurs = facNomsFacteurs.map(function (nom, i) {
+    const attenduFr = 'Facteur ' + (i + 1);
+    const attenduEn = 'Factor ' + (i + 1);
+    if (nom === attenduFr || nom === attenduEn) {
+      return dict.facteur_defaut + ' ' + (i + 1);
+    }
+    return nom;
+  });
+
+  if (facItems.length > 0) genererTableau();
+
+
+  try { 0 /* la langue est geree par la page hote */; } catch (e) {}
+}
+
+function echapperHtml(texte) {
+  const div = document.createElement('div');
+  div.textContent = texte;
+  return div.innerHTML;
+}
+
+function majNomsFacteurs(n) {
+  const nouveaux = [];
+  for (let i = 0; i < n; i++) {
+    nouveaux.push(facNomsFacteurs[i] || (FAC_TRADUCTIONS[LANGUE_ACTUELLE].facteur_defaut + " " + (i + 1)));
+  }
+  facNomsFacteurs = nouveaux;
+}
+
+function majCompteurs() {
+  const nonAssignes = facAssignation.filter(function (a) { return a === null; }).length;
+  const total = facItems.length;
+  document.getElementById('compteurGlobal').innerHTML = texteCompteurGlobal(total - nonAssignes, total, nonAssignes);
+
+  const compteParFacteur = facNomsFacteurs.map(function () { return 0; });
+  facAssignation.forEach(function (a) { if (a !== null) compteParFacteur[a]++; });
+  const suffixeItems = FAC_TRADUCTIONS[LANGUE_ACTUELLE].items_suffixe;
+  document.getElementById('resumeFacteurs').innerHTML = facNomsFacteurs.map(function (nom, i) {
+    return '<span><span class="badge">' + echapperHtml(nom) + '</span> : ' + compteParFacteur[i] + ' ' + suffixeItems + '</span>';
+  }).join('');
+}
+
+function genererTableau() {
+  const n = facNomsFacteurs.length;
+  let html = '<thead><tr><th class="col-item">' + FAC_TRADUCTIONS[LANGUE_ACTUELLE].col_item + '</th>';
+  for (let i = 0; i < n; i++) {
+    html += '<th><input type="text" class="nom-facteur" data-idx="' + i + '" value="' + echapperHtml(facNomsFacteurs[i]) + '"></th>';
+  }
+  html += '</tr></thead><tbody>';
+
+  facItems.forEach(function (item, idxItem) {
+    const nonAssigne = facAssignation[idxItem] === null;
+    html += '<tr' + (nonAssigne ? ' class="non-assigne"' : '') + '>';
+    html += '<td class="col-item">' + echapperHtml(item.statement) + '</td>';
+    for (let i = 0; i < n; i++) {
+      const coche = facAssignation[idxItem] === i ? ' checked' : '';
+      html += '<td class="case-centre"><input type="checkbox" data-item="' + idxItem + '" data-facteur="' + i + '"' + coche + '></td>';
+    }
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('tableItems').innerHTML = html;
+
+  document.querySelectorAll('.nom-facteur').forEach(function (inp) {
+    inp.addEventListener('input', function () {
+      facNomsFacteurs[parseInt(this.dataset.idx, 10)] = this.value;
+      majCompteurs();
+    });
+  });
+
+  document.querySelectorAll('#tableItems td.case-centre input[type="checkbox"]').forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      const idxItem = parseInt(this.dataset.item, 10);
+      const idxFacteur = parseInt(this.dataset.facteur, 10);
+      const ligne = this.closest('tr');
+      if (this.checked) {
+        // Comportement exclusif : decoche les autres cases de la meme ligne
+        ligne.querySelectorAll('input[type="checkbox"]').forEach(function (autre) {
+          if (autre !== cb) autre.checked = false;
+        });
+        facAssignation[idxItem] = idxFacteur;
+        ligne.classList.remove('non-assigne');
+      } else {
+        facAssignation[idxItem] = null;
+        ligne.classList.add('non-assigne');
+      }
+      majCompteurs();
+    });
+  });
+
+  majCompteurs();
+}
+
+function chargerFichier(fichier) {
+  if (!fichier) return;
+  const lecteur = new FileReader();
+  lecteur.onload = function (ev) {
+    const lignes = ev.target.result.split(/\r?\n/)
+      .map(function (l) { return l.trim(); })
+      .filter(function (l) { return l.length > 0; });
+    facItems = lignes.map(function (texte, i) { return { id: i + 1, statement: texte }; });
+    facAssignation = facItems.map(function () { return null; });
+    document.getElementById('infoChargement').textContent = texteChargement(facItems.length, fichier.name);
+    document.getElementById('zoneTableau').style.display = 'block';
+    document.getElementById('btnExporter').style.display = 'inline-block';
+    document.getElementById('statutExport').textContent = '';
+    genererTableau();
+  };
+  lecteur.readAsText(fichier, 'UTF-8');
+}
+
+const zoneDepot = document.getElementById('zoneDepot');
+const fichierInput = document.getElementById('fichierInput');
+
+zoneDepot.addEventListener('click', function () { fichierInput.click(); });
+
+fichierInput.addEventListener('change', function (e) {
+  chargerFichier(e.target.files[0]);
+});
+
+['dragenter', 'dragover'].forEach(function (evt) {
+  zoneDepot.addEventListener(evt, function (e) {
+    e.preventDefault();
+    zoneDepot.classList.add('survolee');
+  });
+});
+['dragleave', 'dragend'].forEach(function (evt) {
+  zoneDepot.addEventListener(evt, function (e) {
+    e.preventDefault();
+    zoneDepot.classList.remove('survolee');
+  });
+});
+zoneDepot.addEventListener('drop', function (e) {
+  e.preventDefault();
+  zoneDepot.classList.remove('survolee');
+  const fichier = e.dataTransfer.files && e.dataTransfer.files[0];
+  if (fichier) chargerFichier(fichier);
+});
+
+document.getElementById('curseurFacteurs').addEventListener('input', function () {
+  const n = parseInt(this.value, 10);
+  document.getElementById('nbFacteursAffiche').textContent = n;
+  majNomsFacteurs(n);
+  facAssignation = facAssignation.map(function (a) { return (a !== null && a < n) ? a : null; });
+  if (facItems.length > 0) genererTableau();
+});
+
+document.getElementById('btnExporter').addEventListener('click', function () {
+  const nonAssignes = facAssignation.filter(function (a) { return a === null; }).length;
+
+  const lignes = ['ID,statement,attribute,type'];
+  facItems.forEach(function (item, idx) {
+    if (facAssignation[idx] === null) return;
+    const nomFacteur = facNomsFacteurs[facAssignation[idx]];
+    const statementEchape = '"' + item.statement.replace(/"/g, '""') + '"';
+    const facteurEchape = '"' + nomFacteur.replace(/"/g, '""') + '"';
+    lignes.push([item.id, statementEchape, facteurEchape, facteurEchape].join(','));
+  });
+
+  const contenu = '\uFEFF' + lignes.join('\r\n');
+  const blob = new Blob([contenu], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'AI-GENIE_construits.csv';
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  // L'adresse temporaire est liberee : sans cela, le contenu reste en
+  // memoire pour toute la duree de la session.
+  URL.revokeObjectURL(url);
+
+  document.getElementById('statutExport').textContent = texteExportTermine(facItems.length - nonAssignes, nonAssignes);
+});
+
+
+facAppliquerLangue(LANGUE_ACTUELLE);
+</script>
+
+<div class="version">v.21.09.2026-01:18:49</div>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+# ============================================================
+# ETAPE 1 : chercher ollama.exe a la racine des disques
+# ============================================================
+# Tout le bloc $( ... ) s'execute, et sa derniere valeur ($racine) est stockee dans $DRIVE.
+$DRIVE = $(
+
+  # 1a. Parcourt tous les disques (C:, D:, E:...) et garde le premier dont la racine
+  #     contient ollama\ollama.exe. On recupere la racine de ce disque (ex : "D:\").
+  $racine = (Get-PSDrive -PSProvider FileSystem | Where-Object { Test-Path (Join-Path $_.Root "ollama\ollama.exe") } | Select-Object -First 1).Root
+
+  # 1b. Si rien n'a ete trouve a la racine, on lance une recherche plus profonde.
+  if (-not $racine) {
+    Write-Host "Recherche sur tous les disques (peut prendre un moment)..." -ForegroundColor Yellow
+
+    # Boucle sur les vrais disques (lettre + ":\"), avec C: en dernier
+    # (le tri sur "commence par C:" place les False avant les True), car C: est le plus long a fouiller.
+    foreach ($d in (Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match "^[A-Za-z]:\\" } | Sort-Object { $_.Root -like "C:*" })) {
+
+      # Cherche ollama.exe sur 6 niveaux de profondeur maximum, sans afficher les erreurs
+      # d'acces refuse, et ne garde que ceux dont le dossier parent s'appelle "ollama".
+      $t = Get-ChildItem -Path $d.Root -Filter "ollama.exe" -Recurse -Depth 6 -File -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1
+
+      # Si trouve : $racine = le dossier AU-DESSUS de "ollama" (celui qui contient "ollama\").
+      # On l'affiche en vert puis on arrete la boucle.
+      if ($t) { $racine = $t.Directory.Parent.FullName; Write-Host ("Installation trouvee : " + $racine) -ForegroundColor Green; break }
+    }
+  }
+
+  # 1c. Valeur renvoyee par le bloc (donc affectee a $DRIVE). Peut etre vide si rien trouve.
+  $racine
+)
+
+# ============================================================
+# ETAPE 2 : si toujours rien, chercher dans le dossier utilisateur
+# ============================================================
+if (-not $DRIVE) {
+  Write-Host "Non trouve a la racine d'un disque, recherche dans ton dossier utilisateur (peut prendre un instant)..." -ForegroundColor Yellow
+
+  # Recherche recursive (sans limite de profondeur) dans C:\Users\TonNom, meme filtre sur le dossier "ollama".
+  $trouve = Get-ChildItem -Path $env:USERPROFILE -Filter "ollama.exe" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Directory.Name -eq "ollama" } | Select-Object -First 1
+
+  if ($trouve) {
+    # Dossier qui contient "ollama\" (souvent un chemin long, du genre C:\Users\Toi\AppData\...).
+    $cheminLong = $trouve.Directory.Parent.FullName
+
+    # ----------------------------------------------------------
+    # ETAPE 3 : creer un "disque virtuel" court avec subst
+    # ----------------------------------------------------------
+    # 3a. Regarde si une lettre subst pointe deja vers ce dossier (evite un doublon).
+    #     "subst" sans argument liste les correspondances ; on garde les 2 premiers caracteres (ex : "Z:").
+    $lettreExistante = subst | Where-Object { $_ -match [regex]::Escape($cheminLong) } | ForEach-Object { $_.Substring(0,2) } | Select-Object -First 1
+
+    if ($lettreExistante) {
+      # Deja associe : on reutilise cette lettre.
+      $DRIVE = "$lettreExistante\"
+    } else {
+      # 3b. Cherche la premiere lettre libre entre D (code 68) et Z (code 90).
+      $lettreLibre = 68..90 | ForEach-Object { [char]$_ } | Where-Object { -not (Test-Path "$_`:") } | Select-Object -First 1
+
+      if ($lettreLibre) {
+        # 3c. Cree le disque virtuel (ex : subst X: C:\Users\Toi\...) et l'utilise comme racine.
+        subst "$lettreLibre`:" $cheminLong
+        $DRIVE = "$lettreLibre`:\"
+      }
+    }
+  }
+}
+
+# ============================================================
+# ETAPE 4 : lancer le script des agents IA, ou signaler l'echec
+# ============================================================
+if (-not $DRIVE) {
+  # Aucune methode n'a fonctionne : message d'erreur en rouge.
+  Write-Host "Installation introuvable, verifie que le dossier ollama existe bien quelque part." -ForegroundColor Red
+} else {
+  # Indique a Ollama ou lire ses modeles (dossier ollama\models de l'installation trouvee).
+  $env:OLLAMA_MODELS = Join-Path $DRIVE "ollama\models"
+
+  # Se place dans le dossier "projet" du disque : c'est la que le script Python
+  # lit et ecrit ses fichiers (items, details, AI-GENIE.txt, archives).
+  Set-Location (Join-Path $DRIVE "projet")
+
+  # Lance Python (version portable du disque) sur agents.py s'il existe dans le dossier courant,
+  # sinon sur agents.txt (le meme code, sauvegarde en .txt).
+  & (Join-Path $DRIVE "python\python.exe") $(if (Test-Path "agents.py") { "agents.py" } else { "agents.txt" })
+}

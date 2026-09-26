@@ -1,0 +1,23 @@
+# Workbooks produced by the scripts
+classement_*.xlsx
+retrotraduction_*.xlsx
+items_*.txt
+details_*.txt
+archive/
+
+# Scripts exported from the pages
+agents.py
+agents.txt
+classement.py
+classement.txt
+retrotraduction.py
+retrotraduction.txt
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# Systeme
+Thumbs.db
+.DS_Store

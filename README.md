@@ -1,283 +1,296 @@
 # Genitem
 
-**AI-assisted item generation and analysis, running entirely on your own machine.**
+**Génération et analyse d'items assistées par IA, entièrement sur votre machine.**
 
-[![Documentation: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Code: MIT](https://img.shields.io/badge/code-MIT-green.svg)](LICENSE)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22801169-blue.svg)](https://doi.org/10.5281/zenodo.22801169)
+[![Documentation : CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Code : MIT](https://img.shields.io/badge/code-MIT-green.svg)](LICENSE)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22801168-blue.svg)](https://doi.org/10.5281/zenodo.22801168)
 
-Live site: <https://genitem.recherche-formation.com> · [Français](README.fr.md)
+Site : <https://genitem.recherche-formation.com>
 
----
-
-## What this is
-
-Genitem is a set of browser-based tools for researchers who build and evaluate
-measurement instruments. It covers the early, expensive part of scale
-development — drafting a pool of items, checking their structure, coding
-qualitative feedback, translating an instrument — using large language models
-that run locally.
-
-Nothing is sent anywhere. The pages do not call any model themselves: each one
-builds a Python script that you download and run on your own computer, against
-a local [Ollama](https://ollama.com) server. No API key, no account, no
-transcript on someone else's disk. This matters for student data, pilot
-responses, and anything covered by an ethics approval that forbids sending
-material to third-party services.
-
-Every page is bilingual, French and English.
+**Français** · [English](README.en.md) *(traduit par IA)*
 
 ---
 
-## The tools
+## De quoi s'agit-il
 
-### 1. Item generation — `AI-agent.html`
+Genitem réunit des outils, utilisables dans un navigateur, destinés aux
+chercheurs qui construisent et éprouvent des instruments de mesure. Ils
+couvrent la partie initiale et coûteuse du travail — rédiger un pool d'items, en vérifier
+la structure, coder des retours qualitatifs, traduire un instrument — au moyen
+de grands modèles de langue qui tournent en local.
 
-A configurator for a multi-agent pipeline, then the two ways out of it.
+Rien n'est envoyé nulle part. Les pages n'appellent aucun modèle : chacune
+compose un script Python que vous téléchargez et lancez sur votre ordinateur,
+contre un serveur [Ollama](https://ollama.com) local. Pas de clé d'API, pas de
+compte, aucune trace sur le disque d'un tiers. Cela compte pour des données
+d'étudiants, des réponses de préenquête, et tout ce que couvre une autorisation
+éthique interdisant la transmission à des services externes.
 
-**Step 1 — configure the agents.** One *generator* drafts the pool: you give it
-a model, the construct, how many items, whether they are dichotomous or
-agreement-scale, and its instructions. Several *reviewers* then criticise the
-draft in parallel — content, wording, coverage of the construct — over as many
-rounds as you set; reviewer cards can be added or removed. A *final* agent
-produces the revised set.
+Toutes les pages sont bilingues, français et anglais.
 
-**Step 2 — export `agents.txt`.** The whole configuration becomes a commented
-Python script. You can read it before running it, and keep it as the record of
-what produced a given pool.
+---
 
-**Step 3 — generate.** Two PowerShell windows: paste
-[`1-lancer-ollama.txt`](powershell/1-lancer-ollama.txt) into the first, which
-starts Ollama and stays open, and
-[`2-generer-items.txt`](powershell/2-generer-items.txt) into the second, which
-runs the script. It writes the items, the full exchange between
-agents, and `AI-GENIE.txt` — the item pool in the form the R pipeline expects.
+## Les outils
 
-**The fork.** What happens next depends on how many constructs you are
-measuring, and the page asks you outright:
+### 1. Génération d'items — `AI-agent.html`
+
+Un configurateur pour une chaîne multi-agents, puis les deux sorties possibles.
+
+**Étape 1 — configurer les agents.** Un *générateur* rédige le pool : vous lui
+donnez un modèle, le construit, le nombre d'items, leur type — dichotomique ou
+échelle d'accord — et ses consignes. Plusieurs *relecteurs* critiquent ensuite
+le brouillon en parallèle — contenu, formulation, couverture du construit — sur
+autant de tours que vous fixez ; les cartes de relecteurs s'ajoutent et se
+retirent. Un agent *final* produit la version révisée.
+
+**Étape 2 — exporter `agents.txt`.** Toute la configuration devient un script
+Python commenté. Vous pouvez le lire avant de le lancer, et le garder comme
+trace de ce qui a produit un pool donné.
+
+**Étape 3 — générer.** Deux fenêtres PowerShell : collez
+[`1-lancer-ollama.txt`](powershell/1-lancer-ollama.txt) dans la première, qui
+démarre Ollama et reste ouverte, et
+[`2-generer-items.txt`](powershell/2-generer-items.txt) dans la seconde, qui
+exécute le script. Il écrit les items, l'échange complet entre agents, et
+`AI-GENIE.txt` — le pool dans la forme qu'attend la chaîne R.
+
+**La bifurcation.** La suite dépend du nombre de construits mesurés, et la page
+vous pose la question :
 
 ```
                     AI-GENIE.txt
                          │
         ┌────────────────┴────────────────┐
         │                                 │
-  Validate items                   Assign factors
-  one construct                    several constructs
+  Valider les items              Assigner les facteurs
+  un seul construit               plusieurs construits
         │                                 │
-        │                    load AI-GENIE.txt
-        │                    set the number of factors
-        │                    tick each item's factor
-        │                    export for AI-GENIE
+        │                    charger AI-GENIE.txt
+        │                    fixer le nombre de facteurs
+        │                    cocher le facteur de chaque item
+        │                    exporter pour AI-GENIE
         │                                 │
         └────────────────┬────────────────┘
                          │
-                   Step 4 — analyse with AI-GENIE
-                      scripts/analyse_genie.R
+                 Étape 4 — analyser avec AI-GENIE
+                    scripts/analyse_genie.R
 ```
 
-With a single construct there is nothing to sort: the pool goes straight to the
-structural validation. With several, the items must first be attributed to
-their factor, one by one, by you. The page presents them in a table with a
-column per factor; nothing is inferred, because a wrongly attributed item
-corrupts the dimensional structure the analysis is meant to estimate.
+Avec un seul construit, il n'y a rien à trier : le pool part directement vers
+la validation structurelle. Avec plusieurs, les items doivent d'abord être
+attribués à leur facteur, un par un, par vous. La page les présente dans un
+tableau avec une colonne par facteur ; rien n'est déduit, car un item mal
+attribué fausse précisément la structure dimensionnelle que l'analyse cherche à
+estimer.
 
-**Step 4 — analyse.** A third command,
-[`3-analyser-ai-genie.txt`](powershell/3-analyser-ai-genie.txt), runs the R
-pipeline.
+**Étape 4 — analyser.** Une troisième commande,
+[`3-analyser-ai-genie.txt`](powershell/3-analyser-ai-genie.txt), lance la
+chaîne R.
 
-### 2. Model comparison — `test_modeles.html`
+### 2. Comparaison de modèles — `test_modeles.html`
 
-The same brief given to several installed models, side by side, with what each
-produced and how long it took. Useful before committing to a model: a 1B model
-and an 8B model differ far more than their size suggests, and the difference is
-easier to see than to predict.
+La même consigne soumise à plusieurs modèles installés, côte à côte, avec ce
+que chacun produit et le temps qu'il y met. Utile avant de s'engager : un
+modèle à 1 milliard de paramètres et un modèle à 8 milliards diffèrent bien
+plus que leur taille ne le laisse croire, et la différence se voit mieux
+qu'elle ne se prévoit.
 
-### 3. Model management — `aide.html`
+### 3. Gestion des modèles — `aide.html`
 
-Adding and removing Ollama models, stored per user account. Includes fallback
-installation methods and an Ollama diagnostic for when something refuses to
-start. Requires a site account.
+Ajout et suppression de modèles Ollama, enregistrés par compte. Contient aussi
+des méthodes d'installation de secours et un diagnostic Ollama pour les cas où
+rien ne démarre. Demande un compte sur le site.
 
-### 4. Verbatim coding — `ia-humain.html`
+### 4. Codage de verbatims — `ia-humain.html`
 
-Classifies written feedback against the seven-level framework of Lee and Ha
-(2026), Table 3, reproduced unmodified and in English — the language of the
-instrument.
+Classe des retours écrits selon le cadre à sept niveaux de Lee et Ha (2026),
+Table 3, repris sans modification et en anglais — la langue de l'instrument.
 
-| Level | Type | Description |
+| Niveau | Type | Description |
 |---|---|---|
-| 0 | Irrelevant Feedback | Unrelated to the response, or without meaningful content |
-| 1 | General Impression | Vague or superficial impressions of the whole response |
-| 2 | Correctness-Focused | Only whether the answer is right, or how it compares to the model answer |
-| 3 | Rubric-Based | Judged against the rubric: overall structure and validity |
-| 4 | Error Identification | Points out a specific error or a missing element |
-| 5 | Commentary | Identifies a strength or weakness and explains it |
-| 6 | Suggestion with Alternative | Offers a concrete alternative or an additional perspective |
+| 0 | Irrelevant Feedback | Sans lien avec la réponse, ou sans contenu exploitable |
+| 1 | General Impression | Impression vague ou superficielle sur l'ensemble |
+| 2 | Correctness-Focused | Seulement si la réponse est juste, ou sa comparaison au corrigé |
+| 3 | Rubric-Based | Jugement selon la grille : structure et validité d'ensemble |
+| 4 | Error Identification | Signale une erreur précise ou un élément manquant |
+| 5 | Commentary | Relève une force ou une faiblesse et l'explique |
+| 6 | Suggestion with Alternative | Propose une alternative concrète ou un autre angle |
 
-Several models code each verbatim independently. Where they agree, the verbatim
-is settled. Where they disagree, each model receives the others' codings and
-reviews its own, up to a cap you set. Past the cap, the majority level wins.
-A final model writes the justification for the retained level; it does not
-arbitrate, since counting identical votes is arithmetic and does not belong to
-a language model.
+Plusieurs modèles codent chaque verbatim de leur côté. S'ils s'accordent, le
+verbatim est réglé. Sinon, chacun reçoit les classements des autres et reprend
+son analyse, jusqu'à un plafond que vous fixez. Passé ce plafond, le niveau
+majoritaire l'emporte. Un modèle final rédige la justification du niveau
+retenu ; il n'arbitre pas, car compter des voix identiques est de
+l'arithmétique et n'a rien à faire dans un modèle de langue.
 
-Input: a spreadsheet with the identifier in column A and the verbatim in
-column B, the first row being a header. Output: a workbook with each model's
-coding at each stage, the retained level, agreement, and the number of rounds.
+Entrée : un classeur avec l'identifiant en colonne A et le verbatim en colonne
+B, la première ligne étant un intitulé. Sortie : un classeur portant le
+classement de chaque modèle à chaque étape, le niveau retenu, l'accord et le
+nombre de tours.
 
-### 5. Back-translation — `retrotraduction.html`
+### 5. Rétrotraduction — `retrotraduction.html`
 
-Translation, then one or two blind back-translations by different models, then
-comparison against the source. The workbook opens on the translation to keep,
-with its provenance and its equivalence verdict; the detail of both passes sits
-on the second sheet.
+Traduction, puis une ou deux rétrotraductions à l'aveugle par des modèles
+différents, puis comparaison à la source. Le classeur s'ouvre sur la traduction
+à conserver, avec sa provenance et son verdict d'équivalence ; le détail des
+deux passages occupe la deuxième feuille.
 
-Blind back-translation is the standard for adapting a measurement instrument.
-A direct translation, however good, is not validated by the fact that it reads
-well.
+La rétrotraduction à l'aveugle est la norme pour adapter un instrument de
+mesure. Une traduction directe, si bonne soit-elle, n'est pas validée par le
+fait qu'elle se lit bien.
 
-### 6. Structural validation — `scripts/analyse_genie.R`
+### 6. Validation structurelle — `scripts/analyse_genie.R`
 
-Runs the [AIGENIE](https://github.com/laralee/AIGENIE) R package on a generated
-item pool: embeddings, Exploratory Graph Analysis, Unique Variable Analysis for
-redundancy, and bootstrap EGA for stability. Exports the results to Excel with
-the plots.
+Applique le paquet R [AIGENIE](https://github.com/laralee/AIGENIE) à un pool
+d'items : embeddings, Exploratory Graph Analysis, Unique Variable Analysis pour
+la redondance, et bootstrap EGA pour la stabilité. Exporte les résultats vers
+Excel, avec les graphiques.
 
-`analyse_genie_multi_construits.R` does the same across several constructs.
-
----
-
-## Requirements
-
-- **Windows**, with PowerShell (the launcher scripts are written for it)
-- **[Ollama](https://ollama.com)** and at least one installed model
-- **Python 3** with `ollama` and `openpyxl`
-- **R** with `AIGENIE`, `ggplot2` and `writexl`, for the structural validation only
-
-A portable bundle — Ollama, Python and R on a single removable drive, with no
-installation on the host machine — is available from the site.
-
-See [Which command runs what](#which-command-runs-what) below for the three
-PowerShell commands and how they find that drive.
-
-### Choosing a model
-
-Small models are tempting and disappointing. A 0.8B model asked for thirty
-distinct items will circle a handful of phrasings, and Unique Variable Analysis
-will then delete most of them — leaving too few for bootstrap EGA to run at
-all. `mistral:7b`, `qwen3:8b` or `gemma4:e4b` are reasonable starting points.
-Reasoning models work but are slow, and reasoning buys little on coding and
-translation tasks.
+`analyse_genie_multi_construits.R` fait de même sur plusieurs construits.
 
 ---
 
-## Project structure
+## Prérequis
+
+- **Windows**, avec PowerShell (les commandes de lancement sont écrites pour lui)
+- **[Ollama](https://ollama.com)** et au moins un modèle installé
+- **Python 3** avec `ollama` et `openpyxl`
+- **R** avec `AIGENIE`, `ggplot2` et `writexl`, pour la validation structurelle seule
+
+Une installation portable — Ollama, Python et R sur un seul disque amovible,
+sans rien installer sur la machine hôte — est disponible depuis le site.
+
+Voir [Quelle commande lance quoi](#quelle-commande-lance-quoi) plus bas pour les
+trois commandes PowerShell et la manière dont elles trouvent ce disque.
+
+### Choisir un modèle
+
+Les petits modèles sont tentants et décevants. Un modèle à 0,8 milliard de
+paramètres à qui l'on demande trente items distincts tournera autour de
+quelques tournures, et l'Unique Variable Analysis en supprimera ensuite la
+plupart — n'en laissant pas assez pour que bootstrap EGA puisse seulement
+s'exécuter. `mistral:7b`, `qwen3:8b` ou `gemma4:e4b` sont des points de départ
+raisonnables. Les modèles à raisonnement fonctionnent mais sont lents, et le
+raisonnement apporte peu sur des tâches de codage et de traduction.
+
+---
+
+## Structure du dépôt
 
 ```
-pages/          the six tools — one self-contained HTML file each
-powershell/     the three commands to paste into a PowerShell window
-scripts/        the R analysis (AI-GENIE pipeline)
-ressources/     the coding grid and related source material
-wordpress/      the thin layer that embeds the pages on the live site
+pages/          les six outils — un fichier HTML autonome chacun
+powershell/     les trois commandes à coller dans une fenêtre PowerShell
+scripts/        l'analyse R (chaîne AI-GENIE)
+ressources/     la grille de codage et ses sources
+wordpress/      la couche mince qui affiche les pages sur le site
 ```
 
-No build step, no bundler, no dependencies to install. Open any file in
-`pages/` in a browser and it works, on a server or from a USB stick.
+Aucune étape de compilation, aucun empaqueteur, aucune dépendance à installer.
+Ouvrez n'importe quel fichier de `pages/` dans un navigateur et il fonctionne,
+depuis un serveur comme depuis une clé USB.
 
-### Which file does what
+### Quel fichier fait quoi
 
-Each tool is one page on the live site, one HTML file here, and — for the three
-tools that run models — one exported Python script and one workbook.
+Chaque outil est une page sur le site, un fichier HTML ici, et — pour les trois
+outils qui font tourner des modèles — un script Python exporté et un classeur.
 
-| Page on the site | File in this repository | Exports | Produces |
+| Page sur le site | Fichier du dépôt | Exporte | Produit |
 |---|---|---|---|
-| [`/app/`](https://genitem.recherche-formation.com/app/) — AI-agent | `pages/AI-agent.html` | `agents.txt` | the item pool, the agents' exchange, `AI-GENIE.txt` |
-| [`/test_modeles/`](https://genitem.recherche-formation.com/test_modeles/) — Model testing | `pages/test_modeles.html` | `test_modeles.txt` | a comparison, read back in the page |
+| [`/app/`](https://genitem.recherche-formation.com/app/) — AI-agent | `pages/AI-agent.html` | `agents.txt` | le pool d'items, l'échange entre agents, `AI-GENIE.txt` |
+| [`/test_modeles/`](https://genitem.recherche-formation.com/test_modeles/) — Test modèles | `pages/test_modeles.html` | `test_modeles.txt` | une comparaison, relue dans la page |
 | [`/ia-humain/`](https://genitem.recherche-formation.com/ia-humain/) — Verbatims | `pages/ia-humain.html` | `classement.txt` | `classement_<date>.xlsx` |
-| [`/retrotraduction/`](https://genitem.recherche-formation.com/retrotraduction/) — Back-translation | `pages/retrotraduction.html` | `retrotraduction.txt` | `retrotraduction_<date>.xlsx` |
-| [`/aide/`](https://genitem.recherche-formation.com/aide/) — Help *(account)* | `pages/aide.html` | — | manages the model list |
-| [`/extra/`](https://genitem.recherche-formation.com/extra/) — Extra | `pages/bonus.html` | — | landing page for the three side tools |
+| [`/retrotraduction/`](https://genitem.recherche-formation.com/retrotraduction/) — Rétrotraduction | `pages/retrotraduction.html` | `retrotraduction.txt` | `retrotraduction_<date>.xlsx` |
+| [`/aide/`](https://genitem.recherche-formation.com/aide/) — Aide *(compte)* | `pages/aide.html` | — | gère la liste des modèles |
+| [`/extra/`](https://genitem.recherche-formation.com/extra/) — Extra | `pages/bonus.html` | — | page d'accueil des trois outils annexes |
 
-The exported script is a `.txt` rather than a `.py` on purpose: it is written
-to be read before it is run. Rename it if you prefer.
+Le script exporté est un `.txt` et non un `.py`, à dessein : il est écrit pour
+être lu avant d'être lancé. Renommez-le si vous préférez.
 
-### Which command runs what
+### Quelle commande lance quoi
 
-Three commands, **pasted into a PowerShell window** rather than run as files.
-Windows blocks downloaded `.ps1` scripts by default, and pasting sidesteps that
-without asking anyone to lower a security setting.
+Trois commandes, **à coller dans une fenêtre PowerShell** plutôt qu'à exécuter
+comme des fichiers. Windows bloque par défaut les scripts `.ps1` téléchargés,
+et le collage contourne cela sans demander à personne d'abaisser un réglage de
+sécurité.
 
-| Command | Window | What it runs |
+| Commande | Fenêtre | Ce qu'elle lance |
 |---|---|---|
-| [`1-lancer-ollama.txt`](powershell/1-lancer-ollama.txt) | first, stays open | the Ollama server |
-| [`2-generer-items.txt`](powershell/2-generer-items.txt) | second | `agents.txt`, exported from `/app/` |
-| [`3-analyser-ai-genie.txt`](powershell/3-analyser-ai-genie.txt) | second | `scripts/analyse_genie.R` |
+| [`1-lancer-ollama.txt`](powershell/1-lancer-ollama.txt) | la première, qui reste ouverte | le serveur Ollama |
+| [`2-generer-items.txt`](powershell/2-generer-items.txt) | la seconde | `agents.txt`, exporté depuis `/app/` |
+| [`3-analyser-ai-genie.txt`](powershell/3-analyser-ai-genie.txt) | la seconde | `scripts/analyse_genie.R` |
 
-The first is needed for every tool: nothing runs without Ollama. The scripts
-exported by the verbatim and back-translation pages are launched the same way
-as the second command, with the script name changed.
+La première sert à tous les outils : rien ne tourne sans Ollama. Les scripts
+exportés par les pages des verbatims et de la rétrotraduction se lancent comme
+la deuxième commande, le nom du script changé.
 
-Each command begins by locating the installation **by its contents rather than
-its letter**: it looks for a folder named `ollama` containing `ollama.exe`,
-first at the root of each drive, then deeper, then in the user profile — where
-it creates a short virtual drive with `subst`, because Windows still chokes on
-long paths. A removable drive that comes up as `E:` on one machine and `H:` on
-the next needs no editing. They are commented step by step; reading one is the
-fastest way to see how the pieces fit.
+Chacune commence par repérer l'installation **par son contenu plutôt que par sa
+lettre** : elle cherche un dossier nommé `ollama` contenant `ollama.exe`,
+d'abord à la racine de chaque disque, puis plus profondément, puis dans le
+profil utilisateur — où elle crée un disque virtuel court avec `subst`, Windows
+butant toujours sur les chemins longs. Un disque amovible qui apparaît en `E:`
+sur une machine et en `H:` sur la suivante n'a rien à modifier. Elles sont
+commentées pas à pas ; en lire une est le moyen le plus rapide de voir comment
+les pièces s'emboîtent.
 
-One known annoyance: the deep search walks network drives too, and prints red
-errors when one is unreachable. Nothing is broken when that happens — fixing it
-is listed as a good first contribution.
+Un défaut connu : la recherche profonde parcourt aussi les disques réseau, et
+affiche des erreurs en rouge quand l'un d'eux est injoignable. Rien n'est cassé
+quand cela se produit — y remédier figure parmi les premières contributions
+utiles.
 
-### How a run fits together
+### Comment s'enchaîne un traitement
 
 ```
-  /app/  ──exports──▶  agents.txt
+  /app/  ──exporte──▶  agents.txt
                             │
-  paste 1-lancer-ollama.txt ──▶  Ollama running, window kept open
+  coller 1-lancer-ollama.txt ──▶  Ollama tourne, fenêtre laissée ouverte
                             │
-  paste 2-generer-items.txt ──▶  python agents.txt
+  coller 2-generer-items.txt ──▶  python agents.txt
                             │
-                            ├──▶  items + exchange
+                            ├──▶  items + échange
                             └──▶  AI-GENIE.txt
                                         │
-  paste 3-analyser-ai-genie.txt ──▶  Rscript analyse_genie.R
+  coller 3-analyser-ai-genie.txt ──▶  Rscript analyse_genie.R
                                         │
-                                        └──▶  results + plots (.xlsx)
+                                        └──▶  résultats + graphiques (.xlsx)
 ```
 
-The verbatim and back-translation tools follow the same three beats — export,
-start Ollama, run the script — and read their own workbook back for display.
-
-## Understanding and changing it
-
-- **[SITEMAP.md](SITEMAP.md)** — the live site's menu and navigation, and the
-  order a researcher usually goes through the tools.
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** — how a page is built, why it writes a
-  Python script rather than calling a model, the shared conventions, and the
-  known weak points.
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** — how to propose an improvement, what
-  makes a good first contribution, and the two or three changes that would look
-  like improvements but would break the project.
-
-Short version: no framework, no build step, one file per tool, and the page
-never talks to a model itself.
+Les outils de verbatims et de rétrotraduction suivent les mêmes trois temps —
+exporter, démarrer Ollama, lancer le script — et relisent leur propre classeur
+pour l'afficher.
 
 ---
 
-## Known limits
+## Comprendre et modifier
 
-The seven-level framework is reproduced in English only. The two grids we had
-translated automatically into other languages were withdrawn: none had been
-validated by back-translation, which is precisely what tool 5 exists to do.
+- **[SITEMAP.md](SITEMAP.md)** — le menu et la navigation du site, et l'ordre
+  dans lequel un chercheur parcourt les outils.
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** — comment une page est faite, pourquoi
+  elle écrit un script Python au lieu d'appeler un modèle, les conventions
+  communes et les points faibles connus.
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — comment proposer une amélioration,
+  ce qui fait une bonne première contribution, et les deux ou trois changements
+  qui ressembleraient à des améliorations mais casseraient le projet.
 
-The single coding rule — code the highest level whose definition is fully met,
-and where you hesitate, keep the highest of those you are considering — is
-ours, not Lee and Ha's. Table 3 gives the levels and nothing else. Anyone
-reporting results obtained here should say so.
+En bref : pas de cadriciel, pas d'étape de compilation, un fichier par outil,
+et la page ne parle jamais à un modèle elle-même.
 
-Agreement between models is not agreement between coders. Two instances of the
-same model agree almost always, and that agreement measures nothing.
+---
+
+## Limites connues
+
+Le cadre à sept niveaux n'est reproduit qu'en anglais. Les grilles que nous
+avions fait traduire automatiquement dans d'autres langues ont été retirées :
+aucune n'avait été validée par rétrotraduction, ce qui est précisément la
+raison d'être de l'outil 5.
+
+La règle de codage unique — coder le niveau le plus élevé dont la définition
+est pleinement remplie, et en cas d'hésitation retenir le plus élevé de ceux
+envisagés — est de nous, non de Lee et Ha. La Table 3 donne les niveaux et rien
+d'autre. Quiconque publie des résultats obtenus ici devrait le mentionner.
+
+L'accord entre modèles n'est pas l'accord entre codeurs. Deux instances du même
+modèle s'accordent presque toujours, et cet accord ne mesure rien.
 
 ---
 
@@ -288,18 +301,18 @@ same model agree almost always, and that agreement measures nothing.
 > (Version 0.1) [Computer software]. Zenodo.
 > <https://doi.org/10.5281/zenodo.22801169>
 
-Two DOIs exist, as Zenodo issues both:
+Deux DOI coexistent, Zenodo en délivrant toujours deux :
 
-| DOI | Resolves to |
+| DOI | Renvoie à |
 |---|---|
-| [10.5281/zenodo.22801168](https://doi.org/10.5281/zenodo.22801168) | every version — cite this to mean the software in general |
-| [10.5281/zenodo.22801169](https://doi.org/10.5281/zenodo.22801169) | version 0.1 — cite this to mean the exact code you used |
+| [10.5281/zenodo.22801168](https://doi.org/10.5281/zenodo.22801168) | toutes les versions — à citer pour désigner le logiciel en général |
+| [10.5281/zenodo.22801169](https://doi.org/10.5281/zenodo.22801169) | la version 0.1 — à citer pour désigner le code exact utilisé |
 
-For reproducibility, cite the version you ran. A citation file in RDF is also
-available from the site, and `CITATION.cff` in this repository feeds GitHub's
-*Cite this repository* button.
+Pour la reproductibilité, citez la version que vous avez exécutée. Une fiche de
+citation au format RDF est également disponible depuis le site, et le fichier
+`CITATION.cff` de ce dépôt alimente le bouton *Cite this repository* de GitHub.
 
-### Works this depends on
+### Travaux dont dépend ce projet
 
 - Russell-Lasalandra, L. L., Christensen, A. P., & Golino, H. (2026).
   Generative psychometrics via AI-GENIE: Automatic item generation and
@@ -311,42 +324,44 @@ available from the site, and `CITATION.cff` in this repository feeds GitHub's
 
 ## Licence
 
-The code — HTML, JavaScript, Python, R and PowerShell — is released under the
-[MIT licence](LICENSE). The documentation, the coding grid and the other
-written resources are released under
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), see
+Le code — HTML, JavaScript, Python, R et PowerShell — est diffusé sous
+[licence MIT](LICENSE). La documentation, la grille de codage et les autres
+ressources écrites sont diffusées sous
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), voir
 [LICENSE-DOCS](LICENSE-DOCS).
 
-The split is deliberate. Creative Commons licences are not designed for
-software: they grant no patent rights and carry no warranty disclaimer suited
-to code. Attribution is required either way.
+Le partage est délibéré. Les licences Creative Commons ne sont pas conçues pour
+le logiciel : elles n'accordent aucun droit de brevet et ne portent pas de
+clause de garantie adaptée au code. L'attribution est exigée des deux côtés.
 
 ---
 
-## Written with AI
+## Écrit avec l'aide d'une IA
 
-Two disclosures, made because the project is about AI-assisted work and it
-would be odd to be coy about it.
+Deux mentions, faites parce que le projet porte sur le travail assisté par IA
+et qu'il serait étrange de s'en cacher.
 
-**The English version of the site** is a translation produced with Claude
-(Opus 5, Anthropic) from the French original. Where the two differ, the French
-is the reference.
+**La version anglaise du site** est une traduction produite avec Claude
+(Opus 5, Anthropic) à partir de l'original français. En cas d'écart entre les
+deux, le français fait foi.
 
-**The documentation in this repository** — this file, `ARCHITECTURE.md`,
-`CONTRIBUTING.md` and `SITEMAP.md` — was drafted with Claude from the project's
-own source files, then published under the authors' responsibility. The code
-itself, the coding grid and the research decisions are the authors'.
+**La documentation de ce dépôt** — ce fichier, `README.en.md`, `ARCHITECTURE.md`,
+`CONTRIBUTING.md` et `SITEMAP.md` — a été rédigée avec Claude à partir des
+fichiers sources du projet, puis publiée sous la responsabilité des auteurs. Le
+code lui-même, la grille de codage et les décisions de recherche sont des
+auteurs.
 
-Errors of fact in the documentation are as possible here as anywhere else, and
-perhaps a little more so. Report them like any other bug.
+Des erreurs de fait dans la documentation restent possibles, ici comme
+ailleurs, et peut-être un peu plus. Signalez-les comme n'importe quel autre
+défaut.
 
 ---
 
-## Funding and affiliation
+## Financement et rattachement
 
-Carried out within a project affiliated with the **University of Fribourg**,
-with support from the **Fonds du centenaire** (project FC-26-989), and in
-collaboration with the **Université de Montréal**.
+Mené dans le cadre d'un projet affilié à l'**Université de Fribourg**, avec le
+soutien du **Fonds du centenaire** (projet FC-26-989), et en collaboration avec
+l'**Université de Montréal**.
 
 ## Contact
 

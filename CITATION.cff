@@ -8,9 +8,11 @@ authors:
   - family-names: Béland
     given-names: Sébastien
   - family-names: Vincent
-    given-names: Cathy
+    given-names: Cynthia
   - family-names: Michelot
     given-names: Florent
+  - family-names: Caron
+    given-names: Émile
 year: 2026
 version: "0.1"
 doi: 10.5281/zenodo.22801169
@@ -31,5 +33,5 @@ keywords:
   - scale development
   - local inference
   - Ollama
-license: MIT
-license-url: https://opensource.org/licenses/MIT
+license: CC-BY-NC-4.0
+license-url: https://creativecommons.org/licenses/by-nc/4.0/

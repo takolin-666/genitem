@@ -2,8 +2,7 @@
 
 **Génération et analyse d'items assistées par IA, entièrement sur votre machine.**
 
-[![Documentation : CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Code : MIT](https://img.shields.io/badge/code-MIT-green.svg)](LICENSE)
+[![Licence : CC BY-NC 4.0](https://img.shields.io/badge/licence-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22801168-blue.svg)](https://doi.org/10.5281/zenodo.22801168)
 
 Site : <https://genitem.recherche-formation.com>
@@ -296,7 +295,7 @@ modèle s'accordent presque toujours, et cet accord ne mesure rien.
 
 ## Citation
 
-> Jan, D., Beland, S., Vincent, C., & Michelot, F. (2026). *Genitem: A
+> Jan, D., Béland, S., Vincent, C., Michelot, F., & Caron, É. (2026). *Genitem: A
 > user-friendly tool for the generation and pre-validation of items with AI*
 > (Version 0.1) [Computer software]. Zenodo.
 > <https://doi.org/10.5281/zenodo.22801169>
@@ -324,15 +323,14 @@ citation au format RDF est également disponible depuis le site, et le fichier
 
 ## Licence
 
-Le code — HTML, JavaScript, Python, R et PowerShell — est diffusé sous
-[licence MIT](LICENSE). La documentation, la grille de codage et les autres
-ressources écrites sont diffusées sous
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), voir
-[LICENSE-DOCS](LICENSE-DOCS).
+Depuis le 6 novembre 2026, tout le dépôt (code, documentation, grille de codage
+et ressources écrites) est diffusé sous licence
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) : utilisation et
+modification libres, sans usage commercial, en citant les auteurs. Voir
+[LICENSE](LICENSE). Pour un usage commercial, contacter les auteurs.
 
-Le partage est délibéré. Les licences Creative Commons ne sont pas conçues pour
-le logiciel : elles n'accordent aucun droit de brevet et ne portent pas de
-clause de garantie adaptée au code. L'attribution est exigée des deux côtés.
+La version 0.1 archivée sur Zenodo garde ses licences d'origine (MIT pour le
+code, CC BY 4.0 pour la documentation).
 
 ---
 

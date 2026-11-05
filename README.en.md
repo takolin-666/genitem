@@ -2,8 +2,7 @@
 
 **AI-assisted item generation and analysis, running entirely on your own machine.**
 
-[![Documentation: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Code: MIT](https://img.shields.io/badge/code-MIT-green.svg)](LICENSE)
+[![Licence: CC BY-NC 4.0](https://img.shields.io/badge/licence-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22801168-blue.svg)](https://doi.org/10.5281/zenodo.22801168)
 
 Live site: <https://genitem.recherche-formation.com>
@@ -289,7 +288,7 @@ same model agree almost always, and that agreement measures nothing.
 
 ## Citation
 
-> Jan, D., Beland, S., Vincent, C., & Michelot, F. (2026). *Genitem: A
+> Jan, D., Béland, S., Vincent, C., Michelot, F., & Caron, É. (2026). *Genitem: A
 > user-friendly tool for the generation and pre-validation of items with AI*
 > (Version 0.1) [Computer software]. Zenodo.
 > <https://doi.org/10.5281/zenodo.22801169>
@@ -317,15 +316,14 @@ available from the site, and `CITATION.cff` in this repository feeds GitHub's
 
 ## Licence
 
-The code — HTML, JavaScript, Python, R and PowerShell — is released under the
-[MIT licence](LICENSE). The documentation, the coding grid and the other
-written resources are released under
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), see
-[LICENSE-DOCS](LICENSE-DOCS).
+Since 6 November 2026, the whole repository (code, documentation, coding grid
+and written resources) is released under the
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) licence: free to
+use and adapt, for non-commercial purposes, with credit to the authors. See
+[LICENSE](LICENSE). For commercial use, please contact the authors.
 
-The split is deliberate. Creative Commons licences are not designed for
-software: they grant no patent rights and carry no warranty disclaimer suited
-to code. Attribution is required either way.
+Version 0.1, as archived on Zenodo, keeps its original licences (MIT for the
+code, CC BY 4.0 for the documentation).
 
 ---
 

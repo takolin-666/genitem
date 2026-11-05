@@ -100,9 +100,8 @@ is not what this repository is for.
 
 ## Licence
 
-Contributions are accepted under the licences of this repository: CC BY 4.0 for
-documentation and resources, MIT for code. By opening a pull request you agree
-to that.
+Contributions are accepted under the licence of this repository, CC BY-NC 4.0
+(see LICENSE). By opening a pull request you agree to that.
 
 ## Contact
 

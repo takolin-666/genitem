@@ -1,21 +1,28 @@
-MIT License
+Genitem
+Copyright (c) 2026 David Jan, Sébastien Béland, Cynthia Vincent, Florent Michelot, Émile Caron
 
-Copyright (c) 2026 David Jan, Sébastien Béland, Cathy Vincent, Florent Michelot
+Since 6 November 2026, everything in this repository (code, documentation,
+coding grid and written resources) is licensed under the Creative Commons
+Attribution-NonCommercial 4.0 International Licence (CC BY-NC 4.0).
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+You are free to share and adapt this material, for non-commercial purposes
+only, provided you give appropriate credit, link to the licence, and indicate
+if changes were made. For any commercial use, please contact the authors.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Attribution:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+    Jan, D., Béland, S., Vincent, C., Michelot, F., & Caron, É. (2026).
+    Genitem: A user-friendly tool for the generation and pre-validation of
+    items with AI (Version 0.1) [Computer software]. Zenodo.
+    https://doi.org/10.5281/zenodo.22801169
+
+Version 0.1, as archived on Zenodo, was released under the MIT licence (code)
+and CC BY 4.0 (documentation). That release keeps those licences.
+
+Full text of the licence (legal code):
+
+    https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+Summary:
+
+    https://creativecommons.org/licenses/by-nc/4.0/

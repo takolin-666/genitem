@@ -128,7 +128,6 @@ section).
   Generative psychometrics via AI-GENIE: Automatic item generation and
   validation with network-integrated evaluation. *Behavior Research Methods,
   58*(8), 217. <https://doi.org/10.3758/s13428-026-03082-1>
-- Lee, & Ha (2026). *Sage Open*. <https://doi.org/10.1177/21582440261418083>
 
 ---
 

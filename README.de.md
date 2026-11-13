@@ -102,6 +102,21 @@ eigenen [Video](https://genitem.recherche-formation.com/wp-content/uploads/data/
 
 ---
 
+## Einblick in die Website
+
+Bildschirmfotos der aktuellen Website, auf Deutsch. Klicken Sie auf ein Bild, um es zu vergrößern.
+
+<table>
+<tr><td width="50%"><a href="ressources/captures/generation-items-de.jpg"><img src="ressources/captures/generation-items-de.jpg" alt="Itemgenerierung"></a><br><b>Itemgenerierung</b></td><td width="50%"><a href="ressources/captures/nouveaux-items-de.jpg"><img src="ressources/captures/nouveaux-items-de.jpg" alt="Neue Items"></a><br><b>Neue Items</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/revision-de.jpg"><img src="ressources/captures/revision-de.jpg" alt="Fragebogenüberarbeitung"></a><br><b>Fragebogenüberarbeitung</b></td><td width="50%"><a href="ressources/captures/retrotraduction-de.jpg"><img src="ressources/captures/retrotraduction-de.jpg" alt="Rückübersetzung"></a><br><b>Rückübersetzung</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/qualite-psychometrique-de.jpg"><img src="ressources/captures/qualite-psychometrique-de.jpg" alt="Psychometrische Qualität"></a><br><b>Psychometrische Qualität</b></td><td width="50%"><a href="ressources/captures/tri-items-de.jpg"><img src="ressources/captures/tri-items-de.jpg" alt="Item-Sortierung"></a><br><b>Item-Sortierung</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/variation-conditions-de.jpg"><img src="ressources/captures/variation-conditions-de.jpg" alt="Variation der Bedingungen"></a><br><b>Variation der Bedingungen</b></td><td width="50%"><a href="ressources/captures/test-modeles-de.jpg"><img src="ressources/captures/test-modeles-de.jpg" alt="Modelltest"></a><br><b>Modelltest</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/codage-de.jpg"><img src="ressources/captures/codage-de.jpg" alt="Kodierung offener Antworten"></a><br><b>Kodierung offener Antworten</b></td><td width="50%"><a href="ressources/captures/textometrie-de.jpg"><img src="ressources/captures/textometrie-de.jpg" alt="Textometrie"></a><br><b>Textometrie</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/verbatims-de.jpg"><img src="ressources/captures/verbatims-de.jpg" alt="Verbatims"></a><br><b>Verbatims</b></td><td width="50%"><a href="ressources/captures/installation-de.jpg"><img src="ressources/captures/installation-de.jpg" alt="Installation"></a><br><b>Installation</b></td></tr>
+</table>
+
+---
+
 ## Inhalt dieses Repositorys
 
 Dieses Repository stellt Genitem vor und archiviert seine zitierfähigen
@@ -111,7 +126,7 @@ Versionen auf Zenodo. Die Werkzeuge selbst werden über die Website genutzt.
 |---|---|
 | `scripts/analyse_genie.R` | Strukturelle Validierung eines Itempools mit AI-GENIE (ein Konstrukt) |
 | `scripts/analyse_genie_multi_construits.R` | Dieselbe Analyse, wenn die Items mehrere Konstrukte messen |
-| `ressources/` | Logo, Kodierraster und Vorschaubilder der Videos |
+| `ressources/` | Logo, Kodierraster, Vorschaubilder der Videos und Bildschirmfotos der Website |
 | `CITATION.cff`, `.zenodo.json` | Zitation und Beschreibung des Zenodo-Archivs |
 
 ---

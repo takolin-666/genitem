@@ -103,6 +103,21 @@ Python y R) se guía paso a paso en el sitio web, con su propio
 
 ---
 
+## Vistazo al sitio web
+
+Capturas de pantalla del sitio web actual, en español. Haga clic en una imagen para ampliarla.
+
+<table>
+<tr><td width="50%"><a href="ressources/captures/generation-items-es.jpg"><img src="ressources/captures/generation-items-es.jpg" alt="Generación de ítems"></a><br><b>Generación de ítems</b></td><td width="50%"><a href="ressources/captures/nouveaux-items-es.jpg"><img src="ressources/captures/nouveaux-items-es.jpg" alt="Nuevos ítems"></a><br><b>Nuevos ítems</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/revision-es.jpg"><img src="ressources/captures/revision-es.jpg" alt="Revisión de cuestionario"></a><br><b>Revisión de cuestionario</b></td><td width="50%"><a href="ressources/captures/retrotraduction-es.jpg"><img src="ressources/captures/retrotraduction-es.jpg" alt="Retrotraducción"></a><br><b>Retrotraducción</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/qualite-psychometrique-es.jpg"><img src="ressources/captures/qualite-psychometrique-es.jpg" alt="Calidad psicométrica"></a><br><b>Calidad psicométrica</b></td><td width="50%"><a href="ressources/captures/tri-items-es.jpg"><img src="ressources/captures/tri-items-es.jpg" alt="Clasificación de ítems"></a><br><b>Clasificación de ítems</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/variation-conditions-es.jpg"><img src="ressources/captures/variation-conditions-es.jpg" alt="Variación de condiciones"></a><br><b>Variación de condiciones</b></td><td width="50%"><a href="ressources/captures/test-modeles-es.jpg"><img src="ressources/captures/test-modeles-es.jpg" alt="Prueba de modelos"></a><br><b>Prueba de modelos</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/codage-es.jpg"><img src="ressources/captures/codage-es.jpg" alt="Codificación de respuestas abiertas"></a><br><b>Codificación de respuestas abiertas</b></td><td width="50%"><a href="ressources/captures/textometrie-es.jpg"><img src="ressources/captures/textometrie-es.jpg" alt="Textometría"></a><br><b>Textometría</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/verbatims-es.jpg"><img src="ressources/captures/verbatims-es.jpg" alt="Verbatims"></a><br><b>Verbatims</b></td><td width="50%"><a href="ressources/captures/installation-es.jpg"><img src="ressources/captures/installation-es.jpg" alt="Instalación"></a><br><b>Instalación</b></td></tr>
+</table>
+
+---
+
 ## Contenido de este repositorio
 
 Este repositorio presenta Genitem y archiva sus versiones citables en Zenodo.
@@ -112,7 +127,7 @@ Las herramientas se utilizan desde el sitio web.
 |---|---|
 | `scripts/analyse_genie.R` | Validación estructural de un banco de ítems con AI-GENIE (un solo constructo) |
 | `scripts/analyse_genie_multi_construits.R` | El mismo análisis cuando los ítems miden varios constructos |
-| `ressources/` | Logotipo, parrillas de codificación y miniaturas de los vídeos |
+| `ressources/` | Logotipo, parrillas de codificación, miniaturas de los vídeos y capturas del sitio web |
 | `CITATION.cff`, `.zenodo.json` | Cita y descripción del archivo de Zenodo |
 
 ---

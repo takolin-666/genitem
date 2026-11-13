@@ -98,6 +98,21 @@ Python e R) é guiada passo a passo no site, com seu próprio
 
 ---
 
+## Uma olhada no site
+
+Capturas de tela do site atual, em português. Clique em uma imagem para ampliá-la.
+
+<table>
+<tr><td width="50%"><a href="ressources/captures/generation-items-pt.jpg"><img src="ressources/captures/generation-items-pt.jpg" alt="Geração de itens"></a><br><b>Geração de itens</b></td><td width="50%"><a href="ressources/captures/nouveaux-items-pt.jpg"><img src="ressources/captures/nouveaux-items-pt.jpg" alt="Novos itens"></a><br><b>Novos itens</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/revision-pt.jpg"><img src="ressources/captures/revision-pt.jpg" alt="Revisão de questionário"></a><br><b>Revisão de questionário</b></td><td width="50%"><a href="ressources/captures/retrotraduction-pt.jpg"><img src="ressources/captures/retrotraduction-pt.jpg" alt="Retrotradução"></a><br><b>Retrotradução</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/qualite-psychometrique-pt.jpg"><img src="ressources/captures/qualite-psychometrique-pt.jpg" alt="Qualidade psicométrica"></a><br><b>Qualidade psicométrica</b></td><td width="50%"><a href="ressources/captures/tri-items-pt.jpg"><img src="ressources/captures/tri-items-pt.jpg" alt="Triagem de itens"></a><br><b>Triagem de itens</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/variation-conditions-pt.jpg"><img src="ressources/captures/variation-conditions-pt.jpg" alt="Variação de condições"></a><br><b>Variação de condições</b></td><td width="50%"><a href="ressources/captures/test-modeles-pt.jpg"><img src="ressources/captures/test-modeles-pt.jpg" alt="Teste de modelos"></a><br><b>Teste de modelos</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/codage-pt.jpg"><img src="ressources/captures/codage-pt.jpg" alt="Codificação de respostas abertas"></a><br><b>Codificação de respostas abertas</b></td><td width="50%"><a href="ressources/captures/textometrie-pt.jpg"><img src="ressources/captures/textometrie-pt.jpg" alt="Textometria"></a><br><b>Textometria</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/verbatims-pt.jpg"><img src="ressources/captures/verbatims-pt.jpg" alt="Verbatims"></a><br><b>Verbatims</b></td><td width="50%"><a href="ressources/captures/installation-pt.jpg"><img src="ressources/captures/installation-pt.jpg" alt="Instalação"></a><br><b>Instalação</b></td></tr>
+</table>
+
+---
+
 ## Conteúdo deste repositório
 
 Este repositório apresenta o Genitem e arquiva suas versões citáveis no Zenodo.
@@ -107,7 +122,7 @@ As ferramentas são usadas a partir do site.
 |---|---|
 | `scripts/analyse_genie.R` | Validação estrutural de um banco de itens com o AI-GENIE (um único construto) |
 | `scripts/analyse_genie_multi_construits.R` | A mesma análise quando os itens medem vários construtos |
-| `ressources/` | Logotipo, grades de codificação e miniaturas dos vídeos |
+| `ressources/` | Logotipo, grades de codificação, miniaturas dos vídeos e capturas de tela do site |
 | `CITATION.cff`, `.zenodo.json` | Citação e descrição do arquivo no Zenodo |
 
 ---

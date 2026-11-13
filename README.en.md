@@ -94,6 +94,21 @@ Python and R) is guided step by step on the website, with its own
 
 ---
 
+## A look at the website
+
+Screenshots of the current website, in English. Click an image to enlarge it.
+
+<table>
+<tr><td width="50%"><a href="ressources/captures/generation-items-en.jpg"><img src="ressources/captures/generation-items-en.jpg" alt="Item generation"></a><br><b>Item generation</b></td><td width="50%"><a href="ressources/captures/nouveaux-items-en.jpg"><img src="ressources/captures/nouveaux-items-en.jpg" alt="New items"></a><br><b>New items</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/revision-en.jpg"><img src="ressources/captures/revision-en.jpg" alt="Questionnaire review"></a><br><b>Questionnaire review</b></td><td width="50%"><a href="ressources/captures/retrotraduction-en.jpg"><img src="ressources/captures/retrotraduction-en.jpg" alt="Back-translation"></a><br><b>Back-translation</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/qualite-psychometrique-en.jpg"><img src="ressources/captures/qualite-psychometrique-en.jpg" alt="Psychometric quality"></a><br><b>Psychometric quality</b></td><td width="50%"><a href="ressources/captures/tri-items-en.jpg"><img src="ressources/captures/tri-items-en.jpg" alt="Item sorting"></a><br><b>Item sorting</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/variation-conditions-en.jpg"><img src="ressources/captures/variation-conditions-en.jpg" alt="Condition variation"></a><br><b>Condition variation</b></td><td width="50%"><a href="ressources/captures/test-modeles-en.jpg"><img src="ressources/captures/test-modeles-en.jpg" alt="Model testing"></a><br><b>Model testing</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/codage-en.jpg"><img src="ressources/captures/codage-en.jpg" alt="Open-ended response coding"></a><br><b>Open-ended response coding</b></td><td width="50%"><a href="ressources/captures/textometrie-en.jpg"><img src="ressources/captures/textometrie-en.jpg" alt="Textometrics"></a><br><b>Textometrics</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/verbatims-en.jpg"><img src="ressources/captures/verbatims-en.jpg" alt="Verbatims"></a><br><b>Verbatims</b></td><td width="50%"><a href="ressources/captures/installation-en.jpg"><img src="ressources/captures/installation-en.jpg" alt="Installation"></a><br><b>Installation</b></td></tr>
+</table>
+
+---
+
 ## What this repository contains
 
 This repository presents Genitem and archives its citable versions on Zenodo.
@@ -103,7 +118,7 @@ The tools themselves are used from the website.
 |---|---|
 | `scripts/analyse_genie.R` | Structural validation of an item pool with AI-GENIE (single construct) |
 | `scripts/analyse_genie_multi_construits.R` | The same analysis when items measure several constructs |
-| `ressources/` | Logo, coding grids and video thumbnails |
+| `ressources/` | Logo, coding grids, video thumbnails and website screenshots |
 | `CITATION.cff`, `.zenodo.json` | Citation and description of the Zenodo archive |
 
 ---

@@ -100,6 +100,21 @@ Python e R) è guidata passo dopo passo sul sito, con il suo
 
 ---
 
+## Uno sguardo al sito
+
+Schermate del sito attuale, in italiano. Fare clic su un'immagine per ingrandirla.
+
+<table>
+<tr><td width="50%"><a href="ressources/captures/generation-items-it.jpg"><img src="ressources/captures/generation-items-it.jpg" alt="Generazione di item"></a><br><b>Generazione di item</b></td><td width="50%"><a href="ressources/captures/nouveaux-items-it.jpg"><img src="ressources/captures/nouveaux-items-it.jpg" alt="Nuovi item"></a><br><b>Nuovi item</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/revision-it.jpg"><img src="ressources/captures/revision-it.jpg" alt="Revisione del questionario"></a><br><b>Revisione del questionario</b></td><td width="50%"><a href="ressources/captures/retrotraduction-it.jpg"><img src="ressources/captures/retrotraduction-it.jpg" alt="Retrotraduzione"></a><br><b>Retrotraduzione</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/qualite-psychometrique-it.jpg"><img src="ressources/captures/qualite-psychometrique-it.jpg" alt="Qualità psicometrica"></a><br><b>Qualità psicometrica</b></td><td width="50%"><a href="ressources/captures/tri-items-it.jpg"><img src="ressources/captures/tri-items-it.jpg" alt="Selezione degli item"></a><br><b>Selezione degli item</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/variation-conditions-it.jpg"><img src="ressources/captures/variation-conditions-it.jpg" alt="Variazione delle condizioni"></a><br><b>Variazione delle condizioni</b></td><td width="50%"><a href="ressources/captures/test-modeles-it.jpg"><img src="ressources/captures/test-modeles-it.jpg" alt="Test dei modelli"></a><br><b>Test dei modelli</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/codage-it.jpg"><img src="ressources/captures/codage-it.jpg" alt="Codifica delle risposte aperte"></a><br><b>Codifica delle risposte aperte</b></td><td width="50%"><a href="ressources/captures/textometrie-it.jpg"><img src="ressources/captures/textometrie-it.jpg" alt="Textometria"></a><br><b>Textometria</b></td></tr>
+<tr><td width="50%"><a href="ressources/captures/verbatims-it.jpg"><img src="ressources/captures/verbatims-it.jpg" alt="Verbatim"></a><br><b>Verbatim</b></td><td width="50%"><a href="ressources/captures/installation-it.jpg"><img src="ressources/captures/installation-it.jpg" alt="Installazione"></a><br><b>Installazione</b></td></tr>
+</table>
+
+---
+
 ## Contenuto di questo repository
 
 Questo repository presenta Genitem e archivia le sue versioni citabili su
@@ -109,7 +124,7 @@ Zenodo. Gli strumenti si usano dal sito.
 |---|---|
 | `scripts/analyse_genie.R` | Validazione strutturale di un pool di item con AI-GENIE (un solo costrutto) |
 | `scripts/analyse_genie_multi_construits.R` | La stessa analisi quando gli item misurano più costrutti |
-| `ressources/` | Logo, griglie di codifica e miniature dei video |
+| `ressources/` | Logo, griglie di codifica, miniature dei video e schermate del sito |
 | `CITATION.cff`, `.zenodo.json` | Citazione e descrizione dell'archivio Zenodo |
 
 ---

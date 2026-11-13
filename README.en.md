@@ -7,7 +7,13 @@
 
 Website: <https://genitem.recherche-formation.com>
 
-[Français](README.md) · **English**
+[Français](README.md) · **English** · [Español](README.es.md) · [Deutsch](README.de.md) · [Português](README.pt.md) · [Italiano](README.it.md)
+
+## Introductory video
+
+<a href="https://genitem.recherche-formation.com/wp-content/uploads/data/genitem-en.mp4"><img src="ressources/vignettes/genitem-en.jpg" width="480" alt="Watch the general presentation of Genitem (2 minutes)"></a>
+
+[Watch the general presentation of Genitem (2 minutes)](https://genitem.recherche-formation.com/wp-content/uploads/data/genitem-en.mp4)
 
 ---
 
@@ -60,27 +66,27 @@ languages on the website). The links below lead to the English version.
 
 | Tool | What it does | Video |
 |---|---|---|
-| [Item generation](https://genitem.recherche-formation.com/app/) | AI agents draft and review a pool of items, then AI-GENIE checks its structure. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/generation-items-en.mp4) |
-| [New items](https://genitem.recherche-formation.com/new_item/) | Suggests items on what existing questionnaires do not yet cover, without ever reproducing or imitating their items. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/nouveaux-items-en.mp4) |
-| [Questionnaire review](https://genitem.recherche-formation.com/revision_questionnaire/) | Compares existing scales: redundancies, wording problems and themes not covered. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/revision-en.mp4) |
-| [Back-translation](https://genitem.recherche-formation.com/retrotraduction/) | Translation, blind back-translation and comparison, with a different model for each role. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/retrotraduction-en.mp4) |
+| [Item generation](https://genitem.recherche-formation.com/app/) | AI agents draft and review a pool of items, then AI-GENIE checks its structure. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/generation-items-en.mp4"><img src="ressources/vignettes/generation-items-en.jpg" width="220" alt="Watch"></a> |
+| [New items](https://genitem.recherche-formation.com/new_item/) | Suggests items on what existing questionnaires do not yet cover, without ever reproducing or imitating their items. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/nouveaux-items-en.mp4"><img src="ressources/vignettes/nouveaux-items-en.jpg" width="220" alt="Watch"></a> |
+| [Questionnaire review](https://genitem.recherche-formation.com/revision_questionnaire/) | Compares existing scales: redundancies, wording problems and themes not covered. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/revision-en.mp4"><img src="ressources/vignettes/revision-en.jpg" width="220" alt="Watch"></a> |
+| [Back-translation](https://genitem.recherche-formation.com/retrotraduction/) | Translation, blind back-translation and comparison, with a different model for each role. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/retrotraduction-en.mp4"><img src="ressources/vignettes/retrotraduction-en.jpg" width="220" alt="Watch"></a> |
 
 ### Check before data collection
 
 | Tool | What it does | Video |
 |---|---|---|
-| [Psychometric quality](https://genitem.recherche-formation.com/quali_psy/) | Repeats item generation with several models and compares the quality of their results in an Excel workbook. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/qualite-psychometrique-en.mp4) |
-| [Item sorting](https://genitem.recherche-formation.com/tri_items/) | Several models sort the items into factors: consensus, Fleiss' kappa and Aiken's V for each item. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/tri-items-en.mp4) |
-| [Condition variation](https://genitem.recherche-formation.com/variation_conditions/) | Gives a questionnaire to AI models under several conditions, then compares their answers. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/variation-conditions-en.mp4) |
-| [Model testing](https://genitem.recherche-formation.com/test_modeles/) | Sends the same prompt to several models and compares what they produce and how long they take. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/test-modeles-en.mp4) |
+| [Psychometric quality](https://genitem.recherche-formation.com/quali_psy/) | Repeats item generation with several models and compares the quality of their results in an Excel workbook. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/qualite-psychometrique-en.mp4"><img src="ressources/vignettes/qualite-psychometrique-en.jpg" width="220" alt="Watch"></a> |
+| [Item sorting](https://genitem.recherche-formation.com/tri_items/) | Several models sort the items into factors: consensus, Fleiss' kappa and Aiken's V for each item. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/tri-items-en.mp4"><img src="ressources/vignettes/tri-items-en.jpg" width="220" alt="Watch"></a> |
+| [Condition variation](https://genitem.recherche-formation.com/variation_conditions/) | Gives a questionnaire to AI models under several conditions, then compares their answers. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/variation-conditions-en.mp4"><img src="ressources/vignettes/variation-conditions-en.jpg" width="220" alt="Watch"></a> |
+| [Model testing](https://genitem.recherche-formation.com/test_modeles/) | Sends the same prompt to several models and compares what they produce and how long they take. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/test-modeles-en.mp4"><img src="ressources/vignettes/test-modeles-en.jpg" width="220" alt="Watch"></a> |
 
 ### Analyse text responses
 
 | Tool | What it does | Video |
 |---|---|---|
-| [Open-ended response coding](https://genitem.recherche-formation.com/codage-de-reponse-ouverte/) | Inductive coding: several AI models suggest codes, a codebook is written, then the corpus is coded and reliability measured. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/codage-en.mp4) |
-| [Textometrics](https://genitem.recherche-formation.com/textometrie/) | Classifies text segments by shared vocabulary (Reinert method) and places them on maps. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/textometrie-en.mp4) |
-| [Verbatims](https://genitem.recherche-formation.com/ia-humain/) | Codes verbatims with the seven-level framework of Lee and Ha (2026) and compares AI coding with human coding. | [Watch](https://genitem.recherche-formation.com/wp-content/uploads/data/info/verbatims-en.mp4) |
+| [Open-ended response coding](https://genitem.recherche-formation.com/codage-de-reponse-ouverte/) | Inductive coding: several AI models suggest codes, a codebook is written, then the corpus is coded and reliability measured. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/codage-en.mp4"><img src="ressources/vignettes/codage-en.jpg" width="220" alt="Watch"></a> |
+| [Textometrics](https://genitem.recherche-formation.com/textometrie/) | Classifies text segments by shared vocabulary (Reinert method) and places them on maps. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/textometrie-en.mp4"><img src="ressources/vignettes/textometrie-en.jpg" width="220" alt="Watch"></a> |
+| [Verbatims](https://genitem.recherche-formation.com/ia-humain/) | Codes verbatims with the seven-level framework of Lee and Ha (2026) and compares AI coding with human coding. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/verbatims-en.mp4"><img src="ressources/vignettes/verbatims-en.jpg" width="220" alt="Watch"></a> |
 
 [Installation](https://genitem.recherche-formation.com/install/) (Ollama,
 Python and R) is guided step by step on the website, with its own
@@ -97,7 +103,7 @@ The tools themselves are used from the website.
 |---|---|
 | `scripts/analyse_genie.R` | Structural validation of an item pool with AI-GENIE (single construct) |
 | `scripts/analyse_genie_multi_construits.R` | The same analysis when items measure several constructs |
-| `ressources/` | Logo and coding grids |
+| `ressources/` | Logo, coding grids and video thumbnails |
 | `CITATION.cff`, `.zenodo.json` | Citation and description of the Zenodo archive |
 
 ---
@@ -141,7 +147,9 @@ code, CC BY 4.0 for the documentation).
 ## Written with the help of AI
 
 This file and its French version were drafted with Claude (Anthropic) from the
-content of the website, then published under the authors' responsibility.
+content of the website, then published under the authors' responsibility. The
+Spanish, German, Portuguese and Italian versions are translations made with the
+same AI. In case of discrepancy, the French version prevails.
 Research decisions are the authors' own.
 
 ---

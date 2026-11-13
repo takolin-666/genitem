@@ -14,7 +14,7 @@ authors:
   - family-names: Caron
     given-names: Émile
 year: 2026
-version: "0.2"
+version: "0.3"
 doi: 10.5281/zenodo.22801168
 identifiers:
   - type: doi

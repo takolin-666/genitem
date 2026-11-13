@@ -14,8 +14,8 @@ authors:
   - family-names: Caron
     given-names: Émile
 year: 2026
-version: "0.1"
-doi: 10.5281/zenodo.22801169
+version: "0.2"
+doi: 10.5281/zenodo.22801168
 identifiers:
   - type: doi
     value: 10.5281/zenodo.22801168
@@ -23,9 +23,14 @@ identifiers:
 url: https://genitem.recherche-formation.com
 repository-code: https://github.com/takolin-666/genitem
 abstract: >-
-  Browser-based tools for AI-assisted item generation, verbatim coding and
-  back-translation, running entirely on the researcher's own machine through a
-  local Ollama server. No data is sent to any external service.
+  Free, browser-based tools to build, adapt and check questionnaires, surveys
+  and measurement scales with generative AI, while keeping human expertise in
+  charge. AI agents organised in a hierarchy draft and review a pool of items,
+  then the AI-GENIE R package retains the most stable items. Other tools cover
+  new items, questionnaire review, back-translation, psychometric quality, item
+  sorting, condition variation, model testing, open-ended response coding,
+  textometrics and verbatim analysis. All language models run locally through
+  Ollama: no data is sent to any external service.
 keywords:
   - psychometrics
   - item generation
@@ -33,5 +38,8 @@ keywords:
   - scale development
   - local inference
   - Ollama
+  - AI agents
+  - AI-GENIE
+  - network psychometrics
 license: CC-BY-NC-4.0
 license-url: https://creativecommons.org/licenses/by-nc/4.0/

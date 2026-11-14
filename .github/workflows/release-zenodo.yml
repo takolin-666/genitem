@@ -1,0 +1,41 @@
+# Release automatique pour Zenodo.
+# Quand la version de .zenodo.json change sur main, ce workflow cree l'etiquette
+# v<version> et la release « Genitem <version> ». Zenodo (integration GitHub)
+# archive alors la nouvelle version sous le DOI concept 10.5281/zenodo.22801168.
+# Rien ne se passe si la release de cette version existe deja.
+name: Release pour Zenodo
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.zenodo.json'
+      - '.github/workflows/release-zenodo.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-zenodo
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Creer la release de la version de .zenodo.json
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(jq -r '.version // empty' .zenodo.json)
+          if [ -z "$VERSION" ]; then echo "::error::Pas de version dans .zenodo.json"; exit 1; fi
+          TAG="v$VERSION"
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "La release $TAG existe deja : rien a faire."
+            exit 0
+          fi
+          gh release create "$TAG" --target "$GITHUB_SHA" --title "Genitem $VERSION" \
+            --notes "Genitem $VERSION. Presentation of the tools in six languages, screenshots of the website, introductory videos and the AI-GENIE R scripts. Website: https://genitem.recherche-formation.com"
+          echo "Release $TAG creee sur $GITHUB_SHA."

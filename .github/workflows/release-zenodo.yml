@@ -37,5 +37,5 @@ jobs:
             exit 0
           fi
           gh release create "$TAG" --target "$GITHUB_SHA" --title "Genitem $VERSION" \
-            --notes "Genitem $VERSION. Presentation of the tools in six languages, screenshots of the website, introductory videos and the AI-GENIE R scripts. Website: https://genitem.recherche-formation.com"
+            --notes "Genitem $VERSION. Presentation of the tools in six languages, screenshots of the website, introductory videos and the AI-GENIE R scripts. Website: https://genitem.education"
           echo "Release $TAG creee sur $GITHUB_SHA."

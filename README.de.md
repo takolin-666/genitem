@@ -5,7 +5,7 @@
 [![Lizenz: CC BY-NC 4.0](https://img.shields.io/badge/Lizenz-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22801168-blue.svg)](https://doi.org/10.5281/zenodo.22801168)
 
-Website: <https://genitem.recherche-formation.com>
+Website: <https://genitem.education>
 
 [Français](README.md) · [English](README.en.md) · [Español](README.es.md) · **Deutsch** · [Português](README.pt.md) · [Italiano](README.it.md)
 
@@ -15,9 +15,9 @@ Website: <https://genitem.recherche-formation.com>
 
 ## Einführungsvideo
 
-<a href="https://genitem.recherche-formation.com/wp-content/uploads/data/genitem-de.mp4"><img src="ressources/vignettes/genitem-de.jpg" width="480" alt="Die allgemeine Vorstellung von Genitem ansehen (2 Minuten)"></a>
+<a href="https://genitem.education/wp-content/uploads/data/genitem-de.mp4"><img src="ressources/vignettes/genitem-de.jpg" width="480" alt="Die allgemeine Vorstellung von Genitem ansehen (2 Minuten)"></a>
 
-[Die allgemeine Vorstellung von Genitem ansehen (2 Minuten)](https://genitem.recherche-formation.com/wp-content/uploads/data/genitem-de.mp4)
+[Die allgemeine Vorstellung von Genitem ansehen (2 Minuten)](https://genitem.education/wp-content/uploads/data/genitem-de.mp4)
 
 ---
 
@@ -74,31 +74,31 @@ deutschen Fassung.
 
 | Werkzeug | Funktion | Video |
 |---|---|---|
-| [Itemgenerierung](https://genitem.recherche-formation.com/app/) | KI-Agenten entwerfen und prüfen einen Itempool, danach prüft AI-GENIE dessen Struktur. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/generation-items-de.mp4"><img src="ressources/vignettes/generation-items-de.jpg" width="220" alt="Ansehen"></a> |
-| [Neue Items](https://genitem.recherche-formation.com/new_item/) | Schlägt Items zu dem vor, was bestehende Fragebögen noch nicht abdecken, ohne deren Items je zu übernehmen oder nachzuahmen. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/nouveaux-items-de.mp4"><img src="ressources/vignettes/nouveaux-items-de.jpg" width="220" alt="Ansehen"></a> |
-| [Fragebogenüberarbeitung](https://genitem.recherche-formation.com/revision_questionnaire/) | Vergleicht bestehende Skalen: Redundanzen, Formulierungsprobleme und nicht abgedeckte Themen. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/revision-de.mp4"><img src="ressources/vignettes/revision-de.jpg" width="220" alt="Ansehen"></a> |
-| [Rückübersetzung](https://genitem.recherche-formation.com/retrotraduction/) | Übersetzung, blinde Rückübersetzung und Vergleich, mit einem anderen Modell für jede Rolle. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/retrotraduction-de.mp4"><img src="ressources/vignettes/retrotraduction-de.jpg" width="220" alt="Ansehen"></a> |
+| [Itemgenerierung](https://genitem.education/app/) | KI-Agenten entwerfen und prüfen einen Itempool, danach prüft AI-GENIE dessen Struktur. | <a href="https://genitem.education/wp-content/uploads/data/info/generation-items-de.mp4"><img src="ressources/vignettes/generation-items-de.jpg" width="220" alt="Ansehen"></a> |
+| [Neue Items](https://genitem.education/new_item/) | Schlägt Items zu dem vor, was bestehende Fragebögen noch nicht abdecken, ohne deren Items je zu übernehmen oder nachzuahmen. | <a href="https://genitem.education/wp-content/uploads/data/info/nouveaux-items-de.mp4"><img src="ressources/vignettes/nouveaux-items-de.jpg" width="220" alt="Ansehen"></a> |
+| [Fragebogenüberarbeitung](https://genitem.education/revision_questionnaire/) | Vergleicht bestehende Skalen: Redundanzen, Formulierungsprobleme und nicht abgedeckte Themen. | <a href="https://genitem.education/wp-content/uploads/data/info/revision-de.mp4"><img src="ressources/vignettes/revision-de.jpg" width="220" alt="Ansehen"></a> |
+| [Rückübersetzung](https://genitem.education/retrotraduction/) | Übersetzung, blinde Rückübersetzung und Vergleich, mit einem anderen Modell für jede Rolle. | <a href="https://genitem.education/wp-content/uploads/data/info/retrotraduction-de.mp4"><img src="ressources/vignettes/retrotraduction-de.jpg" width="220" alt="Ansehen"></a> |
 
 ### Vor der Erhebung prüfen
 
 | Werkzeug | Funktion | Video |
 |---|---|---|
-| [Psychometrische Qualität](https://genitem.recherche-formation.com/quali_psy/) | Wiederholt die Itemgenerierung mit mehreren Modellen und vergleicht die Qualität ihrer Ergebnisse in einer Excel-Arbeitsmappe. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/qualite-psychometrique-de.mp4"><img src="ressources/vignettes/qualite-psychometrique-de.jpg" width="220" alt="Ansehen"></a> |
-| [Item-Sortierung](https://genitem.recherche-formation.com/tri_items/) | Mehrere Modelle ordnen die Items Faktoren zu: Konsens, Fleiss' Kappa und Aikens V für jedes Item. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/tri-items-de.mp4"><img src="ressources/vignettes/tri-items-de.jpg" width="220" alt="Ansehen"></a> |
-| [Variation der Bedingungen](https://genitem.recherche-formation.com/variation_conditions/) | Legt KI-Modellen einen Fragebogen unter mehreren Bedingungen vor und vergleicht ihre Antworten. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/variation-conditions-de.mp4"><img src="ressources/vignettes/variation-conditions-de.jpg" width="220" alt="Ansehen"></a> |
-| [Modelltest](https://genitem.recherche-formation.com/test_modeles/) | Sendet dieselbe Anweisung an mehrere Modelle und vergleicht, was sie erzeugen und wie lange sie dafür brauchen. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/test-modeles-de.mp4"><img src="ressources/vignettes/test-modeles-de.jpg" width="220" alt="Ansehen"></a> |
+| [Psychometrische Qualität](https://genitem.education/quali_psy/) | Wiederholt die Itemgenerierung mit mehreren Modellen und vergleicht die Qualität ihrer Ergebnisse in einer Excel-Arbeitsmappe. | <a href="https://genitem.education/wp-content/uploads/data/info/qualite-psychometrique-de.mp4"><img src="ressources/vignettes/qualite-psychometrique-de.jpg" width="220" alt="Ansehen"></a> |
+| [Item-Sortierung](https://genitem.education/tri_items/) | Mehrere Modelle ordnen die Items Faktoren zu: Konsens, Fleiss' Kappa und Aikens V für jedes Item. | <a href="https://genitem.education/wp-content/uploads/data/info/tri-items-de.mp4"><img src="ressources/vignettes/tri-items-de.jpg" width="220" alt="Ansehen"></a> |
+| [Variation der Bedingungen](https://genitem.education/variation_conditions/) | Legt KI-Modellen einen Fragebogen unter mehreren Bedingungen vor und vergleicht ihre Antworten. | <a href="https://genitem.education/wp-content/uploads/data/info/variation-conditions-de.mp4"><img src="ressources/vignettes/variation-conditions-de.jpg" width="220" alt="Ansehen"></a> |
+| [Modelltest](https://genitem.education/test_modeles/) | Sendet dieselbe Anweisung an mehrere Modelle und vergleicht, was sie erzeugen und wie lange sie dafür brauchen. | <a href="https://genitem.education/wp-content/uploads/data/info/test-modeles-de.mp4"><img src="ressources/vignettes/test-modeles-de.jpg" width="220" alt="Ansehen"></a> |
 
 ### Textantworten analysieren
 
 | Werkzeug | Funktion | Video |
 |---|---|---|
-| [Kodierung offener Antworten](https://genitem.recherche-formation.com/codage-de-reponse-ouverte/) | Induktive Kodierung: Mehrere KI-Modelle schlagen Codes vor, ein Codebuch wird erstellt, danach wird das Korpus kodiert und die Reliabilität gemessen. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/codage-de.mp4"><img src="ressources/vignettes/codage-de.jpg" width="220" alt="Ansehen"></a> |
-| [Textometrie](https://genitem.recherche-formation.com/textometrie/) | Ordnet Textsegmente nach ihrem Wortschatz (Reinert-Methode) und stellt sie auf Karten dar. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/textometrie-de.mp4"><img src="ressources/vignettes/textometrie-de.jpg" width="220" alt="Ansehen"></a> |
-| [Verbatims](https://genitem.recherche-formation.com/ia-humain/) | Kodiert Verbatims mit dem siebenstufigen Rahmen von Lee und Ha (2026) und vergleicht die KI-Kodierung mit der menschlichen. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/verbatims-de.mp4"><img src="ressources/vignettes/verbatims-de.jpg" width="220" alt="Ansehen"></a> |
+| [Kodierung offener Antworten](https://genitem.education/codage-de-reponse-ouverte/) | Induktive Kodierung: Mehrere KI-Modelle schlagen Codes vor, ein Codebuch wird erstellt, danach wird das Korpus kodiert und die Reliabilität gemessen. | <a href="https://genitem.education/wp-content/uploads/data/info/codage-de.mp4"><img src="ressources/vignettes/codage-de.jpg" width="220" alt="Ansehen"></a> |
+| [Textometrie](https://genitem.education/textometrie/) | Ordnet Textsegmente nach ihrem Wortschatz (Reinert-Methode) und stellt sie auf Karten dar. | <a href="https://genitem.education/wp-content/uploads/data/info/textometrie-de.mp4"><img src="ressources/vignettes/textometrie-de.jpg" width="220" alt="Ansehen"></a> |
+| [Verbatims](https://genitem.education/ia-humain/) | Kodiert Verbatims mit dem siebenstufigen Rahmen von Lee und Ha (2026) und vergleicht die KI-Kodierung mit der menschlichen. | <a href="https://genitem.education/wp-content/uploads/data/info/verbatims-de.mp4"><img src="ressources/vignettes/verbatims-de.jpg" width="220" alt="Ansehen"></a> |
 
-Die [Installation](https://genitem.recherche-formation.com/install/) (Ollama,
+Die [Installation](https://genitem.education/install/) (Ollama,
 Python und R) wird auf der Website Schritt für Schritt erklärt, mit einem
-eigenen [Video](https://genitem.recherche-formation.com/wp-content/uploads/data/info/installation-de.mp4).
+eigenen [Video](https://genitem.education/wp-content/uploads/data/info/installation-de.mp4).
 
 ---
 

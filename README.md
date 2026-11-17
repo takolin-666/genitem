@@ -5,15 +5,15 @@
 [![Licence : CC BY-NC 4.0](https://img.shields.io/badge/licence-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22801168-blue.svg)](https://doi.org/10.5281/zenodo.22801168)
 
-Site : <https://genitem.recherche-formation.com>
+Site : <https://genitem.education>
 
 **Français** · [English](README.en.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Português](README.pt.md) · [Italiano](README.it.md)
 
 ## Vidéo de présentation
 
-<a href="https://genitem.recherche-formation.com/wp-content/uploads/data/genitem-fr.mp4"><img src="ressources/vignettes/genitem-fr.jpg" width="480" alt="Regarder la présentation générale de Genitem (2 minutes)"></a>
+<a href="https://genitem.education/wp-content/uploads/data/genitem-fr.mp4"><img src="ressources/vignettes/genitem-fr.jpg" width="480" alt="Regarder la présentation générale de Genitem (2 minutes)"></a>
 
-[Regarder la présentation générale de Genitem (2 minutes)](https://genitem.recherche-formation.com/wp-content/uploads/data/genitem-fr.mp4)
+[Regarder la présentation générale de Genitem (2 minutes)](https://genitem.education/wp-content/uploads/data/genitem-fr.mp4)
 
 ---
 
@@ -69,31 +69,31 @@ six langues sur le site). Les liens ci-dessous mènent à la version française.
 
 | Outil | Ce qu'il fait | Vidéo |
 |---|---|---|
-| [Génération d'items](https://genitem.recherche-formation.com/app/) | Des agents IA rédigent et relisent un bassin d'items, puis AI-GENIE en vérifie la structure. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/generation-items-fr.mp4"><img src="ressources/vignettes/generation-items-fr.jpg" width="220" alt="Regarder"></a> |
-| [Nouveaux items](https://genitem.recherche-formation.com/new_item/) | Propose des items sur ce que les questionnaires existants ne couvrent pas encore, sans jamais reproduire ni imiter leurs items. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/nouveaux-items-fr.mp4"><img src="ressources/vignettes/nouveaux-items-fr.jpg" width="220" alt="Regarder"></a> |
-| [Révision de questionnaire](https://genitem.recherche-formation.com/revision_questionnaire/) | Compare des échelles existantes : redondances, problèmes de formulation et thèmes non abordés. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/revision-fr.mp4"><img src="ressources/vignettes/revision-fr.jpg" width="220" alt="Regarder"></a> |
-| [Rétrotraduction](https://genitem.recherche-formation.com/retrotraduction/) | Traduction, rétrotraduction à l'aveugle et comparaison, avec un modèle différent pour chaque rôle. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/retrotraduction-fr.mp4"><img src="ressources/vignettes/retrotraduction-fr.jpg" width="220" alt="Regarder"></a> |
+| [Génération d'items](https://genitem.education/app/) | Des agents IA rédigent et relisent un bassin d'items, puis AI-GENIE en vérifie la structure. | <a href="https://genitem.education/wp-content/uploads/data/info/generation-items-fr.mp4"><img src="ressources/vignettes/generation-items-fr.jpg" width="220" alt="Regarder"></a> |
+| [Nouveaux items](https://genitem.education/new_item/) | Propose des items sur ce que les questionnaires existants ne couvrent pas encore, sans jamais reproduire ni imiter leurs items. | <a href="https://genitem.education/wp-content/uploads/data/info/nouveaux-items-fr.mp4"><img src="ressources/vignettes/nouveaux-items-fr.jpg" width="220" alt="Regarder"></a> |
+| [Révision de questionnaire](https://genitem.education/revision_questionnaire/) | Compare des échelles existantes : redondances, problèmes de formulation et thèmes non abordés. | <a href="https://genitem.education/wp-content/uploads/data/info/revision-fr.mp4"><img src="ressources/vignettes/revision-fr.jpg" width="220" alt="Regarder"></a> |
+| [Rétrotraduction](https://genitem.education/retrotraduction/) | Traduction, rétrotraduction à l'aveugle et comparaison, avec un modèle différent pour chaque rôle. | <a href="https://genitem.education/wp-content/uploads/data/info/retrotraduction-fr.mp4"><img src="ressources/vignettes/retrotraduction-fr.jpg" width="220" alt="Regarder"></a> |
 
 ### Vérifier avant la collecte
 
 | Outil | Ce qu'il fait | Vidéo |
 |---|---|---|
-| [Qualité psychométrique](https://genitem.recherche-formation.com/quali_psy/) | Répète la génération d'items avec plusieurs modèles et compare la qualité de leurs résultats dans un classeur Excel. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/qualite-psychometrique-fr.mp4"><img src="ressources/vignettes/qualite-psychometrique-fr.jpg" width="220" alt="Regarder"></a> |
-| [Tri d'items](https://genitem.recherche-formation.com/tri_items/) | Plusieurs modèles classent les items dans des facteurs : consensus, kappa de Fleiss et V d'Aiken par item. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/tri-items-fr.mp4"><img src="ressources/vignettes/tri-items-fr.jpg" width="220" alt="Regarder"></a> |
-| [Variation de conditions](https://genitem.recherche-formation.com/variation_conditions/) | Fait passer un questionnaire à des modèles IA sous plusieurs conditions, puis compare leurs réponses. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/variation-conditions-fr.mp4"><img src="ressources/vignettes/variation-conditions-fr.jpg" width="220" alt="Regarder"></a> |
-| [Test modèles](https://genitem.recherche-formation.com/test_modeles/) | Soumet la même consigne à plusieurs modèles et compare ce qu'ils produisent et le temps qu'ils y mettent. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/test-modeles-fr.mp4"><img src="ressources/vignettes/test-modeles-fr.jpg" width="220" alt="Regarder"></a> |
+| [Qualité psychométrique](https://genitem.education/quali_psy/) | Répète la génération d'items avec plusieurs modèles et compare la qualité de leurs résultats dans un classeur Excel. | <a href="https://genitem.education/wp-content/uploads/data/info/qualite-psychometrique-fr.mp4"><img src="ressources/vignettes/qualite-psychometrique-fr.jpg" width="220" alt="Regarder"></a> |
+| [Tri d'items](https://genitem.education/tri_items/) | Plusieurs modèles classent les items dans des facteurs : consensus, kappa de Fleiss et V d'Aiken par item. | <a href="https://genitem.education/wp-content/uploads/data/info/tri-items-fr.mp4"><img src="ressources/vignettes/tri-items-fr.jpg" width="220" alt="Regarder"></a> |
+| [Variation de conditions](https://genitem.education/variation_conditions/) | Fait passer un questionnaire à des modèles IA sous plusieurs conditions, puis compare leurs réponses. | <a href="https://genitem.education/wp-content/uploads/data/info/variation-conditions-fr.mp4"><img src="ressources/vignettes/variation-conditions-fr.jpg" width="220" alt="Regarder"></a> |
+| [Test modèles](https://genitem.education/test_modeles/) | Soumet la même consigne à plusieurs modèles et compare ce qu'ils produisent et le temps qu'ils y mettent. | <a href="https://genitem.education/wp-content/uploads/data/info/test-modeles-fr.mp4"><img src="ressources/vignettes/test-modeles-fr.jpg" width="220" alt="Regarder"></a> |
 
 ### Analyser les réponses écrites
 
 | Outil | Ce qu'il fait | Vidéo |
 |---|---|---|
-| [Codage de réponses ouvertes](https://genitem.recherche-formation.com/codage-de-reponse-ouverte/) | Codage inductif : plusieurs IA proposent des codes, un livre de codes est rédigé, puis le corpus est codé et la fidélité mesurée. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/codage-fr.mp4"><img src="ressources/vignettes/codage-fr.jpg" width="220" alt="Regarder"></a> |
-| [Textométrie](https://genitem.recherche-formation.com/textometrie/) | Classe les segments de texte selon leur vocabulaire (méthode de Reinert) et les place sur des cartes. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/textometrie-fr.mp4"><img src="ressources/vignettes/textometrie-fr.jpg" width="220" alt="Regarder"></a> |
-| [Verbatims](https://genitem.recherche-formation.com/ia-humain/) | Code des verbatims avec le cadre à sept niveaux de Lee et Ha (2026) et compare le codage de l'IA à celui d'humains. | <a href="https://genitem.recherche-formation.com/wp-content/uploads/data/info/verbatims-fr.mp4"><img src="ressources/vignettes/verbatims-fr.jpg" width="220" alt="Regarder"></a> |
+| [Codage de réponses ouvertes](https://genitem.education/codage-de-reponse-ouverte/) | Codage inductif : plusieurs IA proposent des codes, un livre de codes est rédigé, puis le corpus est codé et la fidélité mesurée. | <a href="https://genitem.education/wp-content/uploads/data/info/codage-fr.mp4"><img src="ressources/vignettes/codage-fr.jpg" width="220" alt="Regarder"></a> |
+| [Textométrie](https://genitem.education/textometrie/) | Classe les segments de texte selon leur vocabulaire (méthode de Reinert) et les place sur des cartes. | <a href="https://genitem.education/wp-content/uploads/data/info/textometrie-fr.mp4"><img src="ressources/vignettes/textometrie-fr.jpg" width="220" alt="Regarder"></a> |
+| [Verbatims](https://genitem.education/ia-humain/) | Code des verbatims avec le cadre à sept niveaux de Lee et Ha (2026) et compare le codage de l'IA à celui d'humains. | <a href="https://genitem.education/wp-content/uploads/data/info/verbatims-fr.mp4"><img src="ressources/vignettes/verbatims-fr.jpg" width="220" alt="Regarder"></a> |
 
-L'[installation](https://genitem.recherche-formation.com/install/) (Ollama,
+L'[installation](https://genitem.education/install/) (Ollama,
 Python et R) est guidée pas à pas sur le site, avec sa propre
-[vidéo](https://genitem.recherche-formation.com/wp-content/uploads/data/info/installation-fr.mp4).
+[vidéo](https://genitem.education/wp-content/uploads/data/info/installation-fr.mp4).
 
 ---
 

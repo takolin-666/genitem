@@ -20,7 +20,7 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.22801168
     description: Concept DOI, resolving to every version
-url: https://genitem.recherche-formation.com
+url: https://genitem.education
 repository-code: https://github.com/takolin-666/genitem
 abstract: >-
   Free, browser-based tools to build, adapt and check questionnaires, surveys
